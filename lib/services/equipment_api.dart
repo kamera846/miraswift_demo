@@ -6,13 +6,18 @@ import 'package:miraswift_demo/services/api.dart';
 
 class EquipmentApiService {
   Future<List<EquipmentModel>?> getEquipments({
+    String? category,
     required Function(String msg) onSuccess,
     required Function(String msg) onError,
     required Function(List<EquipmentModel>? data) onCompleted,
   }) async {
     List<EquipmentModel>? data;
+    Map<String, String> withFilter = {};
+    if (category != null) {
+      withFilter = {'name': category};
+    }
     try {
-      final url = Uri.https(baseUrl, 'api/equipment-status');
+      final url = Uri.https(baseUrl, 'api/equipment-status', withFilter);
       final response = await http.get(
         url,
         headers: headerSetup,

@@ -13,6 +13,8 @@ class EquipmentScreen extends StatefulWidget {
 class _EquipmentScreenState extends State<EquipmentScreen> {
   List<EquipmentModel>? _equipments;
   bool isLoading = true;
+  String? selectedCategory = 'ALL';
+  List<String> categories = ['ALL', 'JETFLO', 'MIXER'];
 
   @override
   void initState() {
@@ -20,11 +22,12 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
     _getEquipments();
   }
 
-  void _getEquipments() async {
+  void _getEquipments({String? category}) async {
     setState(() {
       isLoading = true;
     });
     await EquipmentApiService().getEquipments(
+      category: category,
       onSuccess: (msg) {},
       onError: (msg) {
         if (mounted) {
@@ -49,6 +52,43 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
     );
   }
 
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Filter Equipment'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButton<String>(
+                value: selectedCategory,
+                isExpanded: true,
+                items: categories.map((String category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedCategory = newValue;
+                  });
+                  if (selectedCategory == 'ALL') {
+                    _getEquipments();
+                  } else {
+                    _getEquipments(category: selectedCategory);
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,34 +99,51 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _showFilterDialog(context);
+            },
             icon: const Icon(Icons.filter_list),
           ),
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.manage_history,
-                  color: Colors.grey,
+            if (selectedCategory == null || selectedCategory != 'ALL')
+              Container(
+                width: double.infinity,
+                height: 50,
+                color: Colors.black54,
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: Text(
+                    'Filtered by category $selectedCategory',
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
-                const SizedBox(width: 16),
-                Text(
-                  'History Equipment',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
+              ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.manage_history,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    'History Equipment',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
