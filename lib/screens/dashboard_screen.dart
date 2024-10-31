@@ -8,7 +8,10 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Center(
         child: Column(
@@ -18,8 +21,8 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 12),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer),
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              ),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
