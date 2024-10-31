@@ -1,3 +1,4 @@
-# miraswift_demo
+# Demo Miraswift Program
+Contoh program pada aplikasi kami.
 
-A new Flutter project.
+![logo](assets/images/MIRASWIFT.png)
