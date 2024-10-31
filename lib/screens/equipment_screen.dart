@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:miraswift_demo/models/equipment_model.dart';
+import 'package:miraswift_demo/services/equipment_api.dart';
 import 'package:miraswift_demo/widgets/equipment.dart';
 
 class EquipmentScreen extends StatefulWidget {
@@ -9,6 +11,44 @@ class EquipmentScreen extends StatefulWidget {
 }
 
 class _EquipmentScreenState extends State<EquipmentScreen> {
+  List<EquipmentModel>? _equipments;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getEquipments();
+  }
+
+  void _getEquipments() async {
+    setState(() {
+      isLoading = true;
+    });
+    await EquipmentApiService().getEquipments(
+      onSuccess: (msg) {},
+      onError: (msg) {
+        if (mounted) {
+          _showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          _equipments = data;
+          isLoading = false;
+        });
+      },
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +64,8 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Row(
@@ -46,12 +86,41 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
             const SizedBox(height: 16),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Equipment(),
+              child:
+                  (!isLoading && _equipments != null && _equipments!.isNotEmpty)
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _equipments!.length,
+                          itemBuilder: (ctx, index) {
+                            final equipment = _equipments![index];
+                            final isLastIndex =
+                                (index == (_equipments!.length - 1));
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  top: 16, bottom: isLastIndex ? 16 : 0),
+                              child: Equipment(
+                                  equipment: equipment,
+                                  isLastIndex: isLastIndex),
+                            );
+                          })
+                      : Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Text(isLoading
+                                ? 'Loading..'
+                                : !isLoading &&
+                                        (_equipments == null ||
+                                            _equipments!.isEmpty)
+                                    ? 'Data is empty.'
+                                    : ''),
+                          ),
+                        ),
             )
           ],
         ),
