@@ -60,11 +60,11 @@ class BatchApiService {
     required String batchNumber,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
-    Function(List<BatchModel>? dataEquipment, List<BatchModel>? dataTimbang)?
+    Function(List<BatchModel>? dataEquipment, List<BatchModel>? dataScales)?
         onCompleted,
   }) async {
     List<BatchModel>? dataEquipment;
-    List<BatchModel>? dataTimbang;
+    List<BatchModel>? dataScales;
     try {
       final url = Uri.https(baseUrl, 'api/batch/detail/$batchNumber');
       final response = await http.get(
@@ -77,8 +77,8 @@ class BatchApiService {
         final apiResponse = ApiResponse.fromJsonList(responseBody);
 
         if (apiResponse.code == 200) {
-          if (apiResponse.dataTimbang != null) {
-            dataTimbang = apiResponse.dataTimbang
+          if (apiResponse.dataScales != null) {
+            dataScales = apiResponse.dataScales
                 ?.map((item) => BatchModel.fromJson(item))
                 .toList();
           }
@@ -110,7 +110,7 @@ class BatchApiService {
       }
     } finally {
       if (onCompleted != null) {
-        onCompleted(dataEquipment, dataTimbang);
+        onCompleted(dataEquipment, dataScales);
       }
     }
   }

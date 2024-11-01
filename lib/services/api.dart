@@ -9,7 +9,7 @@ class ApiResponse {
   final Map<String, dynamic>? data;
   final List<dynamic>? listData;
   final List<dynamic>? dataEquipment;
-  final List<dynamic>? dataTimbang;
+  final List<dynamic>? dataScales;
 
   ApiResponse({
     required this.code,
@@ -18,7 +18,7 @@ class ApiResponse {
     this.data,
     this.listData,
     this.dataEquipment,
-    this.dataTimbang,
+    this.dataScales,
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
@@ -37,7 +37,7 @@ class ApiResponse {
       msg: json['msg'] ?? '',
       listData: json['data'],
       dataEquipment: json['dataEquipment'],
-      dataTimbang: json['dataTimbang'],
+      dataScales: json['dataTimbang'],
     );
   }
 }

@@ -15,7 +15,7 @@ class BatchDetailScreen extends StatefulWidget {
 
 class _BatchDetailScreenState extends State<BatchDetailScreen> {
   List<BatchModel>? _dataEquipment;
-  List<BatchModel>? _dataTimbang;
+  List<BatchModel>? _dataScales;
   bool isLoading = true;
 
   @override
@@ -35,10 +35,10 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           showSnackBar(context, msg);
         }
       },
-      onCompleted: (dataEquipment, dataTimbang) {
+      onCompleted: (dataEquipment, dataScales) {
         setState(() {
           _dataEquipment = dataEquipment;
-          _dataTimbang = dataTimbang;
+          _dataScales = dataScales;
           isLoading = false;
         });
       },
@@ -212,7 +212,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                   ),
                   const SizedBox(width: 9),
                   Text(
-                    'Timbangan',
+                    'Scales',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -228,38 +228,37 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: (!isLoading &&
-                      _dataTimbang != null &&
-                      _dataTimbang!.isNotEmpty)
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _dataTimbang!.length,
-                      itemBuilder: (ctx, index) {
-                        final item = _dataTimbang![index];
-                        final isLastIndex =
-                            (index == (_dataTimbang!.length - 1));
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: 16, bottom: isLastIndex ? 16 : 0),
-                          child: BatchItem.timbangan(
-                            timbangan: item,
-                            isLastIndex: isLastIndex,
+              child:
+                  (!isLoading && _dataScales != null && _dataScales!.isNotEmpty)
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _dataScales!.length,
+                          itemBuilder: (ctx, index) {
+                            final item = _dataScales![index];
+                            final isLastIndex =
+                                (index == (_dataScales!.length - 1));
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  top: 16, bottom: isLastIndex ? 16 : 0),
+                              child: BatchItem.scales(
+                                scales: item,
+                                isLastIndex: isLastIndex,
+                              ),
+                            );
+                          })
+                      : Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Text(isLoading
+                                ? 'Loading..'
+                                : !isLoading &&
+                                        (_dataScales == null ||
+                                            _dataScales!.isEmpty)
+                                    ? 'Data is empty.'
+                                    : ''),
                           ),
-                        );
-                      })
-                  : Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(isLoading
-                            ? 'Loading..'
-                            : !isLoading &&
-                                    (_dataTimbang == null ||
-                                        _dataTimbang!.isEmpty)
-                                ? 'Data is empty.'
-                                : ''),
-                      ),
-                    ),
+                        ),
             ),
           ],
         ),

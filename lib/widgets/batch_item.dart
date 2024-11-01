@@ -6,15 +6,15 @@ class BatchItem extends StatelessWidget {
     super.key,
     required this.equipment,
     this.isLastIndex = false,
-  }) : timbangan = null;
-  const BatchItem.timbangan({
+  }) : scales = null;
+  const BatchItem.scales({
     super.key,
-    required this.timbangan,
+    required this.scales,
     this.isLastIndex = false,
   }) : equipment = null;
 
   final BatchModel? equipment;
-  final BatchModel? timbangan;
+  final BatchModel? scales;
   final bool isLastIndex;
 
   @override
@@ -40,7 +40,7 @@ class BatchItem extends StatelessWidget {
                   Text(
                     equipment != null
                         ? equipment!.nameEquipment
-                        : timbangan!.nameBahan,
+                        : scales!.nameBahan,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.w900,
                         ),
@@ -68,7 +68,7 @@ class BatchItem extends StatelessWidget {
                       Text(
                         equipment != null
                             ? equipment!.timeOn
-                            : '${timbangan!.dateTimbang} ${timbangan!.timeTimbang}',
+                            : '${scales!.dateTimbang} ${scales!.timeTimbang}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -134,7 +134,7 @@ class BatchItem extends StatelessWidget {
                   )
                 else if (equipment == null)
                   Text(
-                    '${timbangan!.actualTimbang} KG',
+                    '${scales!.actualTimbang} KG',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -142,7 +142,7 @@ class BatchItem extends StatelessWidget {
                 Text(
                   equipment != null
                       ? equipment!.desc.toUpperCase()
-                      : timbangan!.statusTimbang.toUpperCase(),
+                      : scales!.statusTimbang.toUpperCase(),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
