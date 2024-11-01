@@ -11,11 +11,19 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Miraswift Demo',
-        theme: ThemeData().copyWith(
+      title: 'Miraswift Demo',
+      theme: ThemeData().copyWith(
+          scaffoldBackgroundColor: Colors.white,
           colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromARGB(255, 48, 49, 139)),
-        ),
-        home: const DashboardScreen());
+            seedColor: Colors.blue,
+          ),
+          appBarTheme: const AppBarTheme(
+            color: Colors.white,
+            elevation: 0,
+            scrolledUnderElevation: 1,
+            shadowColor: Colors.white54,
+          )),
+      home: const DashboardScreen(),
+    );
   }
 }
