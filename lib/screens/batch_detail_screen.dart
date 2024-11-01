@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/equipment.dart';
+import 'package:miraswift_demo/widgets/batch_item.dart';
 
 class BatchDetailScreen extends StatefulWidget {
   const BatchDetailScreen({super.key, required this.batch});
@@ -14,7 +14,8 @@ class BatchDetailScreen extends StatefulWidget {
 }
 
 class _BatchDetailScreenState extends State<BatchDetailScreen> {
-  List<BatchModel>? _batchs;
+  List<BatchModel>? _dataEquipment;
+  List<BatchModel>? _dataTimbang;
   bool isLoading = true;
 
   @override
@@ -34,9 +35,10 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           showSnackBar(context, msg);
         }
       },
-      onCompleted: (data) {
+      onCompleted: (dataEquipment, dataTimbang) {
         setState(() {
-          _batchs = data;
+          _dataEquipment = dataEquipment;
+          _dataTimbang = dataTimbang;
           isLoading = false;
         });
       },
@@ -55,12 +57,94 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    'Batch Number: ',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    widget.batch.noBatch,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: Row(
                 children: [
                   const Icon(
-                    Icons.manage_history,
+                    Icons.scale_rounded,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(width: 9),
+                  Text(
+                    'Timbangan',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: (!isLoading &&
+                      _dataTimbang != null &&
+                      _dataTimbang!.isNotEmpty)
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _dataTimbang!.length,
+                      itemBuilder: (ctx, index) {
+                        final item = _dataTimbang![index];
+                        final isLastIndex =
+                            (index == (_dataTimbang!.length - 1));
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              top: 16, bottom: isLastIndex ? 16 : 0),
+                          child: BatchItem.timbangan(
+                            timbangan: item,
+                            isLastIndex: isLastIndex,
+                          ),
+                        );
+                      })
+                  : Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(isLoading
+                            ? 'Loading..'
+                            : !isLoading &&
+                                    (_dataTimbang == null ||
+                                        _dataTimbang!.isEmpty)
+                                ? 'Data is empty.'
+                                : ''),
+                      ),
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.settings_applications,
                     color: Colors.grey,
                   ),
                   const SizedBox(width: 9),
@@ -81,18 +165,21 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: (!isLoading && _batchs != null && _batchs!.isNotEmpty)
+              child: (!isLoading &&
+                      _dataEquipment != null &&
+                      _dataEquipment!.isNotEmpty)
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _batchs!.length,
+                      itemCount: _dataEquipment!.length,
                       itemBuilder: (ctx, index) {
-                        final item = _batchs![index];
-                        final isLastIndex = (index == (_batchs!.length - 1));
+                        final item = _dataEquipment![index];
+                        final isLastIndex =
+                            (index == (_dataEquipment!.length - 1));
                         return Padding(
                           padding: EdgeInsets.only(
                               top: 16, bottom: isLastIndex ? 16 : 0),
-                          child: Equipment(
+                          child: BatchItem.equipment(
                             equipment: item,
                             isLastIndex: isLastIndex,
                           ),
@@ -104,7 +191,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         child: Text(isLoading
                             ? 'Loading..'
                             : !isLoading &&
-                                    (_batchs == null || _batchs!.isEmpty)
+                                    (_dataEquipment == null ||
+                                        _dataEquipment!.isEmpty)
                                 ? 'Data is empty.'
                                 : ''),
                       ),

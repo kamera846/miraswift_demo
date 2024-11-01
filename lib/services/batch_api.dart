@@ -56,13 +56,15 @@ class BatchApiService {
     }
   }
 
-  Future<List<BatchModel>?> detail({
+  Future detail({
     required String batchNumber,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
-    Function(List<BatchModel>? data)? onCompleted,
+    Function(List<BatchModel>? dataEquipment, List<BatchModel>? dataTimbang)?
+        onCompleted,
   }) async {
-    List<BatchModel>? data;
+    List<BatchModel>? dataEquipment;
+    List<BatchModel>? dataTimbang;
     try {
       final url = Uri.https(baseUrl, 'api/batch/detail/$batchNumber');
       final response = await http.get(
@@ -75,35 +77,40 @@ class BatchApiService {
         final apiResponse = ApiResponse.fromJsonList(responseBody);
 
         if (apiResponse.code == 200) {
-          if (apiResponse.listData != null) {
-            data = apiResponse.listData
+          if (apiResponse.dataTimbang != null) {
+            dataTimbang = apiResponse.dataTimbang
+                ?.map((item) => BatchModel.fromJson(item))
+                .toList();
+          }
+          if (apiResponse.dataEquipment != null) {
+            dataEquipment = apiResponse.dataEquipment
                 ?.map((item) => BatchModel.fromJson(item))
                 .toList();
           }
           if (onSuccess != null) {
             onSuccess(apiResponse.msg);
           }
-          return data;
+          return;
         }
 
         if (onError != null) {
           onError(apiResponse.msg);
+          return;
         }
-        return data;
       } else {
         if (onError != null) {
           onError('$failedRequestText. Status Code: ${response.statusCode}');
+          return;
         }
-        return data;
       }
     } catch (e) {
       if (onError != null) {
         onError('$failedRequestText. Exception: $e');
+        return;
       }
-      return data;
     } finally {
       if (onCompleted != null) {
-        onCompleted(data);
+        onCompleted(dataEquipment, dataTimbang);
       }
     }
   }

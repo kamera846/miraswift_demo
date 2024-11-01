@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miraswift_demo/screens/batch_screen.dart';
 import 'package:miraswift_demo/screens/equipment_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -40,7 +41,7 @@ class DashboardScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (ctx) => const EquipmentScreen(),
+                    builder: (ctx) => const BatchScreen(),
                   ),
                 );
               },

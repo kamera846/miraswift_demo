@@ -105,8 +105,9 @@ class _BatchScreenState extends State<BatchScreen> {
                               subtitle: Text(item.noBatch,
                                   style:
                                       Theme.of(context).textTheme.titleMedium),
-                              splashColor:
-                                  Theme.of(context).colorScheme.primary,
+                              splashColor: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
                               trailing: Icon(
                                 Icons.chevron_right_rounded,
                                 color: Colors.grey.withAlpha(75),
