@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/equipment_model.dart';
 import 'package:miraswift_demo/services/equipment_api.dart';
-import 'package:miraswift_demo/widgets/equipment.dart';
+import 'package:miraswift_demo/widgets/equipment_status.dart';
 
 class EquipmentScreen extends StatefulWidget {
   const EquipmentScreen({super.key});
@@ -161,7 +161,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                             return Padding(
                               padding: EdgeInsets.only(
                                   top: 16, bottom: isLastIndex ? 16 : 0),
-                              child: Equipment(
+                              child: EquipmentStatus(
                                   equipment: equipment,
                                   isLastIndex: isLastIndex),
                             );

@@ -30,7 +30,21 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Buka Equipment'),
+              child: const Text('Open Equipment'),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => const EquipmentScreen(),
+                  ),
+                );
+              },
+              child: const Text('Open Batch'),
             ),
           ],
         ),

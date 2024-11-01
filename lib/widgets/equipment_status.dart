@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/batch_model.dart';
 import 'package:miraswift_demo/models/equipment_model.dart';
 
-class Equipment extends StatelessWidget {
-  const Equipment({
+class EquipmentStatus extends StatelessWidget {
+  const EquipmentStatus({
     super.key,
     required this.equipment,
     this.isLastIndex = false,
   });
 
-  final BatchModel equipment;
+  final EquipmentModel equipment;
   final bool isLastIndex;
 
   @override
   Widget build(BuildContext context) {
     Color statusColor = Colors.grey.withAlpha(75);
     Color statusColorBorder = Colors.grey.withAlpha(150);
-    // if (equipment.statusEquipment == 'ON') {
-    //   statusColor = Colors.green.withAlpha(75);
-    //   statusColorBorder = Colors.green.withAlpha(150);
-    // } else if (equipment.statusEquipment == 'OFF') {
-    //   statusColor = Colors.red.withAlpha(75);
-    //   statusColorBorder = Colors.red.withAlpha(150);
-    // }
+    if (equipment.statusEquipment == 'ON') {
+      statusColor = Colors.green.withAlpha(75);
+      statusColorBorder = Colors.green.withAlpha(150);
+    } else if (equipment.statusEquipment == 'OFF') {
+      statusColor = Colors.red.withAlpha(75);
+      statusColorBorder = Colors.red.withAlpha(150);
+    }
 
     return Column(
       children: [
@@ -37,10 +36,10 @@ class Equipment extends StatelessWidget {
                 border: Border.all(width: 2, color: statusColorBorder),
                 borderRadius: BorderRadius.circular(1000),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'ON',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  equipment.statusEquipment,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -56,7 +55,7 @@ class Equipment extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    '${equipment.timeOn} ${equipment.timeOff}',
+                    '${equipment.dateEquipment} ${equipment.timeEquipment}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -66,13 +65,13 @@ class Equipment extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  equipment.desc,
+                  'BATCH',
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 Text(
-                  equipment.timeElapsed,
+                  equipment.noBatch,
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
