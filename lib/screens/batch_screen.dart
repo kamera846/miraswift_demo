@@ -57,7 +57,7 @@ class _BatchScreenState extends State<BatchScreen> {
               child: Row(
                 children: [
                   const Icon(
-                    Icons.batch_prediction,
+                    Icons.miscellaneous_services_rounded,
                     color: Colors.grey,
                   ),
                   const SizedBox(width: 8),
@@ -115,7 +115,7 @@ class _BatchScreenState extends State<BatchScreen> {
                             ),
                             if (!isLastIndex)
                               Divider(
-                                height: 1,
+                                height: 0,
                                 color: Colors.grey.withAlpha(75),
                               ),
                           ],

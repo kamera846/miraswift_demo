@@ -45,6 +45,7 @@ class BatchItem extends StatelessWidget {
                           fontWeight: FontWeight.w900,
                         ),
                   ),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Container(
@@ -75,7 +76,7 @@ class BatchItem extends StatelessWidget {
                   if (equipment != null) ...[
                     Container(
                       width: 2,
-                      height: 20,
+                      height: 25,
                       margin: const EdgeInsets.only(left: 9),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -106,6 +107,7 @@ class BatchItem extends StatelessWidget {
                           )
                         else
                           Icon(
+                            size: 20,
                             Icons.linear_scale,
                             color: statusColorBorderOff,
                           )
@@ -150,9 +152,9 @@ class BatchItem extends StatelessWidget {
         if (!isLastIndex) ...[
           const SizedBox(height: 16),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 0),
             child: Divider(
-              height: 1,
+              height: 0,
               color: Colors.grey.withAlpha(75),
             ),
           ),
