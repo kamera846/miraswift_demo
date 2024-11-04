@@ -19,14 +19,14 @@ class BatchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color statusColorOn = Colors.green.withAlpha(75);
-    Color statusColorOff = Colors.grey.withAlpha(75);
-    Color statusColorBorderOn = Colors.green.withAlpha(150);
-    Color statusColorBorderOff = Colors.grey.withAlpha(150);
+    Color statusColorOn = Colors.green.shade900.withAlpha(75);
+    Color statusColorOff = Colors.red.shade900.withAlpha(75);
+    Color statusColorBorderOn = Colors.green.shade900.withAlpha(150);
+    Color statusColorBorderOff = Colors.red.shade900.withAlpha(150);
 
     if (equipment != null && equipment!.timeOff == '0') {
-      statusColorOff = Colors.orange.withAlpha(75);
-      statusColorBorderOff = Colors.orange.withAlpha(150);
+      statusColorOff = Colors.yellow.shade900.withAlpha(75);
+      statusColorBorderOff = Colors.yellow.shade900.withAlpha(150);
     }
 
     return Column(

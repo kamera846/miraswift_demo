@@ -90,9 +90,10 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         height: 20,
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.green.withAlpha(75),
+                          color: Colors.green.shade900.withAlpha(75),
                           border: Border.all(
-                              width: 2, color: Colors.green.withAlpha(150)),
+                              width: 2,
+                              color: Colors.green.shade900.withAlpha(150)),
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
@@ -107,9 +108,10 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         height: 20,
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.orange.withAlpha(75),
+                          color: Colors.yellow.shade900.withAlpha(75),
                           border: Border.all(
-                              width: 2, color: Colors.orange.withAlpha(150)),
+                              width: 2,
+                              color: Colors.yellow.shade900.withAlpha(150)),
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
@@ -124,9 +126,10 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         height: 20,
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.grey.withAlpha(75),
+                          color: Colors.red.shade900.withAlpha(75),
                           border: Border.all(
-                              width: 2, color: Colors.grey.withAlpha(150)),
+                              width: 2,
+                              color: Colors.red.shade900.withAlpha(150)),
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
