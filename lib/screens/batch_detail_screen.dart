@@ -53,6 +53,12 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           'Batch Detail',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+            onPressed: _getBatchDetail,
+            icon: const Icon(Icons.refresh_rounded),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
