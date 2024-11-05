@@ -3,6 +3,7 @@ import 'package:miraswift_demo/models/batch_model.dart';
 import 'package:miraswift_demo/screens/batch_detail_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
+import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
 class BatchScreen extends StatefulWidget {
   const BatchScreen({super.key});
@@ -87,7 +88,7 @@ class _BatchScreenState extends State<BatchScreen> {
                         final isLastIndex = (index == (_batchs!.length - 1));
                         return Column(
                           children: [
-                            ListTile(
+                            ListTileItem(
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -96,22 +97,8 @@ class _BatchScreenState extends State<BatchScreen> {
                                   ),
                                 );
                               },
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              title: Text(
-                                'Batch number',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              subtitle: Text(item.noBatch,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium),
-                              splashColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              trailing: Icon(
-                                Icons.chevron_right_rounded,
-                                color: Colors.grey.withAlpha(75),
-                              ),
+                              title: item.noBatch,
+                              description: '2024-11-05 08:49:48',
                             ),
                             if (!isLastIndex)
                               Divider(
