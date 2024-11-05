@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/services/product_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
+import 'package:miraswift_demo/widgets/form_new_product.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -15,6 +16,8 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   List<ProductModel>? _list;
   bool isLoading = true;
+
+  double _keyboardHeight = 0;
 
   @override
   void initState() {
@@ -41,14 +44,42 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
+  void _newProduct() {
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: 16, right: 16, bottom: 16 + _keyboardHeight),
+            child: const FormNewProduct(),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Setting Recipe',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+            onPressed: _newProduct,
+            icon: const Icon(
+              CupertinoIcons.add_circled_solid,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -13,16 +13,20 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Miraswift Demo',
       theme: ThemeData().copyWith(
-          scaffoldBackgroundColor: Colors.white,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blue,
-          ),
-          appBarTheme: const AppBarTheme(
-            color: Colors.white,
-            elevation: 0,
-            scrolledUnderElevation: 1,
-            shadowColor: Colors.white54,
-          )),
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+        ),
+        appBarTheme: const AppBarTheme(
+          color: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 1,
+          shadowColor: Colors.white54,
+        ),
+        bottomSheetTheme: const BottomSheetThemeData(
+          backgroundColor: Colors.white,
+        ),
+      ),
       home: const DashboardScreen(),
     );
   }
