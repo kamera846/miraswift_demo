@@ -56,7 +56,7 @@ class BatchApiService {
     }
   }
 
-  Future detail({
+  Future<void> detail({
     required String batchNumber,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,

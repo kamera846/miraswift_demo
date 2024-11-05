@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/screens/batch_screen.dart';
 import 'package:miraswift_demo/screens/equipment_screen.dart';
+import 'package:miraswift_demo/screens/product_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -46,6 +47,20 @@ class DashboardScreen extends StatelessWidget {
                 );
               },
               child: const Text('Open Batch'),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => const ProductScreen(),
+                  ),
+                );
+              },
+              child: const Text('Setting Recipe'),
             ),
           ],
         ),
