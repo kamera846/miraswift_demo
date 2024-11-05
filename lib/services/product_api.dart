@@ -115,10 +115,16 @@ class ProductApi {
   }) async {
     try {
       final url = Uri.https(baseUrl, 'api/product');
-      final response = await http.post(url, headers: headerSetup, body: {
-        'kode_product': productCode,
-        'name_product': productName,
-      });
+      final response = await http.post(
+        url,
+        headers: headerSetup,
+        body: jsonEncode(
+          {
+            'kode_product': productCode,
+            'name_product': productName,
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -163,10 +169,16 @@ class ProductApi {
   }) async {
     try {
       final url = Uri.https(baseUrl, 'api/product/$productId');
-      final response = await http.post(url, headers: headerSetup, body: {
-        'kode_product': productCode,
-        'name_product': productName,
-      });
+      final response = await http.post(
+        url,
+        headers: headerSetup,
+        body: jsonEncode(
+          {
+            'kode_product': productCode,
+            'name_product': productName,
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

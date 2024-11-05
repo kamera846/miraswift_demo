@@ -15,7 +15,8 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   List<ProductModel>? _list;
-  bool isLoading = true;
+  bool _isLoading = true;
+  bool _isSubmitting = false;
 
   double _keyboardHeight = 0;
 
@@ -27,7 +28,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   void _getList() async {
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
     await ProductApi().list(
       onError: (msg) {
@@ -38,7 +39,7 @@ class _ProductScreenState extends State<ProductScreen> {
       onCompleted: (data) {
         setState(() {
           _list = data;
-          isLoading = false;
+          _isLoading = false;
         });
       },
     );
@@ -47,15 +48,27 @@ class _ProductScreenState extends State<ProductScreen> {
   void _newProduct() {
     showModalBottomSheet(
       context: context,
-      showDragHandle: true,
+      // showDragHandle: !_isSubmitting,
       isScrollControlled: true,
+      // enableDrag: !_isSubmitting,
+      // isDismissible: !_isSubmitting,
       builder: (ctx) {
         return SizedBox(
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.only(
-                left: 16, right: 16, bottom: 16 + _keyboardHeight),
-            child: const FormNewProduct(),
+              top: 16,
+              left: 16,
+              right: 16,
+              bottom: 16 + _keyboardHeight,
+            ),
+            child: FormNewProduct(
+              // onSubmitting: (state) => setState(() {
+              //   _isSubmitting = state;
+              //   print(_isSubmitting);
+              // }),
+              onSubmitted: _getList,
+            ),
           ),
         );
       },
@@ -109,7 +122,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: (!isLoading && _list != null && _list!.isNotEmpty)
+              child: (!_isLoading && _list != null && _list!.isNotEmpty)
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -136,14 +149,16 @@ class _ProductScreenState extends State<ProductScreen> {
                   : Center(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Text(isLoading
-                            ? 'Loading..'
-                            : !isLoading && (_list == null || _list!.isEmpty)
-                                ? 'Data is empty.'
-                                : ''),
+                        child: Text(
+                          _isLoading
+                              ? 'Loading..'
+                              : !_isLoading && (_list == null || _list!.isEmpty)
+                                  ? 'Data is empty.'
+                                  : '',
+                        ),
                       ),
                     ),
-            )
+            ),
           ],
         ),
       ),
