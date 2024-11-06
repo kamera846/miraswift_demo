@@ -31,6 +31,7 @@ class ListTileItem extends StatelessWidget {
   const ListTileItem({
     super.key,
     required this.title,
+    this.isSelected = false,
     this.description,
     this.badge,
     this.onTap,
@@ -43,12 +44,15 @@ class ListTileItem extends StatelessWidget {
   final String? badge;
   final BadgeModel? badgeModel;
   final Widget? customTrailingIcon;
+  final bool isSelected;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
+      selected: isSelected,
+      selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
       contentPadding:
           const EdgeInsets.only(top: 8, right: 0, bottom: 8, left: 16),
       title: Column(

@@ -85,7 +85,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   void _editItem() async {
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       showDragHandle: true,
       isScrollControlled: true,
@@ -106,6 +106,9 @@ class _ProductScreenState extends State<ProductScreen> {
         );
       },
     );
+    setState(() {
+      _selectedItem = null;
+    });
   }
 
   void _submitEditItem(String code, String name) async {
@@ -125,7 +128,46 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   void _deleteItem() {
-    // ...
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: Text(
+              'Are you sure you want to delete ${_selectedItem!.nameProduct} with code ${_selectedItem!.kodeProduct}?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _selectedItem = null;
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: _submitDeleteItem,
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _submitDeleteItem() async {
+    Navigator.of(context).pop();
+    setState(() {
+      _isLoading = true;
+    });
+    await ProductApi().delete(
+      productId: _selectedItem!.idProduct,
+      onSuccess: (msg) => showSnackBar(context, msg),
+      onError: (msg) => showSnackBar(context, msg),
+      onCompleted: () {
+        _getList();
+      },
+    );
   }
 
   @override
@@ -185,6 +227,11 @@ class _ProductScreenState extends State<ProductScreen> {
                           children: [
                             ListTileItem(
                               onTap: () {},
+                              isSelected: (_selectedItem != null &&
+                                      _selectedItem!.idProduct ==
+                                          item.idProduct)
+                                  ? true
+                                  : false,
                               badge: item.kodeProduct,
                               title: item.nameProduct,
                               description: item.createdAt,
@@ -194,12 +241,20 @@ class _ProductScreenState extends State<ProductScreen> {
                                     color: Colors.grey.withAlpha(75),
                                   ),
                                   onSelected: (value) {
-                                    _selectedItem = value;
+                                    setState(() {
+                                      _selectedItem = value;
+                                    });
                                   },
                                   itemBuilder: (ctx) {
                                     return [
                                       PopupMenuItem<ProductModel>(
-                                        onTap: () {},
+                                        onTap: () async {
+                                          await Future.delayed(const Duration(
+                                              milliseconds: 250));
+                                          setState(() {
+                                            _selectedItem = null;
+                                          });
+                                        },
                                         value: item,
                                         child: const Row(
                                           children: [
