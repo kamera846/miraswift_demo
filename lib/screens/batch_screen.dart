@@ -43,6 +43,8 @@ class _BatchScreenState extends State<BatchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int index = 0;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -79,13 +81,10 @@ class _BatchScreenState extends State<BatchScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: (!isLoading && _batchs != null && _batchs!.isNotEmpty)
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _batchs!.length,
-                      itemBuilder: (ctx, index) {
-                        final item = _batchs![index];
+                  ? Column(
+                      children: _batchs!.map((item) {
                         final isLastIndex = (index == (_batchs!.length - 1));
+                        index++;
                         return Column(
                           children: [
                             ListTileItem(
@@ -107,7 +106,8 @@ class _BatchScreenState extends State<BatchScreen> {
                               ),
                           ],
                         );
-                      })
+                      }).toList(),
+                    )
                   : Center(
                       child: Padding(
                         padding: const EdgeInsets.all(16),

@@ -47,6 +47,9 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int dataEquipmentIndex = 0;
+    int dataScalesIndex = 0;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -179,14 +182,11 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               child: (!isLoading &&
                       _dataEquipment != null &&
                       _dataEquipment!.isNotEmpty)
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _dataEquipment!.length,
-                      itemBuilder: (ctx, index) {
-                        final item = _dataEquipment![index];
-                        final isLastIndex =
-                            (index == (_dataEquipment!.length - 1));
+                  ? Column(
+                      children: _dataEquipment!.map((item) {
+                        final isLastIndex = (dataEquipmentIndex ==
+                            (_dataEquipment!.length - 1));
+                        dataEquipmentIndex++;
                         return Padding(
                           padding: EdgeInsets.only(
                             top: 16,
@@ -197,7 +197,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                             isLastIndex: isLastIndex,
                           ),
                         );
-                      })
+                      }).toList(),
+                    )
                   : Center(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
@@ -239,14 +240,11 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               ),
               child:
                   (!isLoading && _dataScales != null && _dataScales!.isNotEmpty)
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _dataScales!.length,
-                          itemBuilder: (ctx, index) {
-                            final item = _dataScales![index];
+                      ? Column(
+                          children: _dataScales!.map((item) {
                             final isLastIndex =
-                                (index == (_dataScales!.length - 1));
+                                (dataScalesIndex == (_dataScales!.length - 1));
+                            dataScalesIndex++;
                             return Padding(
                               padding: EdgeInsets.only(
                                   top: 16, bottom: isLastIndex ? 16 : 0),
@@ -255,7 +253,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                                 isLastIndex: isLastIndex,
                               ),
                             );
-                          })
+                          }).toList(),
+                        )
                       : Center(
                           child: Padding(
                             padding: const EdgeInsets.all(16),

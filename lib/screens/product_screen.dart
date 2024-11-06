@@ -131,7 +131,7 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     _keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    var index = 0;
+    int index = 0;
 
     return Scaffold(
       appBar: AppBar(
