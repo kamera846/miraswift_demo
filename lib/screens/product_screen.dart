@@ -16,7 +16,7 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   List<ProductModel>? _list;
   bool _isLoading = true;
-  // bool _isSubmitting = false;
+  ProductModel? _selectedItem;
 
   double _keyboardHeight = 0;
 
@@ -39,13 +39,14 @@ class _ProductScreenState extends State<ProductScreen> {
       onCompleted: (data) {
         setState(() {
           _list = data;
+          _selectedItem = null;
           _isLoading = false;
         });
       },
     );
   }
 
-  void _newProduct() {
+  void _newItem() {
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -60,7 +61,7 @@ class _ProductScreenState extends State<ProductScreen> {
               bottom: 16 + _keyboardHeight,
             ),
             child: FormNewProduct(
-              onSubmitted: _submitNewProduct,
+              onSubmitted: _submitNewItem,
             ),
           ),
         );
@@ -68,7 +69,7 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  void _submitNewProduct(String code, String name) async {
+  void _submitNewItem(String code, String name) async {
     setState(() {
       _isLoading = true;
     });
@@ -81,6 +82,50 @@ class _ProductScreenState extends State<ProductScreen> {
         _getList();
       },
     );
+  }
+
+  void _editItem() async {
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: 16 + _keyboardHeight,
+            ),
+            child: FormNewProduct.edit(
+              item: _selectedItem,
+              onSubmitted: _submitEditItem,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _submitEditItem(String code, String name) async {
+    setState(() {
+      _isLoading = true;
+    });
+    await ProductApi().edit(
+      productId: _selectedItem!.idProduct,
+      productCode: code,
+      productName: name,
+      onSuccess: (msg) => showSnackBar(context, msg),
+      onError: (msg) => showSnackBar(context, msg),
+      onCompleted: () {
+        _getList();
+      },
+    );
+  }
+
+  void _deleteItem() {
+    // ...
   }
 
   @override
@@ -96,7 +141,7 @@ class _ProductScreenState extends State<ProductScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: _isLoading ? null : _newProduct,
+            onPressed: _isLoading ? null : _newItem,
             icon: const Icon(
               CupertinoIcons.add_circled_solid,
             ),
@@ -143,6 +188,61 @@ class _ProductScreenState extends State<ProductScreen> {
                               badge: item.kodeProduct,
                               title: item.nameProduct,
                               description: item.createdAt,
+                              customTrailingIcon: PopupMenuButton<ProductModel>(
+                                  icon: Icon(
+                                    Icons.more_vert_rounded,
+                                    color: Colors.grey.withAlpha(75),
+                                  ),
+                                  onSelected: (value) {
+                                    _selectedItem = value;
+                                  },
+                                  itemBuilder: (ctx) {
+                                    return [
+                                      PopupMenuItem<ProductModel>(
+                                        onTap: () {},
+                                        value: item,
+                                        child: const Row(
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons
+                                                  .arrow_up_right_circle_fill,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 12),
+                                            Text('Open')
+                                          ],
+                                        ),
+                                      ),
+                                      PopupMenuItem<ProductModel>(
+                                        onTap: _editItem,
+                                        value: item,
+                                        child: const Row(
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.pencil_circle_fill,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 12),
+                                            Text('Edit')
+                                          ],
+                                        ),
+                                      ),
+                                      PopupMenuItem<ProductModel>(
+                                        onTap: _deleteItem,
+                                        value: item,
+                                        child: const Row(
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.trash_circle_fill,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 12),
+                                            Text('Delete')
+                                          ],
+                                        ),
+                                      ),
+                                    ];
+                                  }),
                             ),
                             if (!isLastIndex)
                               Divider(

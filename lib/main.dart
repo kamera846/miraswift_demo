@@ -26,6 +26,9 @@ class MainApp extends StatelessWidget {
         bottomSheetTheme: const BottomSheetThemeData(
           backgroundColor: Colors.white,
         ),
+        popupMenuTheme: const PopupMenuThemeData(
+          color: Colors.white,
+        ),
       ),
       home: const DashboardScreen(),
     );

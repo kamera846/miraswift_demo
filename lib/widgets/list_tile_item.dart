@@ -35,19 +35,22 @@ class ListTileItem extends StatelessWidget {
     this.badge,
     this.onTap,
     this.badgeModel,
+    this.customTrailingIcon,
   });
 
   final String title;
   final String? description;
   final String? badge;
   final BadgeModel? badgeModel;
+  final Widget? customTrailingIcon;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      contentPadding:
+          const EdgeInsets.only(top: 8, right: 0, bottom: 8, left: 16),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -89,10 +92,14 @@ class ListTileItem extends StatelessWidget {
                 ),
               ),
             ),
-          Icon(
-            Icons.chevron_right_rounded,
-            color: Colors.grey.withAlpha(75),
-          ),
+          customTrailingIcon ??
+              IconButton(
+                onPressed: onTap,
+                icon: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Colors.grey.withAlpha(75),
+                ),
+              ),
         ],
       ),
     );

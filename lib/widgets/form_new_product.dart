@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:miraswift_demo/models/product_model.dart';
 
 class FormNewProduct extends StatefulWidget {
   const FormNewProduct({
     super.key,
     required this.onSubmitted,
-  });
+  })  : isEdit = false,
+        item = null;
+  const FormNewProduct.edit({
+    super.key,
+    required this.item,
+    required this.onSubmitted,
+  }) : isEdit = true;
 
+  final bool isEdit;
+  final ProductModel? item;
   final void Function(String code, String name) onSubmitted;
 
   @override
@@ -21,10 +30,23 @@ class FormNewProductState extends State<FormNewProduct> {
   String _nameInput = '';
 
   @override
+  void initState() {
+    if (widget.isEdit) _setupItem();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _codeController.dispose();
     _nameController.dispose();
     super.dispose();
+  }
+
+  void _setupItem() {
+    _codeInput = widget.item!.kodeProduct;
+    _nameInput = widget.item!.nameProduct;
+    _codeController.text = widget.item!.kodeProduct;
+    _nameController.text = widget.item!.nameProduct;
   }
 
   @override
@@ -33,7 +55,7 @@ class FormNewProductState extends State<FormNewProduct> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'New Product',
+          widget.isEdit ? 'Edit Product' : 'New Product',
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
               ),
