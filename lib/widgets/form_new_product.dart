@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/services/product_api.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
 
 class FormNewProduct extends StatefulWidget {
   const FormNewProduct({
     super.key,
-    this.onSubmitting,
-    this.onSubmitted,
+    required this.onSubmitted,
   });
 
-  final void Function(bool state)? onSubmitting;
-  final void Function()? onSubmitted;
+  final void Function(String code, String name) onSubmitted;
 
   @override
   FormNewProductState createState() => FormNewProductState();
@@ -23,46 +19,12 @@ class FormNewProductState extends State<FormNewProduct> {
 
   String _codeInput = '';
   String _nameInput = '';
-  bool _isLoading = false;
 
   @override
   void dispose() {
     _codeController.dispose();
     _nameController.dispose();
     super.dispose();
-  }
-
-  void _newProduct() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      setState(() {
-        _isLoading = true;
-      });
-      // print('Submit state: true');
-      // widget.onSubmitting(true);
-      // await Future.delayed(const Duration(seconds: 5));
-      // setState(() {
-      //   _isLoading = false;
-      // });
-      // print('Submit state: false');
-      // widget.onSubmitting(false);
-      // return;
-      await ProductApi().create(
-        productCode: _codeInput,
-        productName: _nameInput,
-        onSuccess: (msg) {
-          if (widget.onSubmitted != null) widget.onSubmitted!();
-          showSnackBar(context, msg);
-        },
-        onError: (msg) => showSnackBar(context, msg),
-        onCompleted: () {
-          setState(() {
-            _isLoading = false;
-          });
-          Navigator.of(context).pop(true);
-        },
-      );
-    }
   }
 
   @override
@@ -82,7 +44,6 @@ class FormNewProductState extends State<FormNewProduct> {
           child: Column(
             children: [
               TextFormField(
-                enabled: !_isLoading,
                 controller: _codeController,
                 style: Theme.of(context).textTheme.bodyMedium,
                 decoration: InputDecoration(
@@ -108,7 +69,6 @@ class FormNewProductState extends State<FormNewProduct> {
               ),
               const SizedBox(height: 16.0),
               TextFormField(
-                enabled: !_isLoading,
                 controller: _nameController,
                 style: Theme.of(context).textTheme.bodyMedium,
                 decoration: InputDecoration(
@@ -134,8 +94,15 @@ class FormNewProductState extends State<FormNewProduct> {
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: _isLoading ? null : _newProduct,
-                child: Text(_isLoading ? 'Submitting..' : 'Submit'),
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    _formKey.currentState?.save();
+
+                    widget.onSubmitted(_codeInput, _nameInput);
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('Submit Now'),
               ),
             ],
           ),

@@ -16,7 +16,7 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   List<ProductModel>? _list;
   bool _isLoading = true;
-  bool _isSubmitting = false;
+  // bool _isSubmitting = false;
 
   double _keyboardHeight = 0;
 
@@ -48,26 +48,19 @@ class _ProductScreenState extends State<ProductScreen> {
   void _newProduct() {
     showModalBottomSheet(
       context: context,
-      // showDragHandle: !_isSubmitting,
+      showDragHandle: true,
       isScrollControlled: true,
-      // enableDrag: !_isSubmitting,
-      // isDismissible: !_isSubmitting,
       builder: (ctx) {
         return SizedBox(
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.only(
-              top: 16,
               left: 16,
               right: 16,
               bottom: 16 + _keyboardHeight,
             ),
             child: FormNewProduct(
-              // onSubmitting: (state) => setState(() {
-              //   _isSubmitting = state;
-              //   print(_isSubmitting);
-              // }),
-              onSubmitted: _getList,
+              onSubmitted: _submitNewProduct,
             ),
           ),
         );
@@ -75,9 +68,25 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
+  void _submitNewProduct(String code, String name) async {
+    setState(() {
+      _isLoading = true;
+    });
+    await ProductApi().create(
+      productCode: code,
+      productName: name,
+      onSuccess: (msg) => showSnackBar(context, msg),
+      onError: (msg) => showSnackBar(context, msg),
+      onCompleted: () {
+        _getList();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    var index = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -87,7 +96,7 @@ class _ProductScreenState extends State<ProductScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: _newProduct,
+            onPressed: _isLoading ? null : _newProduct,
             icon: const Icon(
               CupertinoIcons.add_circled_solid,
             ),
@@ -123,13 +132,10 @@ class _ProductScreenState extends State<ProductScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: (!_isLoading && _list != null && _list!.isNotEmpty)
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _list!.length,
-                      itemBuilder: (ctx, index) {
-                        final item = _list![index];
+                  ? Column(
+                      children: _list!.map((item) {
                         final isLastIndex = (index == (_list!.length - 1));
+                        index++;
                         return Column(
                           children: [
                             ListTileItem(
@@ -145,7 +151,8 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                           ],
                         );
-                      })
+                      }).toList(),
+                    )
                   : Center(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
