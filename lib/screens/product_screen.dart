@@ -5,6 +5,7 @@ import 'package:miraswift_demo/services/product_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/form_new_product.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
+import 'package:miraswift_demo/widgets/platform_alert_dialog.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -127,32 +128,25 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  void _deleteItem() {
-    showDialog(
+  void _deleteItem() async {
+    await showPlatformAlertDialog(
       context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: const Text('Confirm Deletion'),
-          content: Text(
-              'Are you sure you want to delete ${_selectedItem!.nameProduct} with code ${_selectedItem!.kodeProduct}?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _selectedItem = null;
-                });
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: _submitDeleteItem,
-              child: const Text('Delete'),
-            ),
-          ],
-        );
+      title: 'Confirm Deletion',
+      content:
+          'Are you sure you want to delete ${_selectedItem!.nameProduct} with code ${_selectedItem!.kodeProduct}?',
+      positiveButtonText: 'Delete',
+      onPositivePressed: _submitDeleteItem,
+      negativeButtonText: 'Cancel',
+      onNegativePressed: () {
+        setState(() {
+          _selectedItem = null;
+        });
+        Navigator.of(context).pop();
       },
     );
+    setState(() {
+      _selectedItem = null;
+    });
   }
 
   void _submitDeleteItem() async {
@@ -240,11 +234,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                     Icons.more_vert_rounded,
                                     color: Colors.grey.withAlpha(75),
                                   ),
-                                  onSelected: (value) {
-                                    setState(() {
-                                      _selectedItem = value;
-                                    });
-                                  },
                                   itemBuilder: (ctx) {
                                     return [
                                       PopupMenuItem<ProductModel>(
@@ -255,7 +244,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                             _selectedItem = null;
                                           });
                                         },
-                                        value: item,
                                         child: const Row(
                                           children: [
                                             Icon(
@@ -269,8 +257,12 @@ class _ProductScreenState extends State<ProductScreen> {
                                         ),
                                       ),
                                       PopupMenuItem<ProductModel>(
-                                        onTap: _editItem,
-                                        value: item,
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedItem = item;
+                                          });
+                                          _editItem();
+                                        },
                                         child: const Row(
                                           children: [
                                             Icon(
@@ -283,8 +275,12 @@ class _ProductScreenState extends State<ProductScreen> {
                                         ),
                                       ),
                                       PopupMenuItem<ProductModel>(
-                                        onTap: _deleteItem,
-                                        value: item,
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedItem = item;
+                                          });
+                                          _deleteItem();
+                                        },
                                         child: const Row(
                                           children: [
                                             Icon(
