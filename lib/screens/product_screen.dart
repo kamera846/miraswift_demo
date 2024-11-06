@@ -7,7 +7,7 @@ import 'package:miraswift_demo/services/product_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/form_new_product.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
-import 'package:miraswift_demo/widgets/platform_alert_dialog.dart';
+import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -223,6 +223,7 @@ class _ProductScreenState extends State<ProductScreen> {
       content:
           'Are you sure you want to delete ${_selectedItem!.nameProduct} with code ${_selectedItem!.kodeProduct}?',
       positiveButtonText: 'Delete',
+      positiveButtonTextColor: CupertinoColors.systemRed,
       onPositivePressed: _submitDeleteItem,
       negativeButtonText: 'Cancel',
       onNegativePressed: () {
@@ -318,9 +319,9 @@ class _ProductScreenState extends State<ProductScreen> {
                               title: item.nameProduct,
                               description: item.createdAt,
                               customTrailingIcon: PopupMenuButton<ProductModel>(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.more_vert_rounded,
-                                    color: Colors.grey.withAlpha(75),
+                                    color: Colors.grey,
                                   ),
                                   itemBuilder: (ctx) {
                                     return [

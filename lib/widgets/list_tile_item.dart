@@ -99,9 +99,9 @@ class ListTileItem extends StatelessWidget {
           customTrailingIcon ??
               IconButton(
                 onPressed: onTap,
-                icon: Icon(
+                icon: const Icon(
                   Icons.chevron_right_rounded,
-                  color: Colors.grey.withAlpha(75),
+                  color: Colors.grey,
                 ),
               ),
         ],

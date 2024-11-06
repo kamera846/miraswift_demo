@@ -60,7 +60,7 @@ class FormNewProductState extends State<FormNewProduct> {
                 fontWeight: FontWeight.bold,
               ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
         Form(
           key: _formKey,
           child: Column(
@@ -126,6 +126,7 @@ class FormNewProductState extends State<FormNewProduct> {
                 },
                 child: const Text('Submit Now'),
               ),
+              const SizedBox(height: 16.0),
             ],
           ),
         ),
