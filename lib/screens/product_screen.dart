@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/product_model.dart';
@@ -48,26 +50,67 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   void _newItem() {
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (ctx) {
-        return SizedBox(
-          width: double.infinity,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom: 16 + _keyboardHeight,
+    if (Platform.isIOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (ctx) {
+          return CupertinoPopupSurface(
+            isSurfacePainted: false,
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(24),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  height: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: CupertinoTheme.of(context)
+                              .scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: FormNewProduct(
+                          onSubmitted: _submitNewItem,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            child: FormNewProduct(
-              onSubmitted: _submitNewItem,
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        showDragHandle: true,
+        isScrollControlled: true,
+        builder: (ctx) {
+          return SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 16 + _keyboardHeight,
+              ),
+              child: FormNewProduct(
+                onSubmitted: _submitNewItem,
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    }
   }
 
   void _submitNewItem(String code, String name) async {
@@ -86,30 +129,75 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   void _editItem() async {
-    await showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (ctx) {
-        return SizedBox(
-          width: double.infinity,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom: 16 + _keyboardHeight,
+    if (Platform.isIOS) {
+      await showCupertinoModalPopup(
+        context: context,
+        builder: (ctx) {
+          return CupertinoPopupSurface(
+            isSurfacePainted: false,
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(24),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  height: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: CupertinoTheme.of(context)
+                              .scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: FormNewProduct.edit(
+                          item: _selectedItem,
+                          onSubmitted: _submitEditItem,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            child: FormNewProduct.edit(
-              item: _selectedItem,
-              onSubmitted: _submitEditItem,
+          );
+        },
+      );
+      setState(() {
+        _selectedItem = null;
+      });
+    } else {
+      await showModalBottomSheet(
+        context: context,
+        showDragHandle: true,
+        isScrollControlled: true,
+        builder: (ctx) {
+          return SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 16 + _keyboardHeight,
+              ),
+              child: FormNewProduct.edit(
+                item: _selectedItem,
+                onSubmitted: _submitEditItem,
+              ),
             ),
-          ),
-        );
-      },
-    );
-    setState(() {
-      _selectedItem = null;
-    });
+          );
+        },
+      );
+      setState(() {
+        _selectedItem = null;
+      });
+    }
   }
 
   void _submitEditItem(String code, String name) async {
