@@ -1,21 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/screens/formula_screen.dart';
 import 'package:miraswift_demo/services/product_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/form_new_product.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
 
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+class FormulaScreen extends StatefulWidget {
+  const FormulaScreen({super.key, required this.product});
+
+  final ProductModel product;
 
   @override
-  State<ProductScreen> createState() => _ProductScreenState();
+  State<FormulaScreen> createState() => _FormulaScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _FormulaScreenState extends State<FormulaScreen> {
   List<ProductModel>? _list;
   bool _isLoading = true;
   ProductModel? _selectedItem;
@@ -259,9 +260,20 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Setting Recipe',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.product.nameProduct,
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            Text(
+              widget.product.kodeProduct,
+              style: Theme.of(context).textTheme.bodySmall,
+            )
+          ],
         ),
         actions: [
           IconButton(
@@ -280,12 +292,12 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Row(
                 children: [
                   const Icon(
-                    Icons.token_rounded,
+                    Icons.receipt_rounded,
                     color: Colors.grey,
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'List Product',
+                    'List Formula',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -308,15 +320,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         return Column(
                           children: [
                             ListTileItem(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) =>
-                                        FormulaScreen(product: item),
-                                  ),
-                                );
-                              },
+                              onTap: () {},
                               isSelected: (_selectedItem != null &&
                                       _selectedItem!.idProduct ==
                                           item.idProduct)
@@ -333,14 +337,12 @@ class _ProductScreenState extends State<ProductScreen> {
                                   itemBuilder: (ctx) {
                                     return [
                                       PopupMenuItem<ProductModel>(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  FormulaScreen(product: item),
-                                            ),
-                                          );
+                                        onTap: () async {
+                                          await Future.delayed(const Duration(
+                                              milliseconds: 250));
+                                          setState(() {
+                                            _selectedItem = null;
+                                          });
                                         },
                                         child: const Row(
                                           children: [
