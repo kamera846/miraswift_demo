@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:miraswift_demo/models/formula_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/services/product_api.dart';
+import 'package:miraswift_demo/services/formula_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/form_new_product.dart';
+import 'package:miraswift_demo/widgets/form_new_formula.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
 
@@ -17,9 +18,9 @@ class FormulaScreen extends StatefulWidget {
 }
 
 class _FormulaScreenState extends State<FormulaScreen> {
-  List<ProductModel>? _list;
+  List<FormulaModel>? _list;
   bool _isLoading = true;
-  ProductModel? _selectedItem;
+  FormulaModel? _selectedItem;
 
   double _keyboardHeight = 0;
 
@@ -33,7 +34,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
     setState(() {
       _isLoading = true;
     });
-    await ProductApi().list(
+    await FormulaApi().list(
+      idProduct: widget.product.idProduct,
       onError: (msg) {
         if (mounted) {
           showSnackBar(context, msg);
@@ -77,7 +79,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     //                       borderRadius: BorderRadius.circular(24),
     //                     ),
     //                     padding: const EdgeInsets.all(16),
-    //                     child: FormNewProduct(
+    //                     child: FormNewFormula(
     //                       onSubmitted: _submitNewItem,
     //                     ),
     //                   ),
@@ -103,7 +105,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
               right: 16,
               bottom: 16 + _keyboardHeight,
             ),
-            child: FormNewProduct(
+            child: FormNewFormula(
+              productId: widget.product.idProduct,
               onSubmitted: _submitNewItem,
             ),
           ),
@@ -113,13 +116,22 @@ class _FormulaScreenState extends State<FormulaScreen> {
     // }
   }
 
-  void _submitNewItem(String code, String name) async {
+  void _submitNewItem(
+    String productId,
+    String code,
+    String target,
+    String fine,
+    String time,
+  ) async {
     setState(() {
       _isLoading = true;
     });
-    await ProductApi().create(
-      productCode: code,
-      productName: name,
+    await FormulaApi().create(
+      productId: productId,
+      code: code,
+      target: target,
+      fine: fine,
+      time: time,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
@@ -156,7 +168,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     //                       borderRadius: BorderRadius.circular(24),
     //                     ),
     //                     padding: const EdgeInsets.all(16),
-    //                     child: FormNewProduct.edit(
+    //                     child: FormNewFormula.edit(
     //                       item: _selectedItem,
     //                       onSubmitted: _submitEditItem,
     //                     ),
@@ -186,8 +198,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
               right: 16,
               bottom: 16 + _keyboardHeight,
             ),
-            child: FormNewProduct.edit(
+            child: FormNewFormula.edit(
               item: _selectedItem,
+              productId: widget.product.idProduct,
               onSubmitted: _submitEditItem,
             ),
           ),
@@ -200,14 +213,18 @@ class _FormulaScreenState extends State<FormulaScreen> {
     // }
   }
 
-  void _submitEditItem(String code, String name) async {
+  void _submitEditItem(String productId, String code, String target,
+      String fine, String time) async {
     setState(() {
       _isLoading = true;
     });
-    await ProductApi().edit(
-      productId: _selectedItem!.idProduct,
-      productCode: code,
-      productName: name,
+    await FormulaApi().edit(
+      id: _selectedItem!.idFormula,
+      productId: productId,
+      code: code,
+      target: target,
+      fine: fine,
+      time: time,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
@@ -221,7 +238,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       context: context,
       title: 'Confirm Deletion',
       content:
-          'Are you sure you want to delete ${_selectedItem!.nameProduct} with code ${_selectedItem!.kodeProduct}?',
+          'Are you sure you want to delete material with code ${_selectedItem!.kodeMaterial}?',
       positiveButtonText: 'Delete',
       positiveButtonTextColor: CupertinoColors.systemRed,
       onPositivePressed: _submitDeleteItem,
@@ -243,8 +260,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
     setState(() {
       _isLoading = true;
     });
-    await ProductApi().delete(
-      productId: _selectedItem!.idProduct,
+    await FormulaApi().delete(
+      id: _selectedItem!.idFormula,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
@@ -297,7 +314,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'List Formula',
+                    'List Material',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -320,43 +337,43 @@ class _FormulaScreenState extends State<FormulaScreen> {
                         return Column(
                           children: [
                             ListTileItem(
-                              onTap: () {},
+                              // onTap: () {},
                               isSelected: (_selectedItem != null &&
-                                      _selectedItem!.idProduct ==
-                                          item.idProduct)
+                                      _selectedItem!.idFormula ==
+                                          item.idFormula)
                                   ? true
                                   : false,
-                              badge: item.kodeProduct,
-                              title: item.nameProduct,
+                              badge: item.kodeMaterial,
+                              title: 'Nama Material',
                               description: item.createdAt,
-                              customTrailingIcon: PopupMenuButton<ProductModel>(
+                              customTrailingIcon: PopupMenuButton<FormulaModel>(
                                   icon: const Icon(
                                     Icons.more_vert_rounded,
                                     color: Colors.grey,
                                   ),
                                   itemBuilder: (ctx) {
                                     return [
-                                      PopupMenuItem<ProductModel>(
-                                        onTap: () async {
-                                          await Future.delayed(const Duration(
-                                              milliseconds: 250));
-                                          setState(() {
-                                            _selectedItem = null;
-                                          });
-                                        },
-                                        child: const Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons
-                                                  .arrow_up_right_circle_fill,
-                                              size: 20,
-                                            ),
-                                            SizedBox(width: 12),
-                                            Text('Open')
-                                          ],
-                                        ),
-                                      ),
-                                      PopupMenuItem<ProductModel>(
+                                      // PopupMenuItem<FormulaModel>(
+                                      //   onTap: () async {
+                                      //     await Future.delayed(const Duration(
+                                      //         milliseconds: 250));
+                                      //     setState(() {
+                                      //       _selectedItem = null;
+                                      //     });
+                                      //   },
+                                      //   child: const Row(
+                                      //     children: [
+                                      //       Icon(
+                                      //         CupertinoIcons
+                                      //             .arrow_up_right_circle_fill,
+                                      //         size: 20,
+                                      //       ),
+                                      //       SizedBox(width: 12),
+                                      //       Text('Open')
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      PopupMenuItem<FormulaModel>(
                                         onTap: () {
                                           setState(() {
                                             _selectedItem = item;
@@ -374,7 +391,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                                           ],
                                         ),
                                       ),
-                                      PopupMenuItem<ProductModel>(
+                                      PopupMenuItem<FormulaModel>(
                                         onTap: () {
                                           setState(() {
                                             _selectedItem = item;
