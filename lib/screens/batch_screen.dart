@@ -96,6 +96,20 @@ class _BatchScreenState extends State<BatchScreen> {
                                   ),
                                 );
                               },
+                              customTrailingIcon: IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (ctx) =>
+                                          BatchDetailScreen(batch: item),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: Colors.grey,
+                                ),
+                              ),
                               title: item.noBatch,
                               description: '2024-11-05 08:49:48',
                             ),

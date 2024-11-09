@@ -97,12 +97,8 @@ class ListTileItem extends StatelessWidget {
               ),
             ),
           customTrailingIcon ??
-              IconButton(
-                onPressed: onTap,
-                icon: const Icon(
-                  Icons.chevron_right_rounded,
-                  color: Colors.grey,
-                ),
+              Container(
+                margin: const EdgeInsets.only(right: 16),
               ),
         ],
       ),
