@@ -105,56 +105,66 @@ class FormNewFormulaState extends State<FormNewFormula> {
                 },
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _targetFormulaController,
-                style: Theme.of(context).textTheme.bodyMedium,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Target (kg)',
-                  labelStyle: Theme.of(context).textTheme.bodyMedium,
-                  hintText: '100.0',
-                  hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.grey,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _targetFormulaController,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Target (kg)',
+                        labelStyle: Theme.of(context).textTheme.bodyMedium,
+                        hintText: '100.0',
+                        hintStyle:
+                            Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  color: Colors.grey,
+                                ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some number';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _targetFormulaInput = value ?? '';
+                      },
+                    ),
                   ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some number';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _targetFormulaInput = value ?? '';
-                },
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _fineFormulaController,
-                style: Theme.of(context).textTheme.bodyMedium,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Fine (kg)',
-                  labelStyle: Theme.of(context).textTheme.bodyMedium,
-                  hintText: '5.0',
-                  hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.grey,
+                  const SizedBox(width: 16.0),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _fineFormulaController,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Fine (kg)',
+                        labelStyle: Theme.of(context).textTheme.bodyMedium,
+                        hintText: '5.0',
+                        hintStyle:
+                            Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  color: Colors.grey,
+                                ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some number';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _fineFormulaInput = value ?? '';
+                      },
+                    ),
                   ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some number';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _fineFormulaInput = value ?? '';
-                },
+                ],
               ),
               const SizedBox(height: 16.0),
               TextFormField(
