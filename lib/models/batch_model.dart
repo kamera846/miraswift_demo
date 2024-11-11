@@ -14,6 +14,7 @@ class BatchModel {
     required this.dateTimbang,
     required this.timeTimbang,
     required this.createdAt,
+    required this.maxDateEquipment,
   });
 
   final String noBatch;
@@ -30,6 +31,7 @@ class BatchModel {
   final String dateTimbang;
   final String timeTimbang;
   final String createdAt;
+  final String maxDateEquipment;
 
   factory BatchModel.fromJson(Map<String, dynamic> json) {
     return BatchModel(
@@ -47,6 +49,7 @@ class BatchModel {
       dateTimbang: json['date_timbang'] ?? '',
       timeTimbang: json['time_timbang'] ?? '',
       createdAt: json['created_at'] ?? '',
+      maxDateEquipment: json['MAX(date_equipment)'] ?? '',
     );
   }
 
@@ -65,5 +68,6 @@ class BatchModel {
         'date_timbang': dateTimbang,
         'time_timbang': timeTimbang,
         'created_at': createdAt,
+        'MAX(date_equipment)': maxDateEquipment,
       };
 }
