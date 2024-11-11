@@ -18,8 +18,13 @@ class FormNewFormula extends StatefulWidget {
   final bool isEdit;
   final String productId;
   final FormulaModel? item;
-  final void Function(String productId, String code, String target, String fine,
-      String time) onSubmitted;
+  final void Function(
+    String productId,
+    String code,
+    String target,
+    String fine,
+    String time,
+  ) onSubmitted;
 
   @override
   FormNewFormulaState createState() => FormNewFormulaState();

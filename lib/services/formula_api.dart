@@ -184,11 +184,10 @@ class FormulaApi {
         headers: headerSetup,
         body: jsonEncode(
           {
-            'id_formula': id,
             'id_product': productId,
-            'target_formula': code,
-            'fine_formula': target,
-            'kode_material': fine,
+            'target_formula': target,
+            'fine_formula': fine,
+            'kode_material': code,
             'time_target': time,
           },
         ),

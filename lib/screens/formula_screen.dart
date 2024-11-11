@@ -215,8 +215,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
     // }
   }
 
-  void _submitEditItem(String productId, String code, String target,
-      String fine, String time) async {
+  void _submitEditItem(
+    String productId,
+    String code,
+    String target,
+    String fine,
+    String time,
+  ) async {
     setState(() {
       _isLoading = true;
     });
@@ -349,72 +354,74 @@ class _FormulaScreenState extends State<FormulaScreen> {
                                   : false,
                               badge: item.kodeMaterial,
                               title: 'Nama Material',
-                              description: item.createdAt,
-                              // customTrailingIcon: PopupMenuButton<FormulaModel>(
-                              //     icon: const Icon(
-                              //       Icons.more_vert_rounded,
-                              //       color: Colors.grey,
-                              //     ),
-                              //     itemBuilder: (ctx) {
-                              //       return [
-                              //         // PopupMenuItem<FormulaModel>(
-                              //         //   onTap: () async {
-                              //         //     await Future.delayed(const Duration(
-                              //         //         milliseconds: 250));
-                              //         //     setState(() {
-                              //         //       _selectedItem = null;
-                              //         //     });
-                              //         //   },
-                              //         //   child: const Row(
-                              //         //     children: [
-                              //         //       Icon(
-                              //         //         CupertinoIcons
-                              //         //             .arrow_up_right_circle_fill,
-                              //         //         size: 20,
-                              //         //       ),
-                              //         //       SizedBox(width: 12),
-                              //         //       Text('Open')
-                              //         //     ],
-                              //         //   ),
-                              //         // ),
-                              //         PopupMenuItem<FormulaModel>(
-                              //           onTap: () {
-                              //             setState(() {
-                              //               _selectedItem = item;
-                              //             });
-                              //             _editItem();
-                              //           },
-                              //           child: const Row(
-                              //             children: [
-                              //               Icon(
-                              //                 CupertinoIcons.pencil_circle_fill,
-                              //                 size: 20,
-                              //               ),
-                              //               SizedBox(width: 12),
-                              //               Text('Edit')
-                              //             ],
-                              //           ),
-                              //         ),
-                              //         PopupMenuItem<FormulaModel>(
-                              //           onTap: () {
-                              //             setState(() {
-                              //               _selectedItem = item;
-                              //             });
-                              //             _deleteItem();
-                              //           },
-                              //           child: const Row(
-                              //             children: [
-                              //               Icon(
-                              //                 CupertinoIcons.trash_circle_fill,
-                              //                 size: 20,
-                              //               ),
-                              //               SizedBox(width: 12),
-                              //               Text('Delete')
-                              //             ],
-                              //           ),
-                              //         ),
-                              //       ];
-                              //     }),
+                              description:
+                                  '${item.targetFormula} kg in ${item.timeTarget} second (Fine ${item.fineFormula} kg)',
+                              customTrailingIcon: PopupMenuButton<FormulaModel>(
+                                icon: const Icon(
+                                  Icons.more_vert_rounded,
+                                  color: Colors.grey,
+                                ),
+                                itemBuilder: (ctx) {
+                                  return [
+                                    // PopupMenuItem<FormulaModel>(
+                                    //   onTap: () async {
+                                    //     await Future.delayed(const Duration(
+                                    //         milliseconds: 250));
+                                    //     setState(() {
+                                    //       _selectedItem = null;
+                                    //     });
+                                    //   },
+                                    //   child: const Row(
+                                    //     children: [
+                                    //       Icon(
+                                    //         CupertinoIcons
+                                    //             .arrow_up_right_circle_fill,
+                                    //         size: 20,
+                                    //       ),
+                                    //       SizedBox(width: 12),
+                                    //       Text('Open')
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    PopupMenuItem<FormulaModel>(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedItem = item;
+                                        });
+                                        _editItem();
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.pencil_circle_fill,
+                                            size: 20,
+                                          ),
+                                          SizedBox(width: 12),
+                                          Text('Edit')
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem<FormulaModel>(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedItem = item;
+                                        });
+                                        _deleteItem();
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.trash_circle_fill,
+                                            size: 20,
+                                          ),
+                                          SizedBox(width: 12),
+                                          Text('Delete')
+                                        ],
+                                      ),
+                                    ),
+                                  ];
+                                },
+                              ),
                             ),
                             if (!isLastIndex)
                               Divider(
