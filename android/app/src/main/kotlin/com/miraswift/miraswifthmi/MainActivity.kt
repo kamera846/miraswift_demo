@@ -1,4 +1,4 @@
-package com.example.miraswift_demo
+package com.miraswift.miraswifthmi
 
 import io.flutter.embedding.android.FlutterActivity
 
