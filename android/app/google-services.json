@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "993256766022",
+    "firebase_url": "https://fir-miraswift-default-rtdb.firebaseio.com",
+    "project_id": "fir-miraswift",
+    "storage_bucket": "fir-miraswift.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993256766022:android:99bdadb6b870780e68e847",
+        "android_client_info": {
+          "package_name": "com.miraswift.miraswifthmi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvEgw9l9J37MYBPwKzets9CMe8acsunUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
