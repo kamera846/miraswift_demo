@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:miraswift_demo/models/equipment_monitoring_model.dart';
 import 'package:miraswift_demo/screens/batch_screen.dart';
 import 'package:miraswift_demo/screens/equipment_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
@@ -7,21 +10,107 @@ import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
 
 FirebaseDatabase database = FirebaseDatabase.instance;
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        shadowColor: Colors.white,
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 75, vertical: 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Image(
+                  image: AssetImage('assets/images/miraswift_transparent.png'),
+                ),
+                const SizedBox(height: 32),
+                const HMIScreen(),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const EquipmentScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('Open Equipment'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const BatchScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('Open Batch'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const ProductScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('Setting Recipe'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
-  String? valveStatus = 'waiting...';
-  String? jetfloStatus = 'waiting...';
-  String? mixerStatus = 'waiting...';
-  String? screwStatus = 'waiting...';
-  String? scalesValue = 'waiting...';
-  String? allEquipmentStatus = 'waiting...';
-  bool? isEquipmentOn;
+class HMIScreen extends StatefulWidget {
+  const HMIScreen({super.key});
+
+  @override
+  State<HMIScreen> createState() => _HMIScreenState();
+}
+
+class _HMIScreenState extends State<HMIScreen> {
+  EquipmentModelMonitoring? data = const EquipmentModelMonitoring(
+    all: null,
+    valve: null,
+    jetflo: null,
+    mixer: null,
+    screw: null,
+    scales: null,
+  );
+  bool isLoading = true;
+  bool isToggleEquipment = false;
 
   @override
   void initState() {
@@ -30,190 +119,175 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void getFirebaseData() {
-    DatabaseReference starCountRef =
-        FirebaseDatabase.instance.ref('bizlink/equipment');
-    starCountRef.child('screw').onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
-      if (data != null) {
+    var starCountRef = FirebaseDatabase.instance.ref('bizlink/equipment');
+    starCountRef.onValue.listen((DatabaseEvent event) {
+      var jsonString = jsonEncode(event.snapshot.value);
+      var mapData = EquipmentModelMonitoring.fromJson(jsonDecode(jsonString));
+      if (mapData.all == null || mapData.all == 'off') {
         setState(() {
-          screwStatus = data.toString().toUpperCase();
+          data = EquipmentModelMonitoring(
+            all: mapData.all,
+            valve: null,
+            jetflo: null,
+            mixer: null,
+            screw: null,
+            scales: null,
+          );
+          isLoading = true;
+        });
+      } else {
+        setState(() {
+          data = mapData;
+          isLoading = false;
         });
       }
-    });
-    starCountRef.child('timbangan').onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
-      if (data != null) {
-        setState(() {
-          scalesValue = data.toString().toUpperCase();
-        });
-      }
-    });
-    starCountRef.child('all').onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
-      if (data != null) {
-        setState(() {
-          allEquipmentStatus = data.toString();
-        });
-      }
-    });
-
-    setState(() {
-      valveStatus = null;
-      jetfloStatus = null;
-      mixerStatus = null;
     });
   }
 
-  void _toggleEquipmentStatus() {
-    if (isEquipmentOn != null) {
-      if (isEquipmentOn!) {
-        showPlatformAlertDialog(
+  void _toggleAllEquipment() {
+    if (data != null) {
+      if (data!.all != null) {
+        if (data!.all == 'off') {
+          showPlatformAlertDialog(
             context: context,
-            title: 'Warning',
-            content: 'Are you sure to turn off all equipment?',
-            positiveButtonText: 'Turn Off',
+            title: 'Confirmation!',
+            content: 'Do you want to turn on all equipment right now?',
+            positiveButtonText: 'Turn On',
             positiveButtonTextColor: Colors.red,
-            onPositivePressed: _submitUpdate);
-      } else {
-        _submitUpdate();
+            onPositivePressed: () async {
+              if (mounted) {
+                Navigator.pop(context);
+              }
+              await _submitUpdate('on', 500);
+            },
+            negativeButtonText: 'Cancel',
+            negativeButtonTextColor: Colors.red,
+            onNegativePressed: () => Navigator.pop(context),
+          );
+        } else if (data!.all == 'on') {
+          _submitUpdate('off', 1500);
+        }
       }
     }
   }
 
-  void _submitUpdate() async {
+  Future<void> _submitUpdate(String status, int delayed) async {
+    setState(() {
+      isToggleEquipment = true;
+    });
     DatabaseReference ref = FirebaseDatabase.instance.ref("bizlink/equipment");
 
     await ref.update({
-      "all": isEquipmentOn! ? 'off' : 'on',
+      "all": status,
     });
 
-    if (!isEquipmentOn!) {
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    }
+    await Future.delayed(Duration(milliseconds: delayed));
+
+    setState(() {
+      isToggleEquipment = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (allEquipmentStatus == 'waiting...' || allEquipmentStatus == null) {
-      setState(() {
-        isEquipmentOn = null;
-      });
-    } else if (allEquipmentStatus == 'on') {
-      setState(() {
-        isEquipmentOn = true;
-      });
-    } else {
-      setState(() {
-        isEquipmentOn = false;
-      });
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Dashboard',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(width: 1),
+        borderRadius: BorderRadius.circular(8),
       ),
-      body: Center(
-        child: SizedBox(
-          width: 250,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            'Equipment Status',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Row(
             children: [
-              const Text('Dashboard is coming soon..'),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Center(
-                      child: Text('Equipment Status'),
-                    ),
-                    const SizedBox(height: 12),
-                    Text('Screw: ${screwStatus ?? 'Not Found'}'),
-                    Text('Scales: ${scalesValue ?? 'Not Found'}'),
-                    const SizedBox(height: 12),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: isEquipmentOn == null
-                            ? null
-                            : _toggleEquipmentStatus,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isEquipmentOn == null
-                              ? Colors.grey
-                              : isEquipmentOn == true
-                                  ? Colors.red
-                                  : Colors.green,
-                        ),
-                        child: Text(
-                          isEquipmentOn == null
-                              ? 'Waiting...'
-                              : isEquipmentOn == true
-                                  ? 'Turn Off'
-                                  : 'Turn On',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => const EquipmentScreen(),
-                    ),
-                  );
-                },
-                child: const Text('Open Equipment'),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => const BatchScreen(),
-                    ),
-                  );
-                },
-                child: const Text('Open Batch'),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => const ProductScreen(),
-                    ),
-                  );
-                },
-                child: const Text('Setting Recipe'),
+              const Text('Valve: '),
+              Text(
+                !isLoading ? data!.valve ?? 'not found' : '...',
+                style: TextStyle(
+                    color: data!.valve == null
+                        ? Colors.black
+                        : data!.valve == 'on'
+                            ? Colors.green
+                            : Colors.red),
               ),
             ],
           ),
-        ),
+          Row(
+            children: [
+              const Text('Jetflo: '),
+              Text(
+                !isLoading ? data!.jetflo ?? 'not found' : '...',
+                style: TextStyle(
+                    color: data!.jetflo == null
+                        ? Colors.black
+                        : data!.jetflo == 'on'
+                            ? Colors.green
+                            : Colors.red),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('Mixer: '),
+              Text(
+                !isLoading ? data!.mixer ?? 'not found' : '...',
+                style: TextStyle(
+                    color: data!.mixer == null
+                        ? Colors.black
+                        : data!.mixer == 'on'
+                            ? Colors.green
+                            : Colors.red),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('Screw: '),
+              Text(
+                !isLoading ? data!.screw ?? 'not found' : '...',
+                style: TextStyle(
+                    color: data!.screw == null
+                        ? Colors.black
+                        : data!.screw == 'on'
+                            ? Colors.green
+                            : Colors.red),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('Scales: '),
+              Text(
+                '${!isLoading ? data!.scales ?? 'not found' : '...'}',
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: isToggleEquipment ? null : _toggleAllEquipment,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isToggleEquipment
+                  ? Colors.grey
+                  : data!.all == 'on'
+                      ? Colors.red
+                      : Colors.green,
+            ),
+            child: Text(
+              isToggleEquipment
+                  ? 'Load Equipment ...'
+                  : data!.all == 'on'
+                      ? 'Turn Off All Equipment'
+                      : 'Turn On All Equipment',
+              style: const TextStyle(color: Colors.white),
+            ),
+          )
+        ],
       ),
     );
   }
