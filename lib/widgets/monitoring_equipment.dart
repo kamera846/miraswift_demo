@@ -24,7 +24,7 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
     scales: null,
   );
   bool isLoading = true;
-  bool isToggleEquipment = false;
+  bool isToggleEquipment = true;
 
   @override
   void initState() {
@@ -55,6 +55,9 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
           isLoading = false;
         });
       }
+      setState(() {
+        isToggleEquipment = false;
+      });
     });
   }
 
