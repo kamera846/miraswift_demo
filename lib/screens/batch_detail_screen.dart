@@ -80,15 +80,24 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                     children: [
                       Text(
                         'Batch Number: ',
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.normal,
+                            ),
                       ),
+                      Text(widget.batch.noBatch,
+                          style: Theme.of(context).textTheme.bodyMedium),
+                    ],
+                  ),
+                  Row(
+                    children: [
                       Text(
-                        widget.batch.noBatch,
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        'Total Scales: ',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.normal,
+                            ),
                       ),
+                      Text('1180.0 KG',
+                          style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
                   const SizedBox(height: 16),
