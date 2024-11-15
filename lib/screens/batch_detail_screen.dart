@@ -17,6 +17,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
   List<BatchModel>? _dataEquipment;
   List<BatchModel>? _dataScales;
   bool isLoading = true;
+  double totalScales = 0.0;
 
   @override
   void initState() {
@@ -36,6 +37,13 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
         }
       },
       onCompleted: (dataEquipment, dataScales) {
+        if (dataScales != null && dataScales.isNotEmpty) {
+          for (var item in dataScales) {
+            setState(() {
+              totalScales += double.parse(item.actualTimbang);
+            });
+          }
+        }
         setState(() {
           _dataEquipment = dataEquipment;
           _dataScales = dataScales;
@@ -96,7 +104,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                               fontWeight: FontWeight.normal,
                             ),
                       ),
-                      Text('1180.0 KG',
+                      Text('$totalScales KG',
                           style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
