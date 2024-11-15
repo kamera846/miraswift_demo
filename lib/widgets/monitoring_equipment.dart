@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/equipment_monitoring_model.dart';
+import 'package:miraswift_demo/services/api.dart';
 import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
+import 'package:miraswift_demo/utils/snackbar.dart';
 
 FirebaseDatabase database = FirebaseDatabase.instance;
 
@@ -33,32 +35,38 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
   }
 
   void getFirebaseData() {
-    var starCountRef = FirebaseDatabase.instance.ref('bizlink/equipment');
-    starCountRef.onValue.listen((DatabaseEvent event) {
-      var jsonString = jsonEncode(event.snapshot.value);
-      var mapData = EquipmentModelMonitoring.fromJson(jsonDecode(jsonString));
-      if (mapData.all == null || mapData.all == 'off') {
+    try {
+      var starCountRef = FirebaseDatabase.instance.ref('bizlink/equipment');
+      starCountRef.onValue.listen((DatabaseEvent event) {
+        var jsonString = jsonEncode(event.snapshot.value);
+        var mapData = EquipmentModelMonitoring.fromJson(jsonDecode(jsonString));
+        if (mapData.all == null || mapData.all == 'off') {
+          setState(() {
+            data = EquipmentModelMonitoring(
+              all: mapData.all,
+              valve: null,
+              jetflo: null,
+              mixer: null,
+              screw: null,
+              scales: null,
+            );
+            isLoading = true;
+          });
+        } else {
+          setState(() {
+            data = mapData;
+            isLoading = false;
+          });
+        }
         setState(() {
-          data = EquipmentModelMonitoring(
-            all: mapData.all,
-            valve: null,
-            jetflo: null,
-            mixer: null,
-            screw: null,
-            scales: null,
-          );
-          isLoading = true;
+          isToggleEquipment = false;
         });
-      } else {
-        setState(() {
-          data = mapData;
-          isLoading = false;
-        });
-      }
-      setState(() {
-        isToggleEquipment = false;
+      }).onError((e) {
+        if (mounted) showSnackBar(context, e.message);
       });
-    });
+    } catch (e) {
+      if (mounted) showSnackBar(context, '$failedRequestText. Exception: $e');
+    }
   }
 
   void _toggleAllEquipment() {
@@ -181,7 +189,7 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
             children: [
               const Text('Scales: '),
               Text(
-                '${!isLoading ? data!.scales ?? 'not found' : '...'}',
+                !isLoading ? data!.scales ?? 'not found' : '...',
               ),
             ],
           ),

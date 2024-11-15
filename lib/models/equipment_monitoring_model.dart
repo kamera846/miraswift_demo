@@ -13,7 +13,7 @@ class EquipmentModelMonitoring {
   final String? jetflo;
   final String? mixer;
   final String? screw;
-  final double? scales;
+  final String? scales;
 
   Map<String, dynamic> toJson() => {
         'all': all,
@@ -31,7 +31,7 @@ class EquipmentModelMonitoring {
       jetflo: json['jetflo'] == '' ? null : json['jetflo'],
       mixer: json['mixer'] == '' ? null : json['mixer'],
       screw: json['screw'] == '' ? null : json['screw'],
-      scales: json['timbangan'] == '' ? null : json['timbangan'],
+      scales: json['timbangan'] == '' ? null : json['timbangan'].toString(),
     );
   }
 }
