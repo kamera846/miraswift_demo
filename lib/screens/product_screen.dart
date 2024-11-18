@@ -259,10 +259,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Setting Recipe',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Setting Recipe'),
         actions: [
           IconButton(
             onPressed: _isLoading ? null : _newItem,

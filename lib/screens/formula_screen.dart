@@ -291,9 +291,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
           children: [
             Text(
               widget.product.nameProduct,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
               widget.product.kodeProduct,

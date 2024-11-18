@@ -47,10 +47,7 @@ class _BatchScreenState extends State<BatchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Batch',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Batch'),
       ),
       body: SingleChildScrollView(
         child: Column(

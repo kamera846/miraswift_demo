@@ -60,10 +60,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Batch Detail',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Batch Detail'),
         actions: [
           IconButton(
             onPressed: _getBatchDetail,

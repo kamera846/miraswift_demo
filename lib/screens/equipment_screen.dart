@@ -93,10 +93,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Equipment',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Equipment'),
         actions: [
           IconButton(
             onPressed: () {
