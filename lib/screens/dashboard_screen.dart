@@ -4,8 +4,15 @@ import 'package:miraswift_demo/screens/equipment_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
 import 'package:miraswift_demo/widgets/monitoring_equipment.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final int _badgeCount = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +22,41 @@ class DashboardScreen extends StatelessWidget {
           'Dashboard',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.notifications),
+              ),
+              if (_badgeCount > 0)
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    margin: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        _badgeCount < 10 ? _badgeCount.toString() : '9+',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
         shadowColor: Colors.white,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
