@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/screens/batch_screen.dart';
 import 'package:miraswift_demo/screens/equipment_screen.dart';
+import 'package:miraswift_demo/screens/notifications_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
 import 'package:miraswift_demo/widgets/monitoring_equipment.dart';
 
@@ -18,16 +19,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Dashboard',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Dashboard'),
         actions: [
           Stack(
             clipBehavior: Clip.none,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (crx) => const NotificationsScreen(),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.notifications),
               ),
               if (_badgeCount > 0)
