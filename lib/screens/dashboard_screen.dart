@@ -13,7 +13,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final int _badgeCount = 5;
+  final int _badgeCount = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -39,21 +39,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Positioned(
                   right: 0,
                   top: 0,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    margin: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        _badgeCount < 10 ? _badgeCount.toString() : '9+',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (crx) => const NotificationsScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      margin: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          _badgeCount < 10 ? _badgeCount.toString() : '9+',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),

@@ -38,6 +38,7 @@ class MainApp extends StatelessWidget {
         dialogTheme: const DialogTheme(
           backgroundColor: Colors.white,
         ),
+        splashColor: Colors.blue.withOpacity(0.2),
       ),
       home: const DashboardScreen(),
     );

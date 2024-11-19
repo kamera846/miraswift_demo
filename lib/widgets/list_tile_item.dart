@@ -52,7 +52,7 @@ class ListTileItem extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       selected: isSelected,
-      selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
+      selectedTileColor: Theme.of(context).splashColor,
       contentPadding:
           const EdgeInsets.only(top: 8, right: 0, bottom: 8, left: 16),
       title: Column(
@@ -72,7 +72,7 @@ class ListTileItem extends StatelessWidget {
             ),
         ],
       ),
-      splashColor: Theme.of(context).colorScheme.primaryContainer,
+      splashColor: Theme.of(context).splashColor,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

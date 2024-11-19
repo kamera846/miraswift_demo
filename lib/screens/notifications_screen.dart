@@ -23,30 +23,32 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       isLoading = true;
     });
     await Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 1),
       () {
-        setState(() {
-          _batchs = [
-            const BatchModel(
-              noBatch: 'noBatch',
-              nameEquipment: 'nameEquipment',
-              timeOn: 'timeOn',
-              timeOff: 'timeOff',
-              timeElapsed: 'timeElapsed',
-              desc: 'desc',
-              idTimbang: 'idTimbang',
-              kodeBahan: 'kodeBahan',
-              nameBahan: 'nameBahan',
-              actualTimbang: 'actualTimbang',
-              statusTimbang: 'statusTimbang',
-              dateTimbang: 'dateTimbang',
-              timeTimbang: 'timeTimbang',
-              createdAt: 'createdAt',
-              maxDateEquipment: 'maxDateEquipment',
-            ),
-          ];
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _batchs = [
+              const BatchModel(
+                noBatch: 'noBatch',
+                nameEquipment: 'nameEquipment',
+                timeOn: 'timeOn',
+                timeOff: 'timeOff',
+                timeElapsed: 'timeElapsed',
+                desc: 'desc',
+                idTimbang: 'idTimbang',
+                kodeBahan: 'kodeBahan',
+                nameBahan: 'nameBahan',
+                actualTimbang: 'actualTimbang',
+                statusTimbang: 'statusTimbang',
+                dateTimbang: 'dateTimbang',
+                timeTimbang: 'timeTimbang',
+                createdAt: 'createdAt',
+                maxDateEquipment: 'maxDateEquipment',
+              ),
+            ];
+            isLoading = false;
+          });
+        }
       },
     );
   }
@@ -94,7 +96,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         index++;
                         return Column(
                           children: [
-                            GestureDetector(
+                            InkWell(
                               onTap: () {},
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
