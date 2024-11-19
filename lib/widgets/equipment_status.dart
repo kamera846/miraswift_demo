@@ -50,31 +50,23 @@ class EquipmentStatus extends StatelessWidget {
                 children: [
                   Text(
                     equipment.nameEquipment,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.w900,
-                        ),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    '${equipment.dateEquipment} ${equipment.timeEquipment}',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  Text('${equipment.dateEquipment} ${equipment.timeEquipment}',
+                      style: const TextStyle(fontSize: 12)),
                 ],
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'BATCH',
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: TextStyle(fontSize: 12),
                 ),
                 Text(
                   equipment.noBatch,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: const TextStyle(fontSize: 12),
                 ),
               ],
             )

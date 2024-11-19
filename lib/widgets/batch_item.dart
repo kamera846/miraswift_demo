@@ -41,9 +41,7 @@ class BatchItem extends StatelessWidget {
                     equipment != null
                         ? equipment!.nameEquipment
                         : scales!.nameBahan,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.w900,
-                        ),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -69,14 +67,15 @@ class BatchItem extends StatelessWidget {
                         equipment != null
                             ? equipment!.timeOn
                             : '${scales!.dateTimbang} ${scales!.timeTimbang}',
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: TextStyle(
+                            fontSize: 12, color: Colors.grey.shade600),
                       ),
                     ],
                   ),
                   if (equipment != null) ...[
                     Container(
                       width: 2,
-                      height: 25,
+                      height: 12,
                       margin: const EdgeInsets.only(left: 9),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -103,7 +102,8 @@ class BatchItem extends StatelessWidget {
                         if (equipment!.timeOff != '0')
                           Text(
                             equipment!.timeOff,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey.shade600),
                           )
                         else
                           Icon(
@@ -118,14 +118,12 @@ class BatchItem extends StatelessWidget {
               ),
             ),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 if (equipment != null && equipment!.timeElapsed != '0')
                   Text(
                     equipment!.timeElapsed,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: const TextStyle(fontSize: 12),
                   )
                 else if (equipment != null && equipment!.timeElapsed == '0')
                   Icon(
@@ -135,15 +133,13 @@ class BatchItem extends StatelessWidget {
                 else if (equipment == null)
                   Text(
                     '${scales!.actualTimbang} KG',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 Text(
                   equipment != null
                       ? equipment!.desc.toUpperCase()
                       : scales!.statusTimbang.toUpperCase(),
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
               ],
             )
