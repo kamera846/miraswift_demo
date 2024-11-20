@@ -137,7 +137,7 @@ class _ProductScreenState extends State<ProductScreen> {
     //         child: Material(
     //           color: Colors.transparent,
     //           borderRadius: BorderRadius.circular(24),
-    //           child: GestureDetector(
+    //           child:   (
     //             onTap: () {
     //               Navigator.pop(context);
     //             },

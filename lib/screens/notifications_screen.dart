@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswift_demo/models/logmsg_model.dart';
+import 'package:miraswift_demo/services/logmsg_api.dart';
+import 'package:miraswift_demo/utils/snackbar.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -9,43 +11,25 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  List<BatchModel>? _batchs;
+  List<LogMessageModel>? _batchs;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _getBatchs();
+    _getList();
   }
 
-  void _getBatchs() async {
+  void _getList() async {
     setState(() {
       isLoading = true;
     });
-    await Future.delayed(
-      const Duration(seconds: 1),
-      () {
+    await LogMessageApi().list(
+      onError: (msg) => showSnackBar(context, msg),
+      onCompleted: (data) {
         if (mounted) {
           setState(() {
-            _batchs = [
-              const BatchModel(
-                noBatch: 'noBatch',
-                nameEquipment: 'nameEquipment',
-                timeOn: 'timeOn',
-                timeOff: 'timeOff',
-                timeElapsed: 'timeElapsed',
-                desc: 'desc',
-                idTimbang: 'idTimbang',
-                kodeBahan: 'kodeBahan',
-                nameBahan: 'nameBahan',
-                actualTimbang: 'actualTimbang',
-                statusTimbang: 'statusTimbang',
-                dateTimbang: 'dateTimbang',
-                timeTimbang: 'timeTimbang',
-                createdAt: 'createdAt',
-                maxDateEquipment: 'maxDateEquipment',
-              ),
-            ];
+            _batchs = data;
             isLoading = false;
           });
         }
@@ -71,13 +55,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   const Icon(
                     Icons.notifications_on_rounded,
                     color: Colors.grey,
+                    size: 20,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     'List Message',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ),
@@ -103,32 +86,32 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Row(
+                                    Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'To number 0895636998639',
-                                          style: TextStyle(
+                                          'To number ${item.toNumber}',
+                                          style: const TextStyle(
                                               fontSize: 10, color: Colors.grey),
                                         ),
                                         Text(
-                                          '18 November 2024, 16.32',
-                                          style: TextStyle(
+                                          item.dateMsg,
+                                          style: const TextStyle(
                                               fontSize: 10, color: Colors.grey),
                                         )
                                       ],
                                     ),
                                     const SizedBox(height: 4),
-                                    const Text(
-                                      'Mochammad Rafli Ramadani',
-                                      style: TextStyle(
+                                    Text(
+                                      item.toName,
+                                      style: const TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce purus magna, lacinia in nisi id, consectetur faucibus lacus. Sed sed lacinia ligula, tristique maximus nisl. Aenean rhoncus ex dolor, non dapibus dui ullamcorper a. Fusce fermentum est quis velit luctus, nec rhoncus lacus mattis. Sed egestas lacus vel arcu tempor, nec finibus odio porta. Morbi convallis lectus at sem porta, sed finibus justo rhoncus. Maecenas tellus dolor, ultricies ut lectus quis, malesuada rhoncus velit. Phasellus et neque vitae dolor tempor elementum.',
+                                      item.message,
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: Colors.grey.shade600,
