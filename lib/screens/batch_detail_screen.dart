@@ -174,14 +174,11 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                   const Icon(
                     Icons.settings_applications,
                     color: Colors.grey,
+                    size: 20,
                   ),
                   const SizedBox(width: 9),
-                  Text(
-                    'Equipments',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                  Text('Equipments',
+                      style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
             ),
@@ -233,14 +230,11 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                   const Icon(
                     Icons.scale_rounded,
                     color: Colors.grey,
+                    size: 20,
                   ),
                   const SizedBox(width: 9),
-                  Text(
-                    'Scales',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                  Text('Scales',
+                      style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
             ),

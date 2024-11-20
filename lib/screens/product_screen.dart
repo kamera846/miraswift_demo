@@ -279,14 +279,11 @@ class _ProductScreenState extends State<ProductScreen> {
                   const Icon(
                     Icons.token_rounded,
                     color: Colors.grey,
+                    size: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'List Product',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                  Text('List Product',
+                      style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
             ),

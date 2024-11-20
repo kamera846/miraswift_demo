@@ -318,14 +318,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
                   const Icon(
                     Icons.receipt_rounded,
                     color: Colors.grey,
+                    size: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'List Formula',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                  Text('List Formula',
+                      style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
             ),

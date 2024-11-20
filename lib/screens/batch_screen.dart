@@ -59,14 +59,11 @@ class _BatchScreenState extends State<BatchScreen> {
                   const Icon(
                     Icons.miscellaneous_services_rounded,
                     color: Colors.grey,
+                    size: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'List Batch',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                  Text('List Batch',
+                      style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
             ),
