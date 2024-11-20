@@ -13,6 +13,7 @@ class NotificationsScreen extends StatefulWidget {
 class _NotificationsScreenState extends State<NotificationsScreen> {
   List<LogMessageModel>? _batchs;
   bool isLoading = true;
+  LogMessageModel? _selectedItem;
 
   @override
   void initState() {
@@ -81,7 +82,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         return Column(
                           children: [
                             InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                setState(() {
+                                  if (_selectedItem == item) {
+                                    _selectedItem = null;
+                                  } else {
+                                    _selectedItem = item;
+                                  }
+                                });
+                              },
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -92,7 +101,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'To number 0895636998639',
+                                          'To number ${item.toNumber}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall!
@@ -102,7 +111,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                         ),
                                         Text(
-                                          '18 November 2024, 16.32',
+                                          item.dateMsg,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall!
@@ -114,19 +123,28 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       ],
                                     ),
                                     const SizedBox(height: 4),
-                                    Text('Mochammad Rafli Ramadani',
+                                    Text(item.toName,
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleSmall),
                                     Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce purus magna, lacinia in nisi id, consectetur faucibus lacus. Sed sed lacinia ligula, tristique maximus nisl. Aenean rhoncus ex dolor, non dapibus dui ullamcorper a. Fusce fermentum est quis velit luctus, nec rhoncus lacus mattis. Sed egestas lacus vel arcu tempor, nec finibus odio porta. Morbi convallis lectus at sem porta, sed finibus justo rhoncus. Maecenas tellus dolor, ultricies ut lectus quis, malesuada rhoncus velit. Phasellus et neque vitae dolor tempor elementum.',
+                                      item.message,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
                                               color: Colors.grey.shade600),
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: _selectedItem != null &&
+                                              _selectedItem!.idLogMsg ==
+                                                  item.idLogMsg
+                                          ? null
+                                          : 3,
+                                      overflow: _selectedItem != null &&
+                                              _selectedItem!.idLogMsg ==
+                                                  item.idLogMsg
+                                          ? TextOverflow.visible
+                                          : TextOverflow.ellipsis,
+                                      softWrap: true,
                                     ),
                                   ],
                                 ),
