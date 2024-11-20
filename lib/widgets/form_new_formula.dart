@@ -109,7 +109,7 @@ class FormNewFormulaState extends State<FormNewFormula> {
                   _codeMaterialInput = value ?? '';
                 },
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
               Row(
                 children: [
                   Expanded(
@@ -140,7 +140,7 @@ class FormNewFormulaState extends State<FormNewFormula> {
                       },
                     ),
                   ),
-                  const SizedBox(width: 16.0),
+                  const SizedBox(width: 12.0),
                   Expanded(
                     child: TextFormField(
                       controller: _fineFormulaController,
@@ -171,7 +171,7 @@ class FormNewFormulaState extends State<FormNewFormula> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
               TextFormField(
                 controller: _timeTargetController,
                 style: Theme.of(context).textTheme.bodyMedium,
@@ -197,7 +197,7 @@ class FormNewFormulaState extends State<FormNewFormula> {
                   _timeTargetInput = value ?? '';
                 },
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
@@ -215,7 +215,7 @@ class FormNewFormulaState extends State<FormNewFormula> {
                 },
                 child: const Text('Submit Now'),
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
             ],
           ),
         ),

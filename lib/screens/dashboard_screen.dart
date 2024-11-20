@@ -19,7 +19,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title:
+            Text('Dashboard', style: Theme.of(context).textTheme.titleMedium),
         actions: [
           Stack(
             clipBehavior: Clip.none,
@@ -90,7 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 const SizedBox(height: 32),
                 const MonitoringEquipment(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
@@ -105,7 +106,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   },
                   child: const Text('Open Equipment'),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
@@ -120,7 +121,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   },
                   child: const Text('Open Batch'),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor:

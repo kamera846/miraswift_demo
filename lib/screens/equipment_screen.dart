@@ -57,7 +57,8 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Filter Equipment'),
+          title: Text('Filter Equipment',
+              style: Theme.of(context).textTheme.titleMedium),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -67,7 +68,8 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                 items: categories.map((String category) {
                   return DropdownMenuItem<String>(
                     value: category,
-                    child: Text(category),
+                    child: Text(category,
+                        style: Theme.of(context).textTheme.bodySmall),
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
@@ -93,7 +95,8 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Equipment'),
+        title:
+            Text('Equipment', style: Theme.of(context).textTheme.titleMedium),
         actions: [
           IconButton(
             onPressed: () {
@@ -130,7 +133,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                   const SizedBox(width: 16),
                   Text(
                     'History Equipment',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -140,7 +143,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              margin: const EdgeInsets.all(16),
+              margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
@@ -157,7 +160,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                                 (index == (_equipments!.length - 1));
                             return Padding(
                               padding: EdgeInsets.only(
-                                  top: 16, bottom: isLastIndex ? 16 : 0),
+                                  top: 16, bottom: isLastIndex ? 12 : 0),
                               child: EquipmentStatus(
                                   equipment: equipment,
                                   isLastIndex: isLastIndex),
@@ -165,7 +168,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                           })
                       : Center(
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(12),
                             child: Text(isLoading
                                 ? 'Loading..'
                                 : !isLoading &&

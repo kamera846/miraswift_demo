@@ -43,13 +43,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text('Notifications',
+            style: Theme.of(context).textTheme.titleMedium),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              padding: const EdgeInsets.only(left: 12, right: 12),
               child: Row(
                 children: [
                   const Icon(
@@ -60,14 +61,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   const SizedBox(width: 8),
                   Text(
                     'List Message',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],
               ),
             ),
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.all(16),
+              margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
@@ -91,31 +92,39 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'To number ${item.toNumber}',
-                                          style: const TextStyle(
-                                              fontSize: 10, color: Colors.grey),
+                                          'To number 0895636998639',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(
+                                                color: Colors.grey,
+                                                fontSize: 10,
+                                              ),
                                         ),
                                         Text(
-                                          item.dateMsg,
-                                          style: const TextStyle(
-                                              fontSize: 10, color: Colors.grey),
+                                          '18 November 2024, 16.32',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(
+                                                color: Colors.grey,
+                                                fontSize: 10,
+                                              ),
                                         )
                                       ],
                                     ),
                                     const SizedBox(height: 4),
+                                    Text('Mochammad Rafli Ramadani',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall),
                                     Text(
-                                      item.toName,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      item.message,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.grey.shade600,
-                                      ),
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce purus magna, lacinia in nisi id, consectetur faucibus lacus. Sed sed lacinia ligula, tristique maximus nisl. Aenean rhoncus ex dolor, non dapibus dui ullamcorper a. Fusce fermentum est quis velit luctus, nec rhoncus lacus mattis. Sed egestas lacus vel arcu tempor, nec finibus odio porta. Morbi convallis lectus at sem porta, sed finibus justo rhoncus. Maecenas tellus dolor, ultricies ut lectus quis, malesuada rhoncus velit. Phasellus et neque vitae dolor tempor elementum.',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              color: Colors.grey.shade600),
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -134,7 +143,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     )
                   : Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(12),
                         child: Text(isLoading
                             ? 'Loading..'
                             : !isLoading &&

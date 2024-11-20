@@ -28,6 +28,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
   void _getBatchDetail() async {
     setState(() {
       isLoading = true;
+      totalScales = 0.0;
     });
     await BatchApiService().detail(
       batchNumber: widget.batch.noBatch,
@@ -60,7 +61,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Batch Detail'),
+        title: Text('Batch Detail',
+            style: Theme.of(context).textTheme.titleMedium),
         actions: [
           IconButton(
             onPressed: _getBatchDetail,
@@ -73,8 +75,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
@@ -105,7 +107,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                           style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   Row(
                     children: [
                       Container(
@@ -125,7 +127,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         'ON',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                       Container(
                         width: 20,
                         height: 20,
@@ -143,7 +145,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         'RUNNING',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                       Container(
                         width: 20,
                         height: 20,
@@ -161,14 +163,14 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         'OFF',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                     ],
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
               child: Row(
                 children: [
                   const Icon(
@@ -178,14 +180,15 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                   ),
                   const SizedBox(width: 9),
                   Text('Equipments',
-                      style: Theme.of(context).textTheme.titleMedium),
+                      style: Theme.of(context).textTheme.titleSmall),
                 ],
               ),
             ),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              margin: const EdgeInsets.only(
+                  left: 12, top: 12, right: 12, bottom: 0),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
@@ -200,8 +203,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         dataEquipmentIndex++;
                         return Padding(
                           padding: EdgeInsets.only(
-                            top: 16,
-                            bottom: isLastIndex ? 16 : 0,
+                            top: 12,
+                            bottom: isLastIndex ? 12 : 0,
                           ),
                           child: BatchItem.equipment(
                             equipment: item,
@@ -212,7 +215,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                     )
                   : Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(12),
                         child: Text(isLoading
                             ? 'Loading..'
                             : !isLoading &&
@@ -224,7 +227,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                     ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
               child: Row(
                 children: [
                   const Icon(
@@ -233,15 +236,14 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                     size: 20,
                   ),
                   const SizedBox(width: 9),
-                  Text('Scales',
-                      style: Theme.of(context).textTheme.titleMedium),
+                  Text('Scales', style: Theme.of(context).textTheme.titleSmall),
                 ],
               ),
             ),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
@@ -255,7 +257,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                             dataScalesIndex++;
                             return Padding(
                               padding: EdgeInsets.only(
-                                  top: 16, bottom: isLastIndex ? 16 : 0),
+                                  top: 12, bottom: isLastIndex ? 12 : 0),
                               child: BatchItem.scales(
                                 scales: item,
                                 isLastIndex: isLastIndex,
@@ -265,7 +267,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                         )
                       : Center(
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(12),
                             child: Text(isLoading
                                 ? 'Loading..'
                                 : !isLoading &&

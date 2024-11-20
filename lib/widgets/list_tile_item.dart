@@ -53,26 +53,25 @@ class ListTileItem extends StatelessWidget {
       onTap: onTap,
       selected: isSelected,
       selectedTileColor: Theme.of(context).splashColor,
+      splashColor: Theme.of(context).splashColor,
       contentPadding:
-          const EdgeInsets.only(top: 8, right: 0, bottom: 8, left: 16),
+          const EdgeInsets.only(top: 4, right: 0, bottom: 4, left: 12),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           if (description != null)
             Text(
               description!,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    fontSize: 12,
-                    color: Colors.grey,
+                    color: Colors.grey.shade600,
                   ),
             ),
         ],
       ),
-      splashColor: Theme.of(context).splashColor,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -98,7 +97,7 @@ class ListTileItem extends StatelessWidget {
             ),
           customTrailingIcon ??
               Container(
-                margin: const EdgeInsets.only(right: 16),
+                margin: const EdgeInsets.only(right: 12),
               ),
         ],
       ),

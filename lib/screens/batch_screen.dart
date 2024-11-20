@@ -47,13 +47,13 @@ class _BatchScreenState extends State<BatchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Batch'),
+        title: Text('Batch', style: Theme.of(context).textTheme.titleMedium),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              padding: const EdgeInsets.only(top: 0, left: 12, right: 12),
               child: Row(
                 children: [
                   const Icon(
@@ -63,13 +63,13 @@ class _BatchScreenState extends State<BatchScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text('List Batch',
-                      style: Theme.of(context).textTheme.titleMedium),
+                      style: Theme.of(context).textTheme.titleSmall),
                 ],
               ),
             ),
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.all(16),
+              margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
@@ -118,7 +118,7 @@ class _BatchScreenState extends State<BatchScreen> {
                     )
                   : Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(12),
                         child: Text(isLoading
                             ? 'Loading..'
                             : !isLoading &&

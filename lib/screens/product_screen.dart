@@ -75,7 +75,7 @@ class _ProductScreenState extends State<ProductScreen> {
     //                           .scaffoldBackgroundColor,
     //                       borderRadius: BorderRadius.circular(24),
     //                     ),
-    //                     padding: const EdgeInsets.all(16),
+    //                     padding: const EdgeInsets.all(12),
     //                     child: FormNewProduct(
     //                       onSubmitted: _submitNewItem,
     //                     ),
@@ -98,9 +98,9 @@ class _ProductScreenState extends State<ProductScreen> {
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom: 16 + _keyboardHeight,
+              left: 12,
+              right: 12,
+              bottom: 12 + _keyboardHeight,
             ),
             child: FormNewProduct(
               onSubmitted: _submitNewItem,
@@ -154,7 +154,7 @@ class _ProductScreenState extends State<ProductScreen> {
     //                           .scaffoldBackgroundColor,
     //                       borderRadius: BorderRadius.circular(24),
     //                     ),
-    //                     padding: const EdgeInsets.all(16),
+    //                     padding: const EdgeInsets.all(12),
     //                     child: FormNewProduct.edit(
     //                       item: _selectedItem,
     //                       onSubmitted: _submitEditItem,
@@ -181,9 +181,9 @@ class _ProductScreenState extends State<ProductScreen> {
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom: 16 + _keyboardHeight,
+              left: 12,
+              right: 12,
+              bottom: 12 + _keyboardHeight,
             ),
             child: FormNewProduct.edit(
               item: _selectedItem,
@@ -259,7 +259,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Setting Recipe'),
+        title: Text('Setting Recipe',
+            style: Theme.of(context).textTheme.titleMedium),
         actions: [
           IconButton(
             onPressed: _isLoading ? null : _newItem,
@@ -273,7 +274,7 @@ class _ProductScreenState extends State<ProductScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              padding: const EdgeInsets.only(left: 12, right: 12),
               child: Row(
                 children: [
                   const Icon(
@@ -283,13 +284,13 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text('List Product',
-                      style: Theme.of(context).textTheme.titleMedium),
+                      style: Theme.of(context).textTheme.titleSmall),
                 ],
               ),
             ),
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.all(16),
+              margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
@@ -398,7 +399,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     )
                   : Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(12),
                         child: Text(
                           _isLoading
                               ? 'Loading..'

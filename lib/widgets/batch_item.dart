@@ -41,7 +41,7 @@ class BatchItem extends StatelessWidget {
                     equipment != null
                         ? equipment!.nameEquipment
                         : scales!.nameBahan,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -67,8 +67,10 @@ class BatchItem extends StatelessWidget {
                         equipment != null
                             ? equipment!.timeOn
                             : '${scales!.dateTimbang} ${scales!.timeTimbang}',
-                        style: TextStyle(
-                            fontSize: 12, color: Colors.grey.shade600),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Colors.grey.shade600),
                       ),
                     ],
                   ),
@@ -102,8 +104,10 @@ class BatchItem extends StatelessWidget {
                         if (equipment!.timeOff != '0')
                           Text(
                             equipment!.timeOff,
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey.shade600),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: Colors.grey.shade600),
                           )
                         else
                           Icon(
@@ -121,32 +125,31 @@ class BatchItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 if (equipment != null && equipment!.timeElapsed != '0')
-                  Text(
-                    equipment!.timeElapsed,
-                    style: const TextStyle(fontSize: 12),
-                  )
+                  Text(equipment!.timeElapsed,
+                      style: Theme.of(context).textTheme.bodySmall)
                 else if (equipment != null && equipment!.timeElapsed == '0')
                   Icon(
                     Icons.linear_scale,
                     color: statusColorBorderOff,
                   )
                 else if (equipment == null)
-                  Text(
-                    '${scales!.actualTimbang} KG',
-                    style: const TextStyle(fontSize: 12),
-                  ),
+                  Text('${scales!.actualTimbang} KG',
+                      style: Theme.of(context).textTheme.bodySmall),
                 Text(
                   equipment != null
                       ? equipment!.desc.toUpperCase()
                       : scales!.statusTimbang.toUpperCase(),
-                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: Colors.grey.shade600),
                 ),
               ],
             )
           ],
         ),
         if (!isLastIndex) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 0),
             child: Divider(

@@ -116,7 +116,7 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         border: Border.all(width: 1),
         borderRadius: BorderRadius.circular(8),
@@ -128,7 +128,7 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
             'Equipment Status',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Row(
             children: [
               const Text('Valve: '),
@@ -193,7 +193,7 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           ElevatedButton(
             onPressed: isToggleEquipment ? null : _toggleAllEquipment,
             style: ElevatedButton.styleFrom(

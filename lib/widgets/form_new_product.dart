@@ -89,7 +89,7 @@ class FormNewProductState extends State<FormNewProduct> {
                   _codeInput = value ?? '';
                 },
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
               TextFormField(
                 controller: _nameController,
                 style: Theme.of(context).textTheme.bodyMedium,
@@ -114,7 +114,7 @@ class FormNewProductState extends State<FormNewProduct> {
                   _nameInput = value ?? '';
                 },
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
@@ -126,7 +126,7 @@ class FormNewProductState extends State<FormNewProduct> {
                 },
                 child: const Text('Submit Now'),
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
             ],
           ),
         ),

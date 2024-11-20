@@ -28,6 +28,7 @@ class MainApp extends StatelessWidget {
           elevation: 0,
           scrolledUnderElevation: 1,
           shadowColor: Colors.white54,
+          // centerTitle: true,
         ),
         bottomSheetTheme: const BottomSheetThemeData(
           backgroundColor: Colors.white,

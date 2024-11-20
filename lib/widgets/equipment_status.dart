@@ -43,37 +43,40 @@ class EquipmentStatus extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(equipment.nameEquipment,
+                      style: Theme.of(context).textTheme.titleSmall),
                   Text(
-                    equipment.nameEquipment,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    '${equipment.dateEquipment} ${equipment.timeEquipment}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.grey.shade600),
                   ),
-                  Text('${equipment.dateEquipment} ${equipment.timeEquipment}',
-                      style: const TextStyle(fontSize: 12)),
                 ],
               ),
             ),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Text(
-                  'BATCH',
-                  style: TextStyle(fontSize: 12),
-                ),
+                Text('BATCH', style: Theme.of(context).textTheme.bodySmall),
                 Text(
                   equipment.noBatch,
-                  style: const TextStyle(fontSize: 12),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: Colors.grey.shade600),
                 ),
               ],
             )
           ],
         ),
         if (!isLastIndex) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Divider(
