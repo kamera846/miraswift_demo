@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/screens/formula_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/utils/badge.dart';
-import 'package:miraswift_demo/utils/formatted_number.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/batch_item.dart';
 

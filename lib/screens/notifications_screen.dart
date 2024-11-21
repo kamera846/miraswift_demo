@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/logmsg_model.dart';
 import 'package:miraswift_demo/services/logmsg_api.dart';
+import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -111,7 +112,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                         ),
                                         Text(
-                                          item.dateMsg,
+                                          formattedDate(
+                                            dateStr: item.dateMsg,
+                                            inputFormat: 'yyyy-MM-dd HH:mm:ss',
+                                            outputFormat: 'dd MMM yyyy, HH:mm',
+                                          ),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall!

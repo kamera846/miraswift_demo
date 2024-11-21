@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
 import 'package:miraswift_demo/screens/batch_detail_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
+import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
@@ -105,7 +106,8 @@ class _BatchScreenState extends State<BatchScreen> {
                                 ),
                               ),
                               title: item.noBatch,
-                              description: 'Date ${item.maxDateEquipment}',
+                              description:
+                                  formattedDate(dateStr: item.maxDateEquipment),
                             ),
                             if (!isLastIndex)
                               Divider(

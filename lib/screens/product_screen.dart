@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/screens/formula_screen.dart';
 import 'package:miraswift_demo/services/product_api.dart';
+import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/form_new_product.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
@@ -319,7 +320,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                   : false,
                               badge: item.kodeProduct,
                               title: item.nameProduct,
-                              description: item.createdAt,
+                              description:
+                                  formattedDate(dateStr: item.createdAt),
                               customTrailingIcon: PopupMenuButton<ProductModel>(
                                   icon: const Icon(
                                     Icons.more_vert_rounded,
