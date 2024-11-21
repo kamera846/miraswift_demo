@@ -292,19 +292,23 @@ class BatchDetailHeader extends StatelessWidget {
                   ],
                 ),
                 InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => FormulaScreen(
-                          product: dataProduct!,
-                        ),
-                      ),
-                    );
-                  },
+                  onTap: dataProduct == null
+                      ? null
+                      : () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => FormulaScreen(
+                                product: dataProduct!,
+                              ),
+                            ),
+                          );
+                        },
                   child: Text(
-                    'Lihat Formula',
-                    style: TextStyle(color: Theme.of(context).primaryColor),
+                    dataProduct == null ? '-' : 'Lihat Formula',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).primaryColor,
+                        ),
                   ),
                 ),
               ],
