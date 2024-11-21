@@ -47,8 +47,8 @@ class BatchItem extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        width: 20,
-                        height: 20,
+                        width: 16,
+                        height: 16,
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: equipment != null
@@ -78,7 +78,7 @@ class BatchItem extends StatelessWidget {
                     Container(
                       width: 2,
                       height: 12,
-                      margin: const EdgeInsets.only(left: 9),
+                      margin: const EdgeInsets.only(left: 7),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [statusColorBorderOn, statusColorBorderOff],
@@ -90,8 +90,8 @@ class BatchItem extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          width: 20,
-                          height: 20,
+                          width: 16,
+                          height: 16,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: statusColorOff,
@@ -154,7 +154,7 @@ class BatchItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 0),
             child: Divider(
               height: 0,
-              color: Colors.grey.withAlpha(75),
+              color: Colors.grey.shade300,
             ),
           ),
         ]

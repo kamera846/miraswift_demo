@@ -153,7 +153,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             if (!isLastIndex)
                               Divider(
                                 height: 0,
-                                color: Colors.grey.withAlpha(75),
+                                color: Colors.grey.shade300,
                               ),
                           ],
                         );

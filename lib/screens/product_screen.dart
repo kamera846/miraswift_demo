@@ -391,7 +391,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             if (!isLastIndex)
                               Divider(
                                 height: 0,
-                                color: Colors.grey.withAlpha(75),
+                                color: Colors.grey.shade300,
                               ),
                           ],
                         );

@@ -421,7 +421,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                             if (!isLastIndex)
                               Divider(
                                 height: 0,
-                                color: Colors.grey.withAlpha(75),
+                                color: Colors.grey.shade300,
                               ),
                           ],
                         );

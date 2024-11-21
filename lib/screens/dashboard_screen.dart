@@ -13,7 +13,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final int _badgeCount = 1;
+  final int _badgeCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +50,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       );
                     },
                     child: Container(
-                      width: 20,
-                      height: 20,
-                      margin: const EdgeInsets.all(4),
+                      width: 16,
+                      height: 16,
+                      margin: const EdgeInsets.all(8),
                       decoration: const BoxDecoration(
                         color: Colors.red,
                         shape: BoxShape.circle,
@@ -62,7 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           _badgeCount < 10 ? _badgeCount.toString() : '9+',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 8,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

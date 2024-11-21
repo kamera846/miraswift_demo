@@ -1,31 +1,5 @@
 import 'package:flutter/material.dart';
-
-enum BadgeCategory { grey, green, yellow, red }
-
-class BadgeModel {
-  BadgeModel(this.txtColor, this.bgColor);
-  final Color txtColor;
-  final Color bgColor;
-}
-
-final Map<BadgeCategory, BadgeModel> badgeStyle = {
-  BadgeCategory.grey: BadgeModel(
-    Colors.grey.shade900.withAlpha(150),
-    Colors.grey.shade900.withAlpha(75),
-  ),
-  BadgeCategory.green: BadgeModel(
-    Colors.green.shade900.withAlpha(150),
-    Colors.green.shade900.withAlpha(75),
-  ),
-  BadgeCategory.yellow: BadgeModel(
-    Colors.yellow.shade900.withAlpha(150),
-    Colors.yellow.shade900.withAlpha(75),
-  ),
-  BadgeCategory.red: BadgeModel(
-    Colors.red.shade900.withAlpha(150),
-    Colors.red.shade900.withAlpha(75),
-  ),
-};
+import 'package:miraswift_demo/utils/badge.dart';
 
 class ListTileItem extends StatelessWidget {
   const ListTileItem({
@@ -76,24 +50,9 @@ class ListTileItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (badge != null)
-            Container(
-              decoration: BoxDecoration(
-                color: badgeModel == null
-                    ? badgeStyle[BadgeCategory.grey]!.bgColor
-                    : badgeModel!.bgColor,
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-              child: Text(
-                badge!.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 10,
-                  color: badgeModel == null
-                      ? badgeStyle[BadgeCategory.grey]!.txtColor
-                      : badgeModel!.txtColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            CustomBadge(
+              badgeText: badge!,
+              badgeModel: badgeModel,
             ),
           customTrailingIcon ??
               Container(

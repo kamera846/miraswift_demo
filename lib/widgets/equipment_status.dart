@@ -81,7 +81,7 @@ class EquipmentStatus extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Divider(
               height: 1,
-              color: Colors.grey.withAlpha(75),
+              color: Colors.grey.shade300,
             ),
           ),
         ]
