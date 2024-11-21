@@ -56,9 +56,7 @@ class FormNewProductState extends State<FormNewProduct> {
       children: [
         Text(
           widget.isEdit ? 'Edit Product' : 'New Product',
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 24),
         Form(
@@ -67,12 +65,12 @@ class FormNewProductState extends State<FormNewProduct> {
             children: [
               TextFormField(
                 controller: _codeController,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodySmall,
                 decoration: InputDecoration(
                   labelText: 'Code',
-                  labelStyle: Theme.of(context).textTheme.bodyMedium,
+                  labelStyle: Theme.of(context).textTheme.bodySmall,
                   hintText: 'PRD001',
-                  hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,
                       ),
                   border: OutlineInputBorder(
@@ -92,12 +90,12 @@ class FormNewProductState extends State<FormNewProduct> {
               const SizedBox(height: 12.0),
               TextFormField(
                 controller: _nameController,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodySmall,
                 decoration: InputDecoration(
                   labelText: 'Name',
-                  labelStyle: Theme.of(context).textTheme.bodyMedium,
+                  labelStyle: Theme.of(context).textTheme.bodySmall,
                   hintText: 'Thinbed',
-                  hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,
                       ),
                   border: OutlineInputBorder(

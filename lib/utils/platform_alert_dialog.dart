@@ -72,17 +72,35 @@ Future<void> showPlatformAlertDialog({
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(title),
-        content: Text(content),
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        content: Text(
+          content,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
         actions: [
           if (negativeButtonText != null)
             TextButton(
               onPressed: onNegativePressed,
-              child: Text(negativeButtonText),
+              child: Text(
+                negativeButtonText,
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: negativeButtonTextColor ??
+                          Theme.of(context).colorScheme.primary,
+                    ),
+              ),
             ),
           TextButton(
             onPressed: onPositivePressed,
-            child: Text(positiveButtonText),
+            child: Text(
+              positiveButtonText,
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: positiveButtonTextColor ??
+                        Theme.of(context).colorScheme.primary,
+                  ),
+            ),
           ),
         ],
       );

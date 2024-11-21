@@ -74,12 +74,8 @@ class FormNewFormulaState extends State<FormNewFormula> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          widget.isEdit ? 'Edit Formula' : 'New Formula',
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-        ),
+        Text(widget.isEdit ? 'Edit Formula' : 'New Formula',
+            style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 24),
         Form(
           key: _formKey,
@@ -87,12 +83,12 @@ class FormNewFormulaState extends State<FormNewFormula> {
             children: [
               TextFormField(
                 controller: _codeMaterialController,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodySmall,
                 decoration: InputDecoration(
                   labelText: 'Code Material',
-                  labelStyle: Theme.of(context).textTheme.bodyMedium,
+                  labelStyle: Theme.of(context).textTheme.bodySmall,
                   hintText: '1001',
-                  hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,
                       ),
                   border: OutlineInputBorder(
@@ -115,14 +111,14 @@ class FormNewFormulaState extends State<FormNewFormula> {
                   Expanded(
                     child: TextFormField(
                       controller: _targetFormulaController,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodySmall,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Target (kg)',
-                        labelStyle: Theme.of(context).textTheme.bodyMedium,
+                        labelStyle: Theme.of(context).textTheme.bodySmall,
                         hintText: '100.0',
                         hintStyle:
-                            Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            Theme.of(context).textTheme.bodySmall!.copyWith(
                                   color: Colors.grey,
                                 ),
                         border: OutlineInputBorder(
@@ -144,14 +140,14 @@ class FormNewFormulaState extends State<FormNewFormula> {
                   Expanded(
                     child: TextFormField(
                       controller: _fineFormulaController,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodySmall,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Fine (kg)',
-                        labelStyle: Theme.of(context).textTheme.bodyMedium,
+                        labelStyle: Theme.of(context).textTheme.bodySmall,
                         hintText: '5.0',
                         hintStyle:
-                            Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            Theme.of(context).textTheme.bodySmall!.copyWith(
                                   color: Colors.grey,
                                 ),
                         border: OutlineInputBorder(
@@ -174,13 +170,13 @@ class FormNewFormulaState extends State<FormNewFormula> {
               const SizedBox(height: 12.0),
               TextFormField(
                 controller: _timeTargetController,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodySmall,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: 'Time (second)',
-                  labelStyle: Theme.of(context).textTheme.bodyMedium,
+                  labelStyle: Theme.of(context).textTheme.bodySmall,
                   hintText: '60',
-                  hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,
                       ),
                   border: OutlineInputBorder(
