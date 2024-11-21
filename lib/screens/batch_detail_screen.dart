@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/screens/formula_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/utils/badge.dart';
+import 'package:miraswift_demo/utils/formatted_number.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/batch_item.dart';
 
@@ -19,8 +21,8 @@ class BatchDetailScreen extends StatefulWidget {
 class _BatchDetailScreenState extends State<BatchDetailScreen> {
   List<BatchModel>? _dataEquipment;
   List<BatchModel>? _dataScales;
-  ProductModel? _dataProduct;
   bool isLoading = true;
+  ProductModel? _dataProduct;
   double totalScales = 0.0;
 
   @override
@@ -79,183 +81,10 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              // padding: const EdgeInsets.all(12),
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Text(
-                                'Batch Number',
-                              ),
-                              Text(
-                                widget.batch.noBatch,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 24,
-                          color: Colors.grey.shade300,
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Text(
-                                'Total Scales',
-                              ),
-                              Text(
-                                '$totalScales KG',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Colors.grey.shade300,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Produk',
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  _dataProduct != null
-                                      ? _dataProduct!.nameProduct
-                                      : '-',
-                                ),
-                                const SizedBox(width: 8),
-                                CustomBadge(
-                                  badgeText: _dataProduct != null
-                                      ? _dataProduct!.kodeProduct
-                                      : '-',
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (ctx) => FormulaScreen(
-                                  product: _dataProduct!,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Lihat Formula',
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Colors.grey.shade300,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Status',
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Container(
-                              width: 16,
-                              height: 16,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.green.shade900.withAlpha(75),
-                                border: Border.all(
-                                    width: 2,
-                                    color:
-                                        Colors.green.shade900.withAlpha(150)),
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'ON',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            const SizedBox(width: 12),
-                            Container(
-                              width: 16,
-                              height: 16,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.yellow.shade900.withAlpha(75),
-                                border: Border.all(
-                                    width: 2,
-                                    color:
-                                        Colors.yellow.shade900.withAlpha(150)),
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'RUNNING',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            const SizedBox(width: 12),
-                            Container(
-                              width: 16,
-                              height: 16,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.red.shade900.withAlpha(75),
-                                border: Border.all(
-                                    width: 2,
-                                    color: Colors.red.shade900.withAlpha(150)),
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'OFF',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            const SizedBox(width: 12),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            BatchDetailHeader(
+              batch: widget.batch,
+              dataProduct: _dataProduct,
+              totalScales: totalScales,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
@@ -368,6 +197,196 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class BatchDetailHeader extends StatelessWidget {
+  const BatchDetailHeader({
+    super.key,
+    required this.batch,
+    required this.dataProduct,
+    required this.totalScales,
+  });
+
+  final BatchModel batch;
+  final ProductModel? dataProduct;
+  final double totalScales;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      // padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Batch Number',
+                      ),
+                      Text(
+                        batch.noBatch,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 24,
+                  color: Colors.grey.shade300,
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Total Scales',
+                      ),
+                      Text(
+                        '$totalScales KG',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+            color: Colors.grey.shade300,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Produk',
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          dataProduct != null ? dataProduct!.nameProduct : '-',
+                        ),
+                        const SizedBox(width: 8),
+                        CustomBadge(
+                          badgeText: dataProduct != null
+                              ? dataProduct!.kodeProduct
+                              : '-',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => FormulaScreen(
+                          product: dataProduct!,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Lihat Formula',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+            color: Colors.grey.shade300,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Status',
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Container(
+                      width: 16,
+                      height: 16,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade900.withAlpha(75),
+                        border: Border.all(
+                            width: 2,
+                            color: Colors.green.shade900.withAlpha(150)),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'ON',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(width: 12),
+                    Container(
+                      width: 16,
+                      height: 16,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.yellow.shade900.withAlpha(75),
+                        border: Border.all(
+                            width: 2,
+                            color: Colors.yellow.shade900.withAlpha(150)),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'RUNNING',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(width: 12),
+                    Container(
+                      width: 16,
+                      height: 16,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade900.withAlpha(75),
+                        border: Border.all(
+                            width: 2,
+                            color: Colors.red.shade900.withAlpha(150)),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'OFF',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
