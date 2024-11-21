@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/services/api.dart';
 
 class BatchApiService {
@@ -60,11 +61,15 @@ class BatchApiService {
     required String batchNumber,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
-    Function(List<BatchModel>? dataEquipment, List<BatchModel>? dataScales)?
-        onCompleted,
+    Function(
+      List<BatchModel>? dataEquipment,
+      List<BatchModel>? dataScales,
+      ProductModel? dataProduct,
+    )? onCompleted,
   }) async {
     List<BatchModel>? dataEquipment;
     List<BatchModel>? dataScales;
+    ProductModel? dataProduct;
     try {
       final url = Uri.https(baseUrl, 'api/batch/detail/$batchNumber');
       final response = await http.get(
@@ -86,6 +91,9 @@ class BatchApiService {
             dataEquipment = apiResponse.dataEquipment
                 ?.map((item) => BatchModel.fromJson(item))
                 .toList();
+          }
+          if (apiResponse.dataProduct != null) {
+            dataProduct = ProductModel.fromJson(apiResponse.dataProduct!);
           }
           if (onSuccess != null) {
             onSuccess(apiResponse.msg);
@@ -110,7 +118,7 @@ class BatchApiService {
       }
     } finally {
       if (onCompleted != null) {
-        onCompleted(dataEquipment, dataScales);
+        onCompleted(dataEquipment, dataScales, dataProduct);
       }
     }
   }

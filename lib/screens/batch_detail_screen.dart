@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswift_demo/models/product_model.dart';
+import 'package:miraswift_demo/screens/formula_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
+import 'package:miraswift_demo/utils/badge.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/batch_item.dart';
 
@@ -16,6 +19,7 @@ class BatchDetailScreen extends StatefulWidget {
 class _BatchDetailScreenState extends State<BatchDetailScreen> {
   List<BatchModel>? _dataEquipment;
   List<BatchModel>? _dataScales;
+  ProductModel? _dataProduct;
   bool isLoading = true;
   double totalScales = 0.0;
 
@@ -29,6 +33,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
     setState(() {
       isLoading = true;
       totalScales = 0.0;
+      _dataProduct = null;
     });
     await BatchApiService().detail(
       batchNumber: widget.batch.noBatch,
@@ -37,7 +42,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           showSnackBar(context, msg);
         }
       },
-      onCompleted: (dataEquipment, dataScales) {
+      onCompleted: (dataEquipment, dataScales, dataProduct) {
         if (dataScales != null && dataScales.isNotEmpty) {
           for (var item in dataScales) {
             setState(() {
@@ -48,6 +53,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
         setState(() {
           _dataEquipment = dataEquipment;
           _dataScales = dataScales;
+          _dataProduct = dataProduct;
           isLoading = false;
         });
       },
@@ -75,96 +81,178 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(12),
+              // padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        'Batch Number: ',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.normal,
-                            ),
-                      ),
-                      Text(widget.batch.noBatch,
-                          style: Theme.of(context).textTheme.bodyMedium),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Batch Number',
+                              ),
+                              Text(
+                                widget.batch.noBatch,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 24,
+                          color: Colors.grey.shade300,
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Total Scales',
+                              ),
+                              Text(
+                                '$totalScales KG',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        'Total Scales: ',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.normal,
-                            ),
-                      ),
-                      Text('$totalScales KG',
-                          style: Theme.of(context).textTheme.bodyMedium),
-                    ],
+                  Divider(
+                    height: 0,
+                    color: Colors.grey.shade300,
                   ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Container(
-                        width: 20,
-                        height: 20,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade900.withAlpha(75),
-                          border: Border.all(
-                              width: 2,
-                              color: Colors.green.shade900.withAlpha(150)),
-                          borderRadius: BorderRadius.circular(100),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Produk',
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  _dataProduct != null
+                                      ? _dataProduct!.nameProduct
+                                      : '-',
+                                ),
+                                const SizedBox(width: 8),
+                                CustomBadge(
+                                  badgeText: _dataProduct != null
+                                      ? _dataProduct!.kodeProduct
+                                      : '-',
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'ON',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(width: 12),
-                      Container(
-                        width: 20,
-                        height: 20,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.yellow.shade900.withAlpha(75),
-                          border: Border.all(
-                              width: 2,
-                              color: Colors.yellow.shade900.withAlpha(150)),
-                          borderRadius: BorderRadius.circular(100),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => FormulaScreen(
+                                  product: _dataProduct!,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Lihat Formula',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'RUNNING',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(width: 12),
-                      Container(
-                        width: 20,
-                        height: 20,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade900.withAlpha(75),
-                          border: Border.all(
-                              width: 2,
-                              color: Colors.red.shade900.withAlpha(150)),
-                          borderRadius: BorderRadius.circular(100),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    height: 0,
+                    color: Colors.grey.shade300,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Status',
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'OFF',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(width: 12),
-                    ],
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Container(
+                              width: 16,
+                              height: 16,
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.green.shade900.withAlpha(75),
+                                border: Border.all(
+                                    width: 2,
+                                    color:
+                                        Colors.green.shade900.withAlpha(150)),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'ON',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              width: 16,
+                              height: 16,
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.yellow.shade900.withAlpha(75),
+                                border: Border.all(
+                                    width: 2,
+                                    color:
+                                        Colors.yellow.shade900.withAlpha(150)),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'RUNNING',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              width: 16,
+                              height: 16,
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.red.shade900.withAlpha(75),
+                                border: Border.all(
+                                    width: 2,
+                                    color: Colors.red.shade900.withAlpha(150)),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'OFF',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(width: 12),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

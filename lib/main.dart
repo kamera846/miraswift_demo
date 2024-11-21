@@ -20,6 +20,7 @@ class MainApp extends StatelessWidget {
       title: 'Miraswift Demo',
       theme: ThemeData().copyWith(
         scaffoldBackgroundColor: Colors.white,
+        primaryColor: Colors.blue,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
         ),
