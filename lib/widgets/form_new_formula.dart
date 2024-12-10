@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/formula_model.dart';
+import 'package:miraswift_demo/models/material_model.dart';
 
 class FormNewFormula extends StatefulWidget {
   const FormNewFormula({
     super.key,
     required this.productId,
+    required this.listMaterial,
     required this.onSubmitted,
   })  : isEdit = false,
         item = null;
@@ -12,15 +14,18 @@ class FormNewFormula extends StatefulWidget {
     super.key,
     required this.item,
     required this.productId,
+    required this.listMaterial,
     required this.onSubmitted,
   }) : isEdit = true;
 
   final bool isEdit;
   final String productId;
   final FormulaModel? item;
+  final List<MaterialModel>? listMaterial;
   final void Function(
     String productId,
     String code,
+    String name,
     String target,
     String fine,
     String time,
@@ -35,13 +40,13 @@ class FormNewFormulaState extends State<FormNewFormula> {
   final TextEditingController _targetFormulaController =
       TextEditingController();
   final TextEditingController _fineFormulaController = TextEditingController();
-  final TextEditingController _codeMaterialController = TextEditingController();
   final TextEditingController _timeTargetController = TextEditingController();
 
   String _targetFormulaInput = '';
   String _fineFormulaInput = '';
-  String _codeMaterialInput = '';
   String _timeTargetInput = '';
+
+  MaterialModel? _selectedMaterial;
 
   @override
   void initState() {
@@ -53,7 +58,6 @@ class FormNewFormulaState extends State<FormNewFormula> {
   void dispose() {
     _targetFormulaController.dispose();
     _fineFormulaController.dispose();
-    _codeMaterialController.dispose();
     _timeTargetController.dispose();
     super.dispose();
   }
@@ -61,11 +65,9 @@ class FormNewFormulaState extends State<FormNewFormula> {
   void _setupItem() {
     _targetFormulaInput = widget.item!.targetFormula;
     _fineFormulaInput = widget.item!.fineFormula;
-    _codeMaterialInput = widget.item!.kodeMaterial;
     _timeTargetInput = widget.item!.timeTarget;
     _targetFormulaController.text = widget.item!.targetFormula;
     _fineFormulaController.text = widget.item!.fineFormula;
-    _codeMaterialController.text = widget.item!.kodeMaterial;
     _timeTargetController.text = widget.item!.timeTarget;
   }
 
@@ -81,29 +83,29 @@ class FormNewFormulaState extends State<FormNewFormula> {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                controller: _codeMaterialController,
-                style: Theme.of(context).textTheme.bodySmall,
-                decoration: InputDecoration(
-                  labelText: 'Code Material',
-                  labelStyle: Theme.of(context).textTheme.bodySmall,
-                  hintText: '1001',
-                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.grey,
-                      ),
+              DropdownMenu<MaterialModel>(
+                width: double.infinity,
+                inputDecorationTheme: InputDecorationTheme(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
+                initialSelection: widget.listMaterial?.first,
+                onSelected: (MaterialModel? value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedMaterial = value;
+                    });
                   }
-                  return null;
                 },
-                onSaved: (value) {
-                  _codeMaterialInput = value ?? '';
-                },
+                dropdownMenuEntries: widget.listMaterial!
+                    .map<DropdownMenuEntry<MaterialModel>>(
+                        (MaterialModel item) {
+                  return DropdownMenuEntry<MaterialModel>(
+                    value: item,
+                    label: item.name, // Display the value as the label.
+                  );
+                }).toList(),
               ),
               const SizedBox(height: 12.0),
               Row(
@@ -201,7 +203,8 @@ class FormNewFormulaState extends State<FormNewFormula> {
 
                     widget.onSubmitted(
                       widget.productId,
-                      _codeMaterialInput,
+                      _selectedMaterial!.no,
+                      _selectedMaterial!.name,
                       _targetFormulaInput,
                       _fineFormulaInput,
                       _timeTargetInput,

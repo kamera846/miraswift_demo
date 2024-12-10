@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/formula_model.dart';
+import 'package:miraswift_demo/models/material_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/services/formula_api.dart';
+import 'package:miraswift_demo/services/material_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/form_new_formula.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
@@ -21,6 +23,7 @@ class FormulaScreen extends StatefulWidget {
 
 class _FormulaScreenState extends State<FormulaScreen> {
   List<FormulaModel>? _list;
+  List<MaterialModel>? _listMaterial;
   bool _isLoading = true;
   FormulaModel? _selectedItem;
 
@@ -46,6 +49,22 @@ class _FormulaScreenState extends State<FormulaScreen> {
       onCompleted: (data) {
         setState(() {
           _list = data;
+        });
+        _getListItem();
+      },
+    );
+  }
+
+  void _getListItem() async {
+    await MaterialApi().list(
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          _listMaterial = data;
           _selectedItem = null;
           _isLoading = false;
         });
@@ -109,6 +128,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
             ),
             child: FormNewFormula(
               productId: widget.product.idProduct,
+              listMaterial: _listMaterial,
               onSubmitted: _submitNewItem,
             ),
           ),
@@ -121,6 +141,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   void _submitNewItem(
     String productId,
     String code,
+    String name,
     String target,
     String fine,
     String time,
@@ -131,6 +152,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     await FormulaApi().create(
       productId: productId,
       code: code,
+      name: name,
       target: target,
       fine: fine,
       time: time,
@@ -203,6 +225,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
             child: FormNewFormula.edit(
               item: _selectedItem,
               productId: widget.product.idProduct,
+              listMaterial: _listMaterial,
               onSubmitted: _submitEditItem,
             ),
           ),
@@ -218,6 +241,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   void _submitEditItem(
     String productId,
     String code,
+    String name,
     String target,
     String fine,
     String time,
@@ -229,6 +253,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       id: _selectedItem!.idFormula,
       productId: productId,
       code: code,
+      name: name,
       target: target,
       fine: fine,
       time: time,

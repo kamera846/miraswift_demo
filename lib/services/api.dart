@@ -8,6 +8,8 @@ class ApiResponse {
   final String msg;
   final Map<String, dynamic>? data;
   final List<dynamic>? listData;
+  final Map<String, dynamic>? detail;
+  final List<dynamic>? listDetail;
   final List<dynamic>? dataEquipment;
   final List<dynamic>? dataScales;
   final Map<String, dynamic>? dataProduct;
@@ -18,6 +20,8 @@ class ApiResponse {
     required this.msg,
     this.data,
     this.listData,
+    this.detail,
+    this.listDetail,
     this.dataEquipment,
     this.dataScales,
     this.dataProduct,
@@ -29,6 +33,7 @@ class ApiResponse {
       status: json['status'] ?? '',
       msg: json['msg'] ?? '',
       data: json['data'],
+      detail: json['detail'],
     );
   }
 
@@ -38,6 +43,7 @@ class ApiResponse {
       status: json['status'] ?? '',
       msg: json['msg'] ?? '',
       listData: json['data'],
+      listDetail: json['detail'],
       dataEquipment: json['dataEquipment'],
       dataScales: json['dataTimbang'],
       dataProduct: json['dataProduct'],
