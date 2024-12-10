@@ -50,8 +50,8 @@ class FormNewFormulaState extends State<FormNewFormula> {
 
   @override
   void initState() {
-    if (widget.isEdit) _setupItem();
     _selectedMaterial = widget.listMaterial.first;
+    if (widget.isEdit) _setupItem();
     super.initState();
   }
 
@@ -70,6 +70,10 @@ class FormNewFormulaState extends State<FormNewFormula> {
     _targetFormulaController.text = widget.item!.targetFormula;
     _fineFormulaController.text = widget.item!.fineFormula;
     _timeTargetController.text = widget.item!.timeTarget;
+    _selectedMaterial = widget.listMaterial.firstWhere(
+      (item) => item.no == widget.item!.kodeMaterial,
+      orElse: () => widget.listMaterial.first,
+    );
   }
 
   @override
@@ -95,7 +99,12 @@ class FormNewFormulaState extends State<FormNewFormula> {
                     (MaterialModel value) {
                   return DropdownMenuItem<MaterialModel>(
                     value: value,
-                    child: Text(value.name),
+                    child: Text(
+                      value.id != -1
+                          ? '${value.name} [${value.no.toString()}]'
+                          : value.name,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   );
                 }).toList(),
                 onChanged: (MaterialModel? value) {
