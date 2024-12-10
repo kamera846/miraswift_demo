@@ -21,7 +21,7 @@ class FormNewFormula extends StatefulWidget {
   final bool isEdit;
   final String productId;
   final FormulaModel? item;
-  final List<MaterialModel>? listMaterial;
+  final List<MaterialModel> listMaterial;
   final void Function(
     String productId,
     String code,
@@ -51,6 +51,7 @@ class FormNewFormulaState extends State<FormNewFormula> {
   @override
   void initState() {
     if (widget.isEdit) _setupItem();
+    _selectedMaterial = widget.listMaterial.first;
     super.initState();
   }
 
@@ -83,29 +84,36 @@ class FormNewFormulaState extends State<FormNewFormula> {
           key: _formKey,
           child: Column(
             children: [
-              DropdownMenu<MaterialModel>(
-                width: double.infinity,
-                inputDecorationTheme: InputDecorationTheme(
+              DropdownButtonFormField<MaterialModel>(
+                value: _selectedMaterial,
+                decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                initialSelection: widget.listMaterial?.first,
-                onSelected: (MaterialModel? value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedMaterial = value;
-                    });
-                  }
-                },
-                dropdownMenuEntries: widget.listMaterial!
-                    .map<DropdownMenuEntry<MaterialModel>>(
-                        (MaterialModel item) {
-                  return DropdownMenuEntry<MaterialModel>(
-                    value: item,
-                    label: item.name, // Display the value as the label.
+                items: widget.listMaterial.map<DropdownMenuItem<MaterialModel>>(
+                    (MaterialModel value) {
+                  return DropdownMenuItem<MaterialModel>(
+                    value: value,
+                    child: Text(value.name),
                   );
                 }).toList(),
+                onChanged: (MaterialModel? value) {
+                  setState(() {
+                    _selectedMaterial = value!;
+                  });
+                },
+                validator: (value) {
+                  if (value!.id == -1) {
+                    return 'Please select the material';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  setState(() {
+                    _selectedMaterial = value!;
+                  });
+                },
               ),
               const SizedBox(height: 12.0),
               Row(

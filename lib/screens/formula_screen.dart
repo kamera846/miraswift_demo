@@ -23,7 +23,7 @@ class FormulaScreen extends StatefulWidget {
 
 class _FormulaScreenState extends State<FormulaScreen> {
   List<FormulaModel>? _list;
-  List<MaterialModel>? _listMaterial;
+  List<MaterialModel> _listMaterial = [];
   bool _isLoading = true;
   FormulaModel? _selectedItem;
 
@@ -64,9 +64,18 @@ class _FormulaScreenState extends State<FormulaScreen> {
       },
       onCompleted: (data) {
         setState(() {
-          _listMaterial = data;
+          if (data != null) _listMaterial = data;
           _selectedItem = null;
           _isLoading = false;
+
+          _listMaterial.insert(
+            0,
+            const MaterialModel(
+              no: "-1",
+              name: "== Select Material ==",
+              id: -1,
+            ),
+          );
         });
       },
     );
