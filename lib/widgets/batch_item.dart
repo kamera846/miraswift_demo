@@ -111,7 +111,7 @@ class BatchItem extends StatelessWidget {
                           )
                         else
                           Icon(
-                            size: 20,
+                            size: 16,
                             Icons.linear_scale,
                             color: statusColorBorderOff,
                           )
@@ -129,6 +129,7 @@ class BatchItem extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall)
                 else if (equipment != null && equipment!.timeElapsed == '0')
                   Icon(
+                    size: 16,
                     Icons.linear_scale,
                     color: statusColorBorderOff,
                   )
