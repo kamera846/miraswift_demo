@@ -107,7 +107,7 @@ class _BatchScreenState extends State<BatchScreen> {
                               ),
                               title: item.noBatch,
                               description:
-                                  formattedDate(dateStr: item.maxDateEquipment),
+                                  formattedDate(dateStr: item.dateEquipment),
                             ),
                             if (!isLastIndex)
                               Divider(
