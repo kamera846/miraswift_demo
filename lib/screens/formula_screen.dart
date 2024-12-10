@@ -279,7 +279,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       context: context,
       title: 'Confirm Deletion',
       content:
-          'Are you sure you want to delete material with code ${_selectedItem!.kodeMaterial}?',
+          'Are you sure you want to delete ${_selectedItem!.nameMaterial} with code ${_selectedItem!.kodeMaterial}?',
       positiveButtonText: 'Delete',
       positiveButtonTextColor: CupertinoColors.systemRed,
       onPositivePressed: _submitDeleteItem,
@@ -382,7 +382,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                                   ? true
                                   : false,
                               badge: item.kodeMaterial,
-                              title: 'Nama Material',
+                              title: item.nameMaterial,
                               description:
                                   '${item.targetFormula} kg in ${item.timeTarget} second (Fine ${item.fineFormula} kg)',
                               customTrailingIcon: PopupMenuButton<FormulaModel>(

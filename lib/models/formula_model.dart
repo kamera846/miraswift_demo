@@ -5,6 +5,7 @@ class FormulaModel {
     required this.targetFormula,
     required this.fineFormula,
     required this.kodeMaterial,
+    required this.nameMaterial,
     required this.timeTarget,
     required this.createdAt,
     required this.updatedAt,
@@ -15,6 +16,7 @@ class FormulaModel {
   final String targetFormula;
   final String fineFormula;
   final String kodeMaterial;
+  final String nameMaterial;
   final String timeTarget;
   final String createdAt;
   final String updatedAt;
@@ -26,6 +28,7 @@ class FormulaModel {
       targetFormula: json['target_formula'] ?? '',
       fineFormula: json['fine_formula'] ?? '',
       kodeMaterial: json['kode_material'] ?? '',
+      nameMaterial: json['name_material'] ?? '',
       timeTarget: json['time_target'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
@@ -38,6 +41,7 @@ class FormulaModel {
         'target_formula': targetFormula,
         'fine_formula': fineFormula,
         'kode_material': kodeMaterial,
+        'name_material': nameMaterial,
         'time_target': timeTarget,
         'created_at': createdAt,
         'updated_at': updatedAt,
