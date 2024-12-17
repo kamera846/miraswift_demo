@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/screens/formula_screen.dart';
 import 'package:miraswift_demo/services/product_api.dart';
+import 'package:miraswift_demo/utils/badge.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
+import 'package:miraswift_demo/widgets/form_new_notification_target.dart';
 import 'package:miraswift_demo/widgets/form_new_product.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
@@ -18,9 +20,9 @@ class NotificationsTargetScreen extends StatefulWidget {
 }
 
 class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
-  List<ProductModel>? _list;
+  List<String>? _list;
   bool _isLoading = true;
-  ProductModel? _selectedItem;
+  String? _selectedItem;
 
   double _keyboardHeight = 0;
 
@@ -32,7 +34,7 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
 
   void _getList() async {
     setState(() {
-      _isLoading = false;
+      _isLoading = true;
     });
     // await ProductApi().list(
     //   onError: (msg) {
@@ -41,11 +43,20 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
     //     }
     //   },
     //   onCompleted: (data) {
-    //     setState(() {
-    //       _list = data;
-    //       _selectedItem = null;
-    //       _isLoading = false;
-    //     });
+    await Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        setState(() {
+          _list = List<String>.of([
+            "M Rafli Ramadani",
+            "M Ghaziy AL Ghifari",
+            "Aditya Bintang",
+          ]);
+          _selectedItem = null;
+          _isLoading = false;
+        });
+      },
+    );
     //   },
     // );
   }
@@ -104,7 +115,7 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
               right: 12,
               bottom: 12 + _keyboardHeight,
             ),
-            child: FormNewProduct(
+            child: FormNewNotificationTarget(
               onSubmitted: _submitNewItem,
             ),
           ),
@@ -114,57 +125,83 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
     // }
   }
 
-  void _submitNewItem(String code, String name) async {
-    setState(() {
-      _isLoading = true;
-    });
-    await ProductApi().create(
-      productCode: code,
-      productName: name,
-      onSuccess: (msg) => showSnackBar(context, msg),
-      onError: (msg) => showSnackBar(context, msg),
-      onCompleted: () {
-        _getList();
-      },
-    );
+  void _submitNewItem(String name, String phone) async {
+    //   setState(() {
+    //     _isLoading = true;
+    //   });
+    //   await ProductApi().create(
+    //     productCode: code,
+    //     productName: name,
+    //     onSuccess: (msg) => showSnackBar(context, msg),
+    //     onError: (msg) => showSnackBar(context, msg),
+    //     onCompleted: () {
+    print("Submit Target: $name, $phone");
+    _getList();
+    //     },
+    //   );
   }
 
   void _editItem() async {
-    // if (Platform.isIOS) {
-    //   await showCupertinoModalPopup(
+    //   // if (Platform.isIOS) {
+    //   //   await showCupertinoModalPopup(
+    //   //     context: context,
+    //   //     builder: (ctx) {
+    //   //       return CupertinoPopupSurface(
+    //   //         isSurfacePainted: false,
+    //   //         child: Material(
+    //   //           color: Colors.transparent,
+    //   //           borderRadius: BorderRadius.circular(24),
+    //   //           child:   (
+    //   //             onTap: () {
+    //   //               Navigator.pop(context);
+    //   //             },
+    //   //             child: Container(
+    //   //               color: Colors.transparent,
+    //   //               height: double.infinity,
+    //   //               child: Column(
+    //   //                 mainAxisSize: MainAxisSize.min,
+    //   //                 mainAxisAlignment: MainAxisAlignment.end,
+    //   //                 children: [
+    //   //                   Container(
+    //   //                     decoration: BoxDecoration(
+    //   //                       color: CupertinoTheme.of(context)
+    //   //                           .scaffoldBackgroundColor,
+    //   //                       borderRadius: BorderRadius.circular(24),
+    //   //                     ),
+    //   //                     padding: const EdgeInsets.all(12),
+    //   //                     child: FormNewProduct.edit(
+    //   //                       item: _selectedItem,
+    //   //                       onSubmitted: _submitEditItem,
+    //   //                     ),
+    //   //                   ),
+    //   //                 ],
+    //   //               ),
+    //   //             ),
+    //   //           ),
+    //   //         ),
+    //   //       );
+    //   //     },
+    //   //   );
+    //   //   setState(() {
+    //   //     _selectedItem = null;
+    //   //   });
+    //   // } else {
+    //   await showModalBottomSheet(
     //     context: context,
+    //     showDragHandle: true,
+    //     isScrollControlled: true,
     //     builder: (ctx) {
-    //       return CupertinoPopupSurface(
-    //         isSurfacePainted: false,
-    //         child: Material(
-    //           color: Colors.transparent,
-    //           borderRadius: BorderRadius.circular(24),
-    //           child:   (
-    //             onTap: () {
-    //               Navigator.pop(context);
-    //             },
-    //             child: Container(
-    //               color: Colors.transparent,
-    //               height: double.infinity,
-    //               child: Column(
-    //                 mainAxisSize: MainAxisSize.min,
-    //                 mainAxisAlignment: MainAxisAlignment.end,
-    //                 children: [
-    //                   Container(
-    //                     decoration: BoxDecoration(
-    //                       color: CupertinoTheme.of(context)
-    //                           .scaffoldBackgroundColor,
-    //                       borderRadius: BorderRadius.circular(24),
-    //                     ),
-    //                     padding: const EdgeInsets.all(12),
-    //                     child: FormNewProduct.edit(
-    //                       item: _selectedItem,
-    //                       onSubmitted: _submitEditItem,
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
+    //       return SizedBox(
+    //         width: double.infinity,
+    //         child: Padding(
+    //           padding: EdgeInsets.only(
+    //             left: 12,
+    //             right: 12,
+    //             bottom: 12 + _keyboardHeight,
+    //           ),
+    //           child: FormNewProduct.edit(
+    //             item: _selectedItem,
+    //             onSubmitted: _submitEditItem,
     //           ),
     //         ),
     //       );
@@ -173,85 +210,60 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
     //   setState(() {
     //     _selectedItem = null;
     //   });
-    // } else {
-    await showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (ctx) {
-        return SizedBox(
-          width: double.infinity,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 12,
-              right: 12,
-              bottom: 12 + _keyboardHeight,
-            ),
-            child: FormNewProduct.edit(
-              item: _selectedItem,
-              onSubmitted: _submitEditItem,
-            ),
-          ),
-        );
-      },
-    );
-    setState(() {
-      _selectedItem = null;
-    });
-    // }
+    //   // }
   }
 
   void _submitEditItem(String code, String name) async {
-    setState(() {
-      _isLoading = true;
-    });
-    await ProductApi().edit(
-      productId: _selectedItem!.idProduct,
-      productCode: code,
-      productName: name,
-      onSuccess: (msg) => showSnackBar(context, msg),
-      onError: (msg) => showSnackBar(context, msg),
-      onCompleted: () {
-        _getList();
-      },
-    );
+    //   setState(() {
+    //     _isLoading = true;
+    //   });
+    //   await ProductApi().edit(
+    //     productId: _selectedItem!.idProduct,
+    //     productCode: code,
+    //     productName: name,
+    //     onSuccess: (msg) => showSnackBar(context, msg),
+    //     onError: (msg) => showSnackBar(context, msg),
+    //     onCompleted: () {
+    //       _getList();
+    //     },
+    //   );
   }
 
   void _deleteItem() async {
-    await showPlatformAlertDialog(
-      context: context,
-      title: 'Confirm Deletion',
-      content:
-          'Are you sure you want to delete ${_selectedItem!.nameProduct} with number ${_selectedItem!.kodeProduct}?',
-      positiveButtonText: 'Delete',
-      positiveButtonTextColor: CupertinoColors.systemRed,
-      onPositivePressed: _submitDeleteItem,
-      negativeButtonText: 'Cancel',
-      onNegativePressed: () {
-        setState(() {
-          _selectedItem = null;
-        });
-        Navigator.of(context).pop();
-      },
-    );
-    setState(() {
-      _selectedItem = null;
-    });
+    //   await showPlatformAlertDialog(
+    //     context: context,
+    //     title: 'Confirm Deletion',
+    //     content:
+    //         'Are you sure you want to delete ${_selectedItem!.nameProduct} with number ${_selectedItem!.kodeProduct}?',
+    //     positiveButtonText: 'Delete',
+    //     positiveButtonTextColor: CupertinoColors.systemRed,
+    //     onPositivePressed: _submitDeleteItem,
+    //     negativeButtonText: 'Cancel',
+    //     onNegativePressed: () {
+    //       setState(() {
+    //         _selectedItem = null;
+    //       });
+    //       Navigator.of(context).pop();
+    //     },
+    //   );
+    //   setState(() {
+    //     _selectedItem = null;
+    //   });
   }
 
   void _submitDeleteItem() async {
-    Navigator.of(context).pop();
-    setState(() {
-      _isLoading = true;
-    });
-    await ProductApi().delete(
-      productId: _selectedItem!.idProduct,
-      onSuccess: (msg) => showSnackBar(context, msg),
-      onError: (msg) => showSnackBar(context, msg),
-      onCompleted: () {
-        _getList();
-      },
-    );
+    //   Navigator.of(context).pop();
+    //   setState(() {
+    //     _isLoading = true;
+    //   });
+    //   await ProductApi().delete(
+    //     productId: _selectedItem!.idProduct,
+    //     onSuccess: (msg) => showSnackBar(context, msg),
+    //     onError: (msg) => showSnackBar(context, msg),
+    //     onCompleted: () {
+    //       _getList();
+    //     },
+    //   );
   }
 
   @override
@@ -308,53 +320,56 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
                           children: [
                             ListTileItem(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) =>
-                                        FormulaScreen(product: item),
-                                  ),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (ctx) =>
+                                //         FormulaScreen(product: item),
+                                //   ),
+                                // );
                               },
-                              isSelected: (_selectedItem != null &&
-                                      _selectedItem!.idProduct ==
-                                          item.idProduct)
-                                  ? true
-                                  : false,
-                              badge: item.kodeProduct,
-                              title: item.nameProduct,
-                              description:
-                                  formattedDate(dateStr: item.createdAt),
-                              customTrailingIcon: PopupMenuButton<ProductModel>(
+                              // isSelected: (_selectedItem != null &&
+                              //         _selectedItem!.idProduct ==
+                              //             item.idProduct)
+                              //     ? true
+                              //     : false,
+                              badge: "Active",
+                              badgeModel: BadgeModel(
+                                badgeStyle[BadgeCategory.green]!.txtColor,
+                                badgeStyle[BadgeCategory.green]!.bgColor,
+                              ),
+                              title: item,
+                              description: "62895636998639",
+                              customTrailingIcon: PopupMenuButton<String>(
                                   icon: const Icon(
                                     Icons.more_vert_rounded,
                                     color: Colors.grey,
                                   ),
                                   itemBuilder: (ctx) {
                                     return [
-                                      PopupMenuItem<ProductModel>(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  FormulaScreen(product: item),
-                                            ),
-                                          );
-                                        },
-                                        child: const Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons
-                                                  .arrow_up_right_circle_fill,
-                                              size: 20,
-                                            ),
-                                            SizedBox(width: 12),
-                                            Text('Open')
-                                          ],
-                                        ),
-                                      ),
-                                      PopupMenuItem<ProductModel>(
+                                      // PopupMenuItem<String>(
+                                      //   onTap: () {
+                                      //     // Navigator.push(
+                                      //     //   context,
+                                      //     //   MaterialPageRoute(
+                                      //     //     builder: (ctx) =>
+                                      //     //         FormulaScreen(product: item),
+                                      //     //   ),
+                                      //     // );
+                                      //   },
+                                      //   child: const Row(
+                                      //     children: [
+                                      //       Icon(
+                                      //         CupertinoIcons
+                                      //             .arrow_up_right_circle_fill,
+                                      //         size: 20,
+                                      //       ),
+                                      //       SizedBox(width: 12),
+                                      //       Text('Open')
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      PopupMenuItem<String>(
                                         onTap: () {
                                           setState(() {
                                             _selectedItem = item;
@@ -372,7 +387,7 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
                                           ],
                                         ),
                                       ),
-                                      PopupMenuItem<ProductModel>(
+                                      PopupMenuItem<String>(
                                         onTap: () {
                                           setState(() {
                                             _selectedItem = item;
