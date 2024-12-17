@@ -51,6 +51,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
             });
           }
         }
+
         setState(() {
           _dataEquipment = dataEquipment;
           _dataScales = dataScales;
@@ -312,7 +313,7 @@ class BatchDetailHeader extends StatelessWidget {
                           );
                         },
                   child: Text(
-                    dataProduct == null ? '-' : 'Lihat Formula',
+                    dataProduct == null ? '-' : 'Detail Formula',
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: Theme.of(context).primaryColor,
                         ),

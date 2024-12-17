@@ -1,3 +1,5 @@
+import 'package:miraswift_demo/models/formula_model.dart';
+
 class BatchModel {
   const BatchModel({
     required this.noBatch,
@@ -15,6 +17,7 @@ class BatchModel {
     required this.timeTimbang,
     required this.createdAt,
     required this.dateEquipment,
+    this.formula,
   });
 
   final String noBatch;
@@ -32,6 +35,7 @@ class BatchModel {
   final String timeTimbang;
   final String createdAt;
   final String dateEquipment;
+  final FormulaModel? formula;
 
   factory BatchModel.fromJson(Map<String, dynamic> json) {
     return BatchModel(
@@ -50,6 +54,9 @@ class BatchModel {
       timeTimbang: json['time_timbang'] ?? '',
       createdAt: json['created_at'] ?? '',
       dateEquipment: json['date_equipment'] ?? '',
+      formula: json['formula'] != null
+          ? FormulaModel.fromJson(json['formula'])
+          : null,
     );
   }
 
@@ -69,5 +76,6 @@ class BatchModel {
         'time_timbang': timeTimbang,
         'created_at': createdAt,
         'date_equipment': dateEquipment,
+        'formula': formula,
       };
 }
