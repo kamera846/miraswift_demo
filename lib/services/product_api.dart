@@ -56,6 +56,57 @@ class ProductApi {
     }
   }
 
+  Future<List<ProductModel>?> listAccurate({
+    Function(String msg)? onSuccess,
+    Function(String msg)? onError,
+    Function(List<ProductModel>? data)? onCompleted,
+  }) async {
+    List<ProductModel>? data;
+    try {
+      final url = Uri.https(baseUrl, 'api/product', {'source': 'accurate'});
+      final response = await http.get(
+        url,
+        headers: headerSetup,
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final apiResponse = ApiResponse.fromJsonList(responseBody);
+
+        if (apiResponse.code == 200) {
+          if (apiResponse.listDetail != null) {
+            data = apiResponse.listDetail
+                ?.map((item) => ProductModel.fromJsonAccurate(item))
+                .toList();
+          }
+          if (onSuccess != null) {
+            onSuccess(apiResponse.msg);
+          }
+          return data;
+        }
+
+        if (onError != null) {
+          onError(apiResponse.msg);
+        }
+        return data;
+      } else {
+        if (onError != null) {
+          onError('$failedRequestText. Status Code: ${response.statusCode}');
+        }
+        return data;
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError('$failedRequestText. Exception: $e');
+      }
+      return data;
+    } finally {
+      if (onCompleted != null) {
+        onCompleted(data);
+      }
+    }
+  }
+
   Future<void> detail({
     required String productId,
     Function(String msg)? onSuccess,

@@ -18,6 +18,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   List<ProductModel>? _list;
+  List<ProductModel> _listAccurate = [];
   bool _isLoading = true;
   ProductModel? _selectedItem;
 
@@ -43,7 +44,35 @@ class _ProductScreenState extends State<ProductScreen> {
         setState(() {
           _list = data;
           _selectedItem = null;
+        });
+        _getListAccurate();
+      },
+    );
+  }
+
+  void _getListAccurate() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await ProductApi().listAccurate(
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          if (data != null) _listAccurate = data;
           _isLoading = false;
+
+          _listAccurate.insert(
+            0,
+            const ProductModel.accurate(
+              no: "-1",
+              name: "== Select Product ==",
+              id: -1,
+            ),
+          );
         });
       },
     );
@@ -104,6 +133,7 @@ class _ProductScreenState extends State<ProductScreen> {
               bottom: 12 + _keyboardHeight,
             ),
             child: FormNewProduct(
+              listProduct: _listAccurate,
               onSubmitted: _submitNewItem,
             ),
           ),
@@ -188,6 +218,7 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             child: FormNewProduct.edit(
               item: _selectedItem,
+              listProduct: _listAccurate,
               onSubmitted: _submitEditItem,
             ),
           ),
