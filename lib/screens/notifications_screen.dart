@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/logmsg_model.dart';
+import 'package:miraswift_demo/screens/notifications_target_screen.dart';
 import 'package:miraswift_demo/services/logmsg_api.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
@@ -45,8 +46,37 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications',
-            style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Notifications',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(
+              Icons.settings,
+            ),
+            itemBuilder: (ctx) {
+              return [
+                PopupMenuItem(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => const NotificationsTargetScreen(),
+                      ),
+                    );
+                  },
+                  child: const Row(
+                    children: [
+                      SizedBox(width: 12),
+                      Text('Notifications Target')
+                    ],
+                  ),
+                ),
+              ];
+            },
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
