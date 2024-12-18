@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/screens/formula_screen.dart';
-import 'package:miraswift_demo/services/product_api.dart';
+import 'package:miraswift_demo/models/user_model.dart';
+import 'package:miraswift_demo/services/user_api.dart';
 import 'package:miraswift_demo/utils/badge.dart';
-import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/form_new_notification_target.dart';
-import 'package:miraswift_demo/widgets/form_new_product.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
 
@@ -20,9 +17,9 @@ class NotificationsTargetScreen extends StatefulWidget {
 }
 
 class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
-  List<String>? _list;
+  List<UserModel>? _list;
   bool _isLoading = true;
-  String? _selectedItem;
+  UserModel? _selectedItem;
 
   double _keyboardHeight = 0;
 
@@ -36,29 +33,20 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
     setState(() {
       _isLoading = true;
     });
-    // await ProductApi().list(
-    //   onError: (msg) {
-    //     if (mounted) {
-    //       showSnackBar(context, msg);
-    //     }
-    //   },
-    //   onCompleted: (data) {
-    await Future.delayed(
-      const Duration(seconds: 1),
-      () {
+    await UserApi().list(
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
         setState(() {
-          _list = List<String>.of([
-            "M Rafli Ramadani",
-            "M Ghaziy AL Ghifari",
-            "Aditya Bintang",
-          ]);
+          _list = data;
           _selectedItem = null;
           _isLoading = false;
         });
       },
     );
-    //   },
-    // );
   }
 
   void _newItem() {
@@ -125,83 +113,58 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
     // }
   }
 
-  void _submitNewItem(String name, String phone) async {
-    //   setState(() {
-    //     _isLoading = true;
-    //   });
-    //   await ProductApi().create(
-    //     productCode: code,
-    //     productName: name,
-    //     onSuccess: (msg) => showSnackBar(context, msg),
-    //     onError: (msg) => showSnackBar(context, msg),
-    //     onCompleted: () {
-    print("Submit Target: $name, $phone");
-    _getList();
-    //     },
-    //   );
+  void _submitNewItem(String name, String phone, String status) async {
+    setState(() {
+      _isLoading = true;
+    });
+    await UserApi().create(
+      phoneUser: phone,
+      nameUser: name,
+      isActive: status,
+      onSuccess: (msg) => showSnackBar(context, msg),
+      onError: (msg) => showSnackBar(context, msg),
+      onCompleted: () {
+        _getList();
+      },
+    );
   }
 
   void _editItem() async {
-    //   // if (Platform.isIOS) {
-    //   //   await showCupertinoModalPopup(
-    //   //     context: context,
-    //   //     builder: (ctx) {
-    //   //       return CupertinoPopupSurface(
-    //   //         isSurfacePainted: false,
-    //   //         child: Material(
-    //   //           color: Colors.transparent,
-    //   //           borderRadius: BorderRadius.circular(24),
-    //   //           child:   (
-    //   //             onTap: () {
-    //   //               Navigator.pop(context);
-    //   //             },
-    //   //             child: Container(
-    //   //               color: Colors.transparent,
-    //   //               height: double.infinity,
-    //   //               child: Column(
-    //   //                 mainAxisSize: MainAxisSize.min,
-    //   //                 mainAxisAlignment: MainAxisAlignment.end,
-    //   //                 children: [
-    //   //                   Container(
-    //   //                     decoration: BoxDecoration(
-    //   //                       color: CupertinoTheme.of(context)
-    //   //                           .scaffoldBackgroundColor,
-    //   //                       borderRadius: BorderRadius.circular(24),
-    //   //                     ),
-    //   //                     padding: const EdgeInsets.all(12),
-    //   //                     child: FormNewProduct.edit(
-    //   //                       item: _selectedItem,
-    //   //                       onSubmitted: _submitEditItem,
-    //   //                     ),
-    //   //                   ),
-    //   //                 ],
-    //   //               ),
-    //   //             ),
-    //   //           ),
-    //   //         ),
-    //   //       );
-    //   //     },
-    //   //   );
-    //   //   setState(() {
-    //   //     _selectedItem = null;
-    //   //   });
-    //   // } else {
-    //   await showModalBottomSheet(
+    // if (Platform.isIOS) {
+    //   await showCupertinoModalPopup(
     //     context: context,
-    //     showDragHandle: true,
-    //     isScrollControlled: true,
     //     builder: (ctx) {
-    //       return SizedBox(
-    //         width: double.infinity,
-    //         child: Padding(
-    //           padding: EdgeInsets.only(
-    //             left: 12,
-    //             right: 12,
-    //             bottom: 12 + _keyboardHeight,
-    //           ),
-    //           child: FormNewProduct.edit(
-    //             item: _selectedItem,
-    //             onSubmitted: _submitEditItem,
+    //       return CupertinoPopupSurface(
+    //         isSurfacePainted: false,
+    //         child: Material(
+    //           color: Colors.transparent,
+    //           borderRadius: BorderRadius.circular(24),
+    //           child:   (
+    //             onTap: () {
+    //               Navigator.pop(context);
+    //             },
+    //             child: Container(
+    //               color: Colors.transparent,
+    //               height: double.infinity,
+    //               child: Column(
+    //                 mainAxisSize: MainAxisSize.min,
+    //                 mainAxisAlignment: MainAxisAlignment.end,
+    //                 children: [
+    //                   Container(
+    //                     decoration: BoxDecoration(
+    //                       color: CupertinoTheme.of(context)
+    //                           .scaffoldBackgroundColor,
+    //                       borderRadius: BorderRadius.circular(24),
+    //                     ),
+    //                     padding: const EdgeInsets.all(12),
+    //                     child: FormNewProduct.edit(
+    //                       item: _selectedItem,
+    //                       onSubmitted: _submitEditItem,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
     //           ),
     //         ),
     //       );
@@ -210,60 +173,86 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
     //   setState(() {
     //     _selectedItem = null;
     //   });
-    //   // }
+    // } else {
+    await showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 12,
+              right: 12,
+              bottom: 12 + _keyboardHeight,
+            ),
+            child: FormNewNotificationTarget.edit(
+              item: _selectedItem,
+              onSubmitted: _submitEditItem,
+            ),
+          ),
+        );
+      },
+    );
+    setState(() {
+      _selectedItem = null;
+    });
+    // }
   }
 
-  void _submitEditItem(String code, String name) async {
-    //   setState(() {
-    //     _isLoading = true;
-    //   });
-    //   await ProductApi().edit(
-    //     productId: _selectedItem!.idProduct,
-    //     productCode: code,
-    //     productName: name,
-    //     onSuccess: (msg) => showSnackBar(context, msg),
-    //     onError: (msg) => showSnackBar(context, msg),
-    //     onCompleted: () {
-    //       _getList();
-    //     },
-    //   );
+  void _submitEditItem(String phone, String name, String status) async {
+    setState(() {
+      _isLoading = true;
+    });
+    await UserApi().edit(
+      id: _selectedItem!.idUser,
+      nameUser: name,
+      phoneUser: phone,
+      isActive: status,
+      onSuccess: (msg) => showSnackBar(context, msg),
+      onError: (msg) => showSnackBar(context, msg),
+      onCompleted: () {
+        _getList();
+      },
+    );
   }
 
   void _deleteItem() async {
-    //   await showPlatformAlertDialog(
-    //     context: context,
-    //     title: 'Confirm Deletion',
-    //     content:
-    //         'Are you sure you want to delete ${_selectedItem!.nameProduct} with number ${_selectedItem!.kodeProduct}?',
-    //     positiveButtonText: 'Delete',
-    //     positiveButtonTextColor: CupertinoColors.systemRed,
-    //     onPositivePressed: _submitDeleteItem,
-    //     negativeButtonText: 'Cancel',
-    //     onNegativePressed: () {
-    //       setState(() {
-    //         _selectedItem = null;
-    //       });
-    //       Navigator.of(context).pop();
-    //     },
-    //   );
-    //   setState(() {
-    //     _selectedItem = null;
-    //   });
+    await showPlatformAlertDialog(
+      context: context,
+      title: 'Confirm Deletion',
+      content:
+          'Are you sure you want to delete ${_selectedItem!.nameUser} with number ${_selectedItem!.phoneUser}?',
+      positiveButtonText: 'Delete',
+      positiveButtonTextColor: CupertinoColors.systemRed,
+      onPositivePressed: _submitDeleteItem,
+      negativeButtonText: 'Cancel',
+      onNegativePressed: () {
+        setState(() {
+          _selectedItem = null;
+        });
+        Navigator.of(context).pop();
+      },
+    );
+    setState(() {
+      _selectedItem = null;
+    });
   }
 
   void _submitDeleteItem() async {
-    //   Navigator.of(context).pop();
-    //   setState(() {
-    //     _isLoading = true;
-    //   });
-    //   await ProductApi().delete(
-    //     productId: _selectedItem!.idProduct,
-    //     onSuccess: (msg) => showSnackBar(context, msg),
-    //     onError: (msg) => showSnackBar(context, msg),
-    //     onCompleted: () {
-    //       _getList();
-    //     },
-    //   );
+    Navigator.of(context).pop();
+    setState(() {
+      _isLoading = true;
+    });
+    await UserApi().delete(
+      id: _selectedItem!.idUser,
+      onSuccess: (msg) => showSnackBar(context, msg),
+      onError: (msg) => showSnackBar(context, msg),
+      onCompleted: () {
+        _getList();
+      },
+    );
   }
 
   @override
@@ -314,6 +303,7 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
               child: (!_isLoading && _list != null && _list!.isNotEmpty)
                   ? Column(
                       children: _list!.map((item) {
+                        bool isUserActive = item.isActive == "1";
                         final isLastIndex = (index == (_list!.length - 1));
                         index++;
                         return Column(
@@ -328,18 +318,21 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
                                 //   ),
                                 // );
                               },
-                              // isSelected: (_selectedItem != null &&
-                              //         _selectedItem!.idProduct ==
-                              //             item.idProduct)
-                              //     ? true
-                              //     : false,
-                              badge: "Active",
+                              isSelected: (_selectedItem != null &&
+                                      _selectedItem!.idUser == item.idUser)
+                                  ? true
+                                  : false,
+                              badge: isUserActive ? "Active" : "Inactive",
                               badgeModel: BadgeModel(
-                                badgeStyle[BadgeCategory.green]!.txtColor,
-                                badgeStyle[BadgeCategory.green]!.bgColor,
+                                isUserActive
+                                    ? badgeStyle[BadgeCategory.green]!.txtColor
+                                    : badgeStyle[BadgeCategory.grey]!.txtColor,
+                                isUserActive
+                                    ? badgeStyle[BadgeCategory.green]!.bgColor
+                                    : badgeStyle[BadgeCategory.grey]!.bgColor,
                               ),
-                              title: item,
-                              description: "62895636998639",
+                              title: item.nameUser,
+                              description: item.phoneUser,
                               customTrailingIcon: PopupMenuButton<String>(
                                   icon: const Icon(
                                     Icons.more_vert_rounded,

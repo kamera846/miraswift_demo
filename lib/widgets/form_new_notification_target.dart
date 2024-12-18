@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/product_model.dart';
+import 'package:miraswift_demo/models/user_model.dart';
 
 class FormNewNotificationTarget extends StatefulWidget {
   const FormNewNotificationTarget({
@@ -14,8 +14,8 @@ class FormNewNotificationTarget extends StatefulWidget {
   }) : isEdit = true;
 
   final bool isEdit;
-  final ProductModel? item;
-  final void Function(String name, String phone) onSubmitted;
+  final UserModel? item;
+  final void Function(String name, String phone, String status) onSubmitted;
 
   @override
   FormNewNotificationTargetState createState() =>
@@ -29,6 +29,8 @@ class FormNewNotificationTargetState extends State<FormNewNotificationTarget> {
 
   String _phoneInput = '';
   String _nameInput = '';
+
+  bool _status = false;
 
   @override
   void initState() {
@@ -44,10 +46,11 @@ class FormNewNotificationTargetState extends State<FormNewNotificationTarget> {
   }
 
   void _setupItem() {
-    _phoneInput = widget.item!.kodeProduct;
-    _nameInput = widget.item!.nameProduct;
-    _phoneController.text = widget.item!.kodeProduct;
-    _nameController.text = widget.item!.nameProduct;
+    _phoneInput = widget.item!.phoneUser;
+    _nameInput = widget.item!.nameUser;
+    _phoneController.text = widget.item!.phoneUser;
+    _nameController.text = widget.item!.nameUser;
+    _status = widget.item!.isActive == "1" ? true : false;
   }
 
   @override
@@ -118,12 +121,30 @@ class FormNewNotificationTargetState extends State<FormNewNotificationTarget> {
                 },
               ),
               const SizedBox(height: 12.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Toggle Status (${_status ? 'active' : 'disabled'})'),
+                  Switch(
+                    value: _status,
+                    activeColor: Colors.green.shade900.withAlpha(150),
+                    activeTrackColor: Colors.green.shade900.withAlpha(75),
+                    onChanged: (value) {
+                      setState(() {
+                        _status = value;
+                      });
+                    },
+                  )
+                ],
+              ),
+              const SizedBox(height: 12.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
                     _formKey.currentState?.save();
 
-                    widget.onSubmitted(_nameInput, _phoneInput);
+                    String statusInput = _status ? "1" : "0";
+                    widget.onSubmitted(_nameInput, _phoneInput, statusInput);
                     Navigator.pop(context);
                   }
                 },
