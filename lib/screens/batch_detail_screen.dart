@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswift_demo/models/formula_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/screens/formula_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
+import 'package:miraswift_demo/services/formula_api.dart';
 import 'package:miraswift_demo/utils/badge.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/batch_item.dart';
+import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
 class BatchDetailScreen extends StatefulWidget {
   const BatchDetailScreen({super.key, required this.batch});
@@ -21,6 +24,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen>
     with SingleTickerProviderStateMixin {
   List<BatchModel>? _dataEquipment;
   List<BatchModel>? _dataScales;
+  List<FormulaModel>? _dataFormula;
   TabController? _tabController;
   ProductModel? _dataProduct;
   bool isLoading = true;
@@ -28,7 +32,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen>
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     super.initState();
     _getBatchDetail();
   }
@@ -59,15 +63,29 @@ class _BatchDetailScreenState extends State<BatchDetailScreen>
           _dataEquipment = dataEquipment;
           _dataScales = dataScales;
           _dataProduct = dataProduct;
-          isLoading = false;
         });
 
-        // Future.delayed(
-        //   const Duration(seconds: 3),
-        //   () => setState(() {
-        //     isLoading = false;
-        //   }),
-        // );
+        _getListFormula();
+      },
+    );
+  }
+
+  void _getListFormula() async {
+    setState(() {
+      isLoading = true;
+    });
+    await FormulaApi().list(
+      idProduct: _dataProduct!.idProduct,
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          _dataFormula = data;
+          isLoading = false;
+        });
       },
     );
   }
@@ -76,6 +94,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen>
   Widget build(BuildContext context) {
     int dataEquipmentIndex = 0;
     int dataScalesIndex = 0;
+    int dataFormulaIndex = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -104,21 +123,36 @@ class _BatchDetailScreenState extends State<BatchDetailScreen>
               borderRadius: BorderRadius.circular(8),
             ),
             child: TabBar(
-              unselectedLabelColor: Colors.grey,
               controller: _tabController,
               indicatorSize: TabBarIndicatorSize.tab,
               dividerHeight: 0,
+              labelColor: Theme.of(context).primaryColorDark,
+              labelStyle: Theme.of(context).textTheme.titleSmall,
+              // unselectedLabelColor: Colors.grey,
+              unselectedLabelStyle: Theme.of(context).textTheme.bodySmall,
+              indicatorColor: Theme.of(context).primaryColorDark,
+              indicatorPadding: const EdgeInsets.symmetric(horizontal: 12),
+              labelPadding: const EdgeInsets.only(top: 6),
               tabs: const [
                 Tab(
-                  icon: Icon(Icons.settings_applications),
+                  icon: Icon(
+                    Icons.settings_applications,
+                    size: 20,
+                  ),
                   text: "Equipments",
                 ),
                 Tab(
-                  icon: Icon(Icons.scale_rounded),
+                  icon: Icon(
+                    Icons.scale_rounded,
+                    size: 20,
+                  ),
                   text: "Scales",
                 ),
                 Tab(
-                  icon: Icon(Icons.receipt_rounded),
+                  icon: Icon(
+                    Icons.receipt_rounded,
+                    size: 20,
+                  ),
                   text: "Formula",
                 ),
               ],
@@ -129,100 +163,153 @@ class _BatchDetailScreenState extends State<BatchDetailScreen>
               controller: _tabController,
               children: [
                 // List Equipments
-                Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      margin: const EdgeInsets.only(
-                          left: 12, top: 12, right: 12, bottom: 0),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1, color: Colors.grey.withAlpha(75)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: (!isLoading &&
-                              _dataEquipment != null &&
-                              _dataEquipment!.isNotEmpty)
-                          ? Column(
-                              children: _dataEquipment!.map((item) {
-                                final isLastIndex = (dataEquipmentIndex ==
-                                    (_dataEquipment!.length - 1));
-                                dataEquipmentIndex++;
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 12,
-                                    bottom: isLastIndex ? 12 : 0,
-                                  ),
-                                  child: BatchItem.equipment(
-                                    equipment: item,
-                                    isLastIndex: isLastIndex,
-                                  ),
-                                );
-                              }).toList(),
-                            )
-                          : Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Text(isLoading
-                                    ? 'Loading..'
-                                    : !isLoading &&
-                                            (_dataEquipment == null ||
-                                                _dataEquipment!.isEmpty)
-                                        ? 'Data is empty.'
-                                        : ''),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        margin: const EdgeInsets.only(
+                            left: 12, top: 12, right: 12, bottom: 0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 1, color: Colors.grey.withAlpha(75)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: (!isLoading &&
+                                _dataEquipment != null &&
+                                _dataEquipment!.isNotEmpty)
+                            ? Column(
+                                children: _dataEquipment!.map((item) {
+                                  final isLastIndex = (dataEquipmentIndex ==
+                                      (_dataEquipment!.length - 1));
+                                  dataEquipmentIndex++;
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 12,
+                                      bottom: isLastIndex ? 12 : 0,
+                                    ),
+                                    child: BatchItem.equipment(
+                                      equipment: item,
+                                      isLastIndex: isLastIndex,
+                                    ),
+                                  );
+                                }).toList(),
+                              )
+                            : Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(isLoading
+                                      ? 'Loading..'
+                                      : !isLoading &&
+                                              (_dataEquipment == null ||
+                                                  _dataEquipment!.isEmpty)
+                                          ? 'Data is empty.'
+                                          : ''),
+                                ),
                               ),
-                            ),
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
                 // List Scales
-                Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      margin: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1, color: Colors.grey.withAlpha(75)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: (!isLoading &&
-                              _dataScales != null &&
-                              _dataScales!.isNotEmpty)
-                          ? Column(
-                              children: _dataScales!.map((item) {
-                                final isLastIndex = (dataScalesIndex ==
-                                    (_dataScales!.length - 1));
-                                dataScalesIndex++;
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 12, bottom: isLastIndex ? 12 : 0),
-                                  child: BatchItem.scales(
-                                    scales: item,
-                                    isLastIndex: isLastIndex,
-                                  ),
-                                );
-                              }).toList(),
-                            )
-                          : Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Text(isLoading
-                                    ? 'Loading..'
-                                    : !isLoading &&
-                                            (_dataScales == null ||
-                                                _dataScales!.isEmpty)
-                                        ? 'Data is empty.'
-                                        : ''),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        margin: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 1, color: Colors.grey.withAlpha(75)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: (!isLoading &&
+                                _dataScales != null &&
+                                _dataScales!.isNotEmpty)
+                            ? Column(
+                                children: _dataScales!.map((item) {
+                                  final isLastIndex = (dataScalesIndex ==
+                                      (_dataScales!.length - 1));
+                                  dataScalesIndex++;
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 12, bottom: isLastIndex ? 12 : 0),
+                                    child: BatchItem.scales(
+                                      scales: item,
+                                      isLastIndex: isLastIndex,
+                                    ),
+                                  );
+                                }).toList(),
+                              )
+                            : Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(isLoading
+                                      ? 'Loading..'
+                                      : !isLoading &&
+                                              (_dataScales == null ||
+                                                  _dataScales!.isEmpty)
+                                          ? 'Data is empty.'
+                                          : ''),
+                                ),
                               ),
-                            ),
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
                 // List Formula
-                Center(
-                  child: Text(
-                    'List Formula',
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 1, color: Colors.grey.withAlpha(75)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: (!isLoading &&
+                                _dataFormula != null &&
+                                _dataFormula!.isNotEmpty)
+                            ? Column(
+                                children: _dataFormula!.map((item) {
+                                  final isLastIndex = (dataFormulaIndex ==
+                                      (_dataFormula!.length - 1));
+                                  dataFormulaIndex++;
+                                  return Column(
+                                    children: [
+                                      ListTileItem(
+                                        badge: item.kodeMaterial,
+                                        title: item.nameMaterial,
+                                        description:
+                                            '${item.targetFormula} kg in ${item.timeTarget} second (Fine ${item.fineFormula} kg)',
+                                      ),
+                                      if (!isLastIndex)
+                                        Divider(
+                                          height: 0,
+                                          color: Colors.grey.shade300,
+                                        ),
+                                    ],
+                                  );
+                                }).toList(),
+                              )
+                            : Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(
+                                    isLoading
+                                        ? 'Loading..'
+                                        : !isLoading &&
+                                                (_dataFormula == null ||
+                                                    _dataFormula!.isEmpty)
+                                            ? 'Data is empty.'
+                                            : '',
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -344,11 +431,17 @@ class BatchDetailHeader extends StatelessWidget {
                             ),
                           );
                         },
-                  child: Text(
-                    dataProduct == null ? '-' : 'Detail Formula',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    child: Text(
+                      dataProduct == null ? '-' : 'Detail Formula',
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                    ),
                   ),
                 ),
               ],
