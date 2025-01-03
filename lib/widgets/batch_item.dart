@@ -121,7 +121,7 @@ class BatchItem extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       scales!.formula != null
-                          ? 'Target ${scales!.formula!.targetFormula} kg (Fine ${scales!.formula!.fineFormula} kg)'
+                          ? 'Target formula ${scales!.formula!.targetFormula} kg (Fine ${scales!.formula!.fineFormula} kg)'
                           : '-',
                       style: Theme.of(context)
                           .textTheme

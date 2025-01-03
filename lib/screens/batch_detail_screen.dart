@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/screens/formula_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/utils/badge.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
@@ -520,12 +519,12 @@ class BatchDetailHeader extends StatelessWidget {
                         Text(
                           dataProduct != null ? dataProduct!.nameProduct : '-',
                         ),
-                        const SizedBox(width: 8),
-                        CustomBadge(
-                          badgeText: dataProduct != null
-                              ? dataProduct!.kodeProduct
-                              : '-',
-                        ),
+                        // const SizedBox(width: 8),
+                        // CustomBadge(
+                        //   badgeText: dataProduct != null
+                        //       ? dataProduct!.kodeProduct
+                        //       : '-',
+                        // ),
                       ],
                     ),
                     Text(
@@ -536,32 +535,36 @@ class BatchDetailHeader extends StatelessWidget {
                     ),
                   ],
                 ),
-                InkWell(
-                  onTap: dataProduct == null
-                      ? null
-                      : () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => FormulaScreen(
-                                product: dataProduct!,
-                              ),
-                            ),
-                          );
-                        },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    child: Text(
-                      dataProduct == null ? '-' : 'Detail Formula',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                    ),
-                  ),
+                CustomBadge(
+                  badgeText:
+                      dataProduct != null ? dataProduct!.kodeProduct : '-',
                 ),
+                // InkWell(
+                //   onTap: dataProduct == null
+                //       ? null
+                //       : () {
+                //           Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //               builder: (ctx) => FormulaScreen(
+                //                 product: dataProduct!,
+                //               ),
+                //             ),
+                //           );
+                //         },
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(
+                //       horizontal: 8,
+                //       vertical: 4,
+                //     ),
+                //     child: Text(
+                //       dataProduct == null ? '-' : 'Detail Formula',
+                //       style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                //             color: Theme.of(context).primaryColorDark,
+                //           ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
