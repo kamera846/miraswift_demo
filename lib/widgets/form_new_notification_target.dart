@@ -106,12 +106,12 @@ class FormNewNotificationTargetState extends State<FormNewNotificationTarget> {
                   ),
                 ),
                 validator: (value) {
-                  final RegExp _phoneRegExp =
+                  final RegExp phoneRegExp =
                       RegExp(r'^\+?[1-9]\d{1,14}$'); // E.164 format
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
                   }
-                  if (!_phoneRegExp.hasMatch(value)) {
+                  if (!phoneRegExp.hasMatch(value)) {
                     return 'Please enter valid phone number';
                   }
                   return null;
