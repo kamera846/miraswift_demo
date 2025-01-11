@@ -18,6 +18,7 @@ class _BatchScreenState extends State<BatchScreen> {
   final _formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
   bool _searchFocus = false;
   List<BatchModel>? _batchs;
   bool isLoading = true;
@@ -75,6 +76,22 @@ class _BatchScreenState extends State<BatchScreen> {
           isScrolled = false;
         });
       }
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != DateTime.now()) {
+      setState(() {
+        _dateController.text =
+            "${pickedDate.toLocal()}".split(' ')[0]; // Format to yyyy-mm-dd
+      });
     }
   }
 
@@ -201,6 +218,60 @@ class _BatchScreenState extends State<BatchScreen> {
                               Text(
                                 'Filter by date',
                                 style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              Material(
+                                color: Colors.white,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  child: TextFormField(
+                                    controller: _dateController,
+                                    readOnly: true,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                          color: Colors.blue,
+                                        ),
+                                    decoration: InputDecoration(
+                                      hintText: 'yyyy-mm-dd',
+                                      hintStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                            color: Colors.grey,
+                                          ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 12),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                          color: _dateController.text.isNotEmpty
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                            color: Colors.blue),
+                                      ),
+                                      suffixIcon: InkWell(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          _selectDate(context);
+                                        },
+                                        child: const Icon(
+                                          CupertinoIcons.calendar,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                               Text(
                                 'Filter by product',
