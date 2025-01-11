@@ -122,7 +122,7 @@ class _BatchScreenState extends State<BatchScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Material(
-                  color: Colors.white,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Form(
@@ -171,7 +171,7 @@ class _BatchScreenState extends State<BatchScreen> {
                         ),
                       ),
                       Material(
-                        color: Colors.white,
+                        color: Colors.transparent,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 12),
                           child: Ink(
@@ -208,6 +208,89 @@ class _BatchScreenState extends State<BatchScreen> {
                 ),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
+                  child: !isFilterShowed
+                      ? Row(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 8, right: 8),
+                              padding: const EdgeInsets.only(left: 12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                color: Colors.blue,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '2025-01-11',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                    width: 6,
+                                  ),
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: const Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 4, bottom: 4, right: 12),
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 8, right: 8),
+                              padding: const EdgeInsets.only(left: 12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                color: Colors.blue,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Thinbed',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                    width: 6,
+                                  ),
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: const Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 4, bottom: 4, right: 12),
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
+                ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
                   child: isFilterShowed
                       ? Padding(
                           key: const ValueKey('filters'),
@@ -220,7 +303,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                               Material(
-                                color: Colors.white,
+                                color: Colors.transparent,
                                 child: Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
