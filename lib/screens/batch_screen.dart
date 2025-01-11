@@ -206,6 +206,55 @@ class _BatchScreenState extends State<BatchScreen> {
                                 'Filter by product',
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 6, right: 6),
+                                    child: OutlinedButton.icon(
+                                      onPressed: () {},
+                                      label: Text(
+                                        'Thinbed',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(color: Colors.blue),
+                                      ),
+                                      style: OutlinedButton.styleFrom(
+                                        side: const BorderSide(
+                                            color: Colors.blue),
+                                        iconColor: Colors.blue,
+                                        surfaceTintColor: Colors.blue,
+                                      ),
+                                      icon: const Icon(
+                                        CupertinoIcons
+                                            .checkmark_alt_circle_fill,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 6, right: 6),
+                                    child: OutlinedButton.icon(
+                                      onPressed: () {},
+                                      label: Text(
+                                        'Acian',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(color: Colors.black87),
+                                      ),
+                                      style: OutlinedButton.styleFrom(
+                                        side: const BorderSide(
+                                            color: Colors.grey),
+                                        iconColor: Colors.grey,
+                                      ),
+                                      icon: null,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         )
