@@ -5,6 +5,7 @@ import 'package:miraswift_demo/screens/batch_detail_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
+import 'package:miraswift_demo/widgets/fullwidth_button.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
 class BatchScreen extends StatefulWidget {
@@ -317,7 +318,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                           color: Colors.blue,
                                         ),
                                     decoration: InputDecoration(
-                                      hintText: 'yyyy-mm-dd',
+                                      hintText: 'click date icon to select ->',
                                       hintStyle: Theme.of(context)
                                           .textTheme
                                           .bodySmall!
@@ -341,7 +342,8 @@ class _BatchScreenState extends State<BatchScreen> {
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide: const BorderSide(
-                                            color: Colors.blue),
+                                          color: Colors.blue,
+                                        ),
                                       ),
                                       suffixIcon: InkWell(
                                         onTap: () {
@@ -408,6 +410,21 @@ class _BatchScreenState extends State<BatchScreen> {
                                     ),
                                   )
                                 ],
+                              ),
+                              const SizedBox(height: 6),
+                              FullwidthButton(
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
+                                  setState(() {
+                                    isFilterShowed = !isFilterShowed;
+                                  });
+                                },
+                                child: const Text(
+                                  "Apply",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
