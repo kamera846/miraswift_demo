@@ -156,8 +156,8 @@ class _BatchScreenState extends State<BatchScreen> {
                             focusNode: _focusNode,
                             style: Theme.of(context).textTheme.bodySmall,
                             keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.done,
-                            onFieldSubmitted: (value) => _getBatchs,
+                            textInputAction: TextInputAction.search,
+                            onFieldSubmitted: (value) => _getBatchs(),
                             decoration: InputDecoration(
                               hintText: 'Search batch number..',
                               hintStyle: Theme.of(context)
