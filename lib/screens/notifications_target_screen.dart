@@ -201,7 +201,7 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
     // }
   }
 
-  void _submitEditItem(String phone, String name, String status) async {
+  void _submitEditItem(String name, String phone, String status) async {
     setState(() {
       _isLoading = true;
     });
