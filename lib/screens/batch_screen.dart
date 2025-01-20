@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/screens/batch_detail_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
+import 'package:miraswift_demo/services/product_api.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/fullwidth_button.dart';
@@ -23,8 +25,12 @@ class _BatchScreenState extends State<BatchScreen> {
   bool _searchFocus = false;
   List<BatchModel>? _batchs;
   bool isLoading = true;
-  bool isFilterShowed = false;
   bool isScrolled = false;
+  bool isFilterShowed = false;
+  String _filteredDate = '';
+  ProductModel? _filteredProduct;
+  ProductModel? _selectedProduct;
+  List<ProductModel>? _listProduct;
 
   @override
   void initState() {
@@ -59,6 +65,22 @@ class _BatchScreenState extends State<BatchScreen> {
       onCompleted: (data) {
         setState(() {
           _batchs = data;
+        });
+        _getProduct();
+      },
+    );
+  }
+
+  void _getProduct() async {
+    await ProductApi().list(
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          _listProduct = data;
           isLoading = false;
         });
       },
@@ -212,80 +234,94 @@ class _BatchScreenState extends State<BatchScreen> {
                   child: !isFilterShowed
                       ? Row(
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(top: 8, right: 8),
-                              padding: const EdgeInsets.only(left: 12),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: Colors.blue,
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '2025-01-11',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {},
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(
-                                            top: 4, bottom: 4, right: 12),
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 14,
+                            if (_filteredDate.isNotEmpty)
+                              Container(
+                                margin: const EdgeInsets.only(top: 8, right: 8),
+                                padding: const EdgeInsets.only(left: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: Colors.blue,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      _filteredDate,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _filteredDate = '';
+                                            _dateController.text = '';
+                                          });
+                                          _getBatchs();
+                                        },
+                                        child: const Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 4, bottom: 4, right: 12),
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 14,
+                                          ),
                                         ),
                                       ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            if (_filteredProduct != null)
+                              Container(
+                                margin: const EdgeInsets.only(top: 8, right: 8),
+                                padding: const EdgeInsets.only(left: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: Colors.blue,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      _filteredProduct!.nameProduct,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(color: Colors.white),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 8, right: 8),
-                              padding: const EdgeInsets.only(left: 12),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: Colors.blue,
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Thinbed',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {},
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(
-                                            top: 4, bottom: 4, right: 12),
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 14,
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedProduct = null;
+                                            _filteredProduct = null;
+                                          });
+                                          _getBatchs();
+                                        },
+                                        child: const Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 4, bottom: 4, right: 12),
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 14,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
                           ],
                         )
                       : const SizedBox.shrink(),
@@ -362,62 +398,84 @@ class _BatchScreenState extends State<BatchScreen> {
                                 'Filter by product',
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: 6, right: 6),
-                                    child: OutlinedButton.icon(
-                                      onPressed: () {},
-                                      label: Text(
-                                        'Thinbed',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(color: Colors.blue),
-                                      ),
-                                      style: OutlinedButton.styleFrom(
-                                        side: const BorderSide(
-                                            color: Colors.blue),
-                                        iconColor: Colors.blue,
-                                        surfaceTintColor: Colors.blue,
-                                      ),
-                                      icon: const Icon(
-                                        CupertinoIcons
-                                            .checkmark_alt_circle_fill,
-                                        size: 18,
-                                      ),
-                                    ),
+                              if (!isLoading &&
+                                  _listProduct != null &&
+                                  _listProduct!.isNotEmpty)
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: _listProduct!.map((item) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 6, right: 6),
+                                        child: OutlinedButton.icon(
+                                          onPressed: () {
+                                            setState(() {
+                                              _selectedProduct = item;
+                                            });
+                                          },
+                                          label: Text(
+                                            item.nameProduct,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall!
+                                                .copyWith(
+                                                    color: _selectedProduct
+                                                                ?.idProduct ==
+                                                            item.idProduct
+                                                        ? Colors.blue
+                                                        : Colors.black87),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                            side: BorderSide(
+                                              color:
+                                                  _selectedProduct?.idProduct ==
+                                                          item.idProduct
+                                                      ? Colors.blue
+                                                      : Colors.black87,
+                                            ),
+                                            iconColor:
+                                                _selectedProduct?.idProduct ==
+                                                        item.idProduct
+                                                    ? Colors.blue
+                                                    : Colors.black87,
+                                            surfaceTintColor:
+                                                _selectedProduct?.idProduct ==
+                                                        item.idProduct
+                                                    ? Colors.blue
+                                                    : Colors.black87,
+                                          ),
+                                          icon: const Icon(
+                                            CupertinoIcons
+                                                .checkmark_alt_circle_fill,
+                                            size: 18,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: 6, right: 6),
-                                    child: OutlinedButton.icon(
-                                      onPressed: () {},
-                                      label: Text(
-                                        'Acian',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(color: Colors.black87),
-                                      ),
-                                      style: OutlinedButton.styleFrom(
-                                        side: const BorderSide(
-                                            color: Colors.grey),
-                                        iconColor: Colors.grey,
-                                      ),
-                                      icon: null,
-                                    ),
-                                  )
-                                ],
-                              ),
+                                )
+                              else
+                                Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(isLoading
+                                      ? 'Loading..'
+                                      : !isLoading &&
+                                              (_batchs == null ||
+                                                  _batchs!.isEmpty)
+                                          ? 'No products created.'
+                                          : ''),
+                                ),
                               const SizedBox(height: 6),
                               FullwidthButton(
                                 onPressed: () {
                                   FocusScope.of(context).unfocus();
                                   setState(() {
                                     isFilterShowed = !isFilterShowed;
+                                    _filteredDate = _dateController.text;
+                                    _filteredProduct = _selectedProduct;
                                   });
+                                  _getBatchs();
                                 },
                                 child: const Text(
                                   "Apply",
@@ -487,6 +545,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                           ),
                                         );
                                       },
+                                      badge: 'Thinbed',
                                       customTrailingIcon: IconButton(
                                         onPressed: () {
                                           FocusScope.of(context).unfocus();
