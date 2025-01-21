@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:miraswift_demo/screens/dashboard_screen.dart';
 import 'package:miraswift_demo/screens/dashboardv2_screen.dart';
 import 'firebase_options.dart';
 
@@ -62,12 +61,12 @@ class MainApp extends StatelessWidget {
             ),
           ),
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
             child: Container(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withOpacity(0.5),
             ),
           ),
-          const DashboardScreen(),
+          const DashboardV2Screen(),
           // Scaffold(
           //   backgroundColor: Colors.transparent,
           //   appBar: AppBar(
