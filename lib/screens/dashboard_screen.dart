@@ -92,21 +92,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 const SizedBox(height: 32),
                 const MonitoringEquipment(),
-                const SizedBox(height: 12),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => const EquipmentScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text('Open Equipment'),
-                ),
+                // const SizedBox(height: 12),
+                // ElevatedButton(
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor:
+                //         Theme.of(context).colorScheme.primaryContainer,
+                //   ),
+                //   onPressed: () {
+                //     Navigator.of(context).push(
+                //       MaterialPageRoute(
+                //         builder: (ctx) => const EquipmentScreen(),
+                //       ),
+                //     );
+                //   },
+                //   child: const Text('Open Equipment'),
+                // ),
                 const SizedBox(height: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
