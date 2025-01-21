@@ -68,9 +68,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   },
                   child: const Row(
                     children: [
-                      Icon(Icons.settings),
+                      Icon(Icons.person),
                       SizedBox(width: 12),
-                      Text('Notifications Target')
+                      Text('Target Users')
                     ],
                   ),
                 ),
