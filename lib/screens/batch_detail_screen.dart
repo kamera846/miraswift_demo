@@ -491,7 +491,7 @@ class BatchDetailHeader extends StatelessWidget {
                         'Total Scales',
                       ),
                       Text(
-                        '$totalScales KG',
+                        '${totalScales.toStringAsFixed(2)} KG',
                       ),
                     ],
                   ),
