@@ -232,8 +232,8 @@ class SpkApi {
         headers: headerSetup,
         body: jsonEncode(
           {
-            'kode_product': idProduct,
-            'name_product': jmlBatch,
+            'id_product': idProduct,
+            'jml_batch': jmlBatch,
             'date_spk': dateSpk,
             'desc_spk': descSpk,
           },

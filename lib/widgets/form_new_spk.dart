@@ -193,8 +193,8 @@ class FormNewSpkState extends State<FormNewSpk> {
 
                     widget.onSubmitted(
                         _selectedProduct!.idProduct,
-                        _selectedDate,
                         _jmlBatchController.text,
+                        _selectedDate,
                         _descSpkController.text);
                     Navigator.pop(context);
                   }

@@ -142,8 +142,8 @@ class _SpkScreenState extends State<SpkScreen> {
 
   void _submitNewItem(
       String idProduct, String jmlBatch, String dateSpk, String descSpk) async {
-    print('$idProduct, $jmlBatch, $dateSpk, $descSpk');
-    return;
+    // print('$idProduct, $jmlBatch, $dateSpk, $descSpk');
+    // return;
     setState(() {
       _isLoading = true;
     });
@@ -218,7 +218,10 @@ class _SpkScreenState extends State<SpkScreen> {
               right: 12,
               bottom: 12 + _keyboardHeight,
             ),
-            child: const Text('Empty space.'),
+            child: FormNewSpk.edit(
+                item: _selectedItem,
+                onSubmitted: _submitEditItem,
+                listProduct: _listProduct),
           ),
         );
       },
@@ -231,6 +234,8 @@ class _SpkScreenState extends State<SpkScreen> {
 
   void _submitEditItem(
       String idProduct, String jmlBatch, String dateSpk, String descSpk) async {
+    // print('$idProduct, $jmlBatch, $dateSpk, $descSpk');
+    // return;
     setState(() {
       _isLoading = true;
     });
@@ -252,7 +257,8 @@ class _SpkScreenState extends State<SpkScreen> {
     await showPlatformAlertDialog(
       context: context,
       title: 'Confirm Deletion',
-      content: 'Are you sure you want to delete ${_selectedItem!.descSpk}?',
+      content:
+          'Are you sure you want to delete ${_selectedItem!.descSpk} with total batch ${_selectedItem!.jmlBatch}?',
       positiveButtonText: 'Delete',
       positiveButtonTextColor: CupertinoColors.systemRed,
       onPositivePressed: _submitDeleteItem,
@@ -360,28 +366,28 @@ class _SpkScreenState extends State<SpkScreen> {
                                   ),
                                   itemBuilder: (ctx) {
                                     return [
-                                      PopupMenuItem<SpkModel>(
-                                        onTap: () {
-                                          // Navigator.push(
-                                          //   context,
-                                          //   MaterialPageRoute(
-                                          //     builder: (ctx) =>
-                                          //         FormulaScreen(product: item),
-                                          //   ),
-                                          // );
-                                        },
-                                        child: const Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons
-                                                  .arrow_up_right_circle_fill,
-                                              size: 20,
-                                            ),
-                                            SizedBox(width: 12),
-                                            Text('Open')
-                                          ],
-                                        ),
-                                      ),
+                                      // PopupMenuItem<SpkModel>(
+                                      //   onTap: () {
+                                      //     // Navigator.push(
+                                      //     //   context,
+                                      //     //   MaterialPageRoute(
+                                      //     //     builder: (ctx) =>
+                                      //     //         FormulaScreen(product: item),
+                                      //     //   ),
+                                      //     // );
+                                      //   },
+                                      //   child: const Row(
+                                      //     children: [
+                                      //       Icon(
+                                      //         CupertinoIcons
+                                      //             .arrow_up_right_circle_fill,
+                                      //         size: 20,
+                                      //       ),
+                                      //       SizedBox(width: 12),
+                                      //       Text('Open')
+                                      //     ],
+                                      //   ),
+                                      // ),
                                       PopupMenuItem<SpkModel>(
                                         onTap: () {
                                           setState(() {
