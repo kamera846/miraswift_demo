@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/models/spk_model.dart';
+import 'package:miraswift_demo/services/product_api.dart';
 import 'package:miraswift_demo/services/spk_api.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
+import 'package:miraswift_demo/widgets/form_new_spk.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
 
@@ -16,6 +19,7 @@ class SpkScreen extends StatefulWidget {
 
 class _SpkScreenState extends State<SpkScreen> {
   List<SpkModel>? _list;
+  List<ProductModel> _listProduct = [];
   bool _isLoading = true;
   SpkModel? _selectedItem;
 
@@ -41,6 +45,32 @@ class _SpkScreenState extends State<SpkScreen> {
         setState(() {
           _list = data;
           _selectedItem = null;
+        });
+        _getListProduct();
+      },
+    );
+  }
+
+  void _getListProduct() async {
+    await ProductApi().list(
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          if (data != null) _listProduct = data;
+          _listProduct.insert(
+            0,
+            const ProductModel(
+              kodeProduct: "-1",
+              nameProduct: "== Select Product ==",
+              idProduct: "-1",
+              createdAt: "",
+              updatedAt: "",
+            ),
+          );
           _isLoading = false;
         });
       },
@@ -101,7 +131,8 @@ class _SpkScreenState extends State<SpkScreen> {
               right: 12,
               bottom: 12 + _keyboardHeight,
             ),
-            child: const Text('Empty space.'),
+            child: FormNewSpk(
+                onSubmitted: _submitNewItem, listProduct: _listProduct),
           ),
         );
       },
@@ -111,6 +142,8 @@ class _SpkScreenState extends State<SpkScreen> {
 
   void _submitNewItem(
       String idProduct, String jmlBatch, String dateSpk, String descSpk) async {
+    print('$idProduct, $jmlBatch, $dateSpk, $descSpk');
+    return;
     setState(() {
       _isLoading = true;
     });
