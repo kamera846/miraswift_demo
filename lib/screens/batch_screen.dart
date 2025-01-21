@@ -432,18 +432,18 @@ class _BatchScreenState extends State<BatchScreen> {
                                                   _selectedProduct?.idProduct ==
                                                           item.idProduct
                                                       ? Colors.blue
-                                                      : Colors.black87,
+                                                      : Colors.black54,
                                             ),
                                             iconColor:
                                                 _selectedProduct?.idProduct ==
                                                         item.idProduct
                                                     ? Colors.blue
-                                                    : Colors.black87,
+                                                    : Colors.black54,
                                             surfaceTintColor:
                                                 _selectedProduct?.idProduct ==
                                                         item.idProduct
                                                     ? Colors.blue
-                                                    : Colors.black87,
+                                                    : Colors.black54,
                                           ),
                                           icon: const Icon(
                                             CupertinoIcons
@@ -478,7 +478,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                   _getBatchs();
                                 },
                                 child: const Text(
-                                  "Apply",
+                                  "Apply Filter",
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
