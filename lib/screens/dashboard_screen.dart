@@ -3,6 +3,7 @@ import 'package:miraswift_demo/screens/batch_screen.dart';
 import 'package:miraswift_demo/screens/equipment_screen.dart';
 import 'package:miraswift_demo/screens/notifications_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
+import 'package:miraswift_demo/screens/spk_screen.dart';
 import 'package:miraswift_demo/widgets/monitoring_equipment.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -135,6 +136,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     );
                   },
                   child: const Text('Setting Recipe'),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const SpkScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('Setting SPK'),
                 ),
               ],
             ),
