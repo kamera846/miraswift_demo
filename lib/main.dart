@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:miraswift_demo/screens/dashboard_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:miraswift_demo/screens/dashboard_screen.dart';
+import 'package:miraswift_demo/screens/dashboardv2_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -44,7 +47,40 @@ class MainApp extends StatelessWidget {
         ),
         splashColor: Colors.blue.withOpacity(0.1),
       ),
-      home: const DashboardScreen(),
+      home: Stack(
+        children: [
+          Center(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage('assets/images/base_bg.png'),
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
+              )),
+            ),
+          ),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+          const DashboardScreen(),
+          // Scaffold(
+          //   backgroundColor: Colors.transparent,
+          //   appBar: AppBar(
+          //     backgroundColor: Colors.transparent,
+          //     title: const Text('Miraswift'),
+          //   ),
+          //   body: const Center(
+          //     child: Text('Dat content...'),
+          //   ),
+          // )
+        ],
+      ),
+      // home: const DashboardScreen(),
     );
   }
 }

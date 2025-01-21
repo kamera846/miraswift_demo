@@ -27,3 +27,4 @@ flutter:
   assets:
     - assets/images/miraswift_transparent.png
     - assets/images/miraswift_square_fav.png
+    - assets/images/base_bg.png
