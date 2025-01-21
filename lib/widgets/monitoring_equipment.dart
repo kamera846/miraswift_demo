@@ -210,6 +210,7 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
                       ? 'Turn Off All Equipment'
                       : 'Turn On All Equipment',
               style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
             ),
           )
         ],

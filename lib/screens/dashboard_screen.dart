@@ -152,6 +152,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   },
                   child: const Text('Setting SPK'),
                 ),
+                const SizedBox(height: 32),
+                const Text('© 2024 Miraswift Auto Solusi'),
               ],
             ),
           ),
