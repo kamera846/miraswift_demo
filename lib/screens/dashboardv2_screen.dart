@@ -158,22 +158,21 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                 ),
                 child: kChild,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(
-                        left: 32, top: 80, right: 32, bottom: 32),
-                    child: Image(
-                      image:
-                          AssetImage('assets/images/miraswift_transparent.png'),
-                      height: 100,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(
+                          left: 32, top: 80, right: 32, bottom: 32),
+                      child: Image(
+                        image: AssetImage(
+                            'assets/images/miraswift_transparent.png'),
+                        height: 100,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Padding(
+                    Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -182,8 +181,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Expanded(
-                                  flex: 2,
+                                SizedBox(
+                                  height: 180,
                                   child: MenuItems(
                                     icon: Icons.playlist_add_circle_rounded,
                                     surfaceColor: Colors.blue,
@@ -197,8 +196,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  flex: 3,
+                                SizedBox(
+                                  height: 220,
                                   child: MenuItems(
                                     icon: Icons.playlist_add_check_circle,
                                     surfaceColor: Colors.red,
@@ -219,8 +218,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Expanded(
-                                  flex: 3,
+                                SizedBox(
+                                  height: 220,
                                   child: MenuItems(
                                     icon: Icons.lightbulb_circle,
                                     surfaceColor: Colors.green,
@@ -234,8 +233,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  flex: 2,
+                                SizedBox(
+                                  height: 180,
                                   child: MenuItems(
                                     icon: Icons.circle_notifications,
                                     surfaceColor: Colors.yellow.shade700,
@@ -256,44 +255,44 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                    child: Padding(
+                    Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: MenuItems(
-                        icon: Icons.build_circle,
-                        surfaceColor: Colors.purple,
-                        title: 'Monitoring Equipments',
-                        description: 'Looking your equipments in realtime',
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => const EquipmentScreen(),
+                      child: SizedBox(
+                        height: 180,
+                        child: MenuItems(
+                          icon: Icons.build_circle,
+                          surfaceColor: Colors.purple,
+                          title: 'Monitoring Equipments',
+                          description: 'Looking your equipments in realtime',
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => const EquipmentScreen(),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(32),
-                    margin: const EdgeInsets.only(
-                      left: 16,
-                      top: 8,
-                      right: 16,
-                      bottom: 32,
+                    Container(
+                      padding: const EdgeInsets.all(32),
+                      margin: const EdgeInsets.only(
+                        left: 16,
+                        top: 8,
+                        right: 16,
+                        bottom: 32,
+                      ),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Center(
+                        child: Text('© 2024 Miraswift Auto Solusi'),
+                      ),
                     ),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: const Center(
-                      child: Text('© 2024 Miraswift Auto Solusi'),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           : Center(
