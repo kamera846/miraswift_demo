@@ -158,7 +158,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                   flex: 2,
                                   child: MenuItems(
                                     icon: Icons.circle_notifications,
-                                    surfaceColor: Colors.yellow,
+                                    surfaceColor: Colors.yellow.shade700,
                                     title: 'Notifications',
                                     description: '230 items',
                                     onTap: () => Navigator.push(
