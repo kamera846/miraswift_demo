@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:miraswift_demo/screens/batch_screen.dart';
 import 'package:miraswift_demo/screens/equipment_screen.dart';
 import 'package:miraswift_demo/screens/notifications_screen.dart';
@@ -12,7 +13,42 @@ class DashboardV2Screen extends StatefulWidget {
   State<DashboardV2Screen> createState() => _DashboarV2dScreenState();
 }
 
-class _DashboarV2dScreenState extends State<DashboardV2Screen> {
+class _DashboarV2dScreenState extends State<DashboardV2Screen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    dummyDelayed();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void dummyDelayed() async {
+    await Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        setState(() {
+          isLoading = false;
+        });
+
+        _animationController = AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 1000),
+          lowerBound: 0,
+          upperBound: 1,
+        );
+        _animationController.forward();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,139 +63,165 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen> {
       //   backgroundColor: Colors.transparent,
       //   scrolledUnderElevation: 0,
       // ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 32, top: 96, right: 32, bottom: 32),
-            child: Image(
-              image: AssetImage('assets/images/miraswift_transparent.png'),
-              height: 100,
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
+      body: !isLoading
+          ? AnimatedBuilder(
+              animation: _animationController,
+              builder: (ctx, kChild) => SlideTransition(
+                position: Tween(
+                  begin: const Offset(0, -0.5),
+                  end: const Offset(0, 0),
+                ).animate(
+                  CurvedAnimation(
+                    parent: _animationController,
+                    curve: Curves.bounceOut,
+                  ),
+                ),
+                child: kChild,
+              ),
+              child: Column(
                 mainAxisSize: MainAxisSize.max,
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: MenuItems(
-                            icon: Icons.playlist_add_circle_rounded,
-                            surfaceColor: Colors.blue,
-                            title: 'Recipes',
-                            description: '230 items',
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (ctx) => const ProductScreen(),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: MenuItems(
-                            icon: Icons.playlist_add_check_circle,
-                            surfaceColor: Colors.red,
-                            title: 'Settings SPK',
-                            description: '230 items',
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (ctx) => const SpkScreen(),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                  const Padding(
+                    padding: EdgeInsets.only(
+                        left: 32, top: 80, right: 32, bottom: 32),
+                    child: Image(
+                      image:
+                          AssetImage('assets/images/miraswift_transparent.png'),
+                      height: 100,
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: MenuItems(
-                            icon: Icons.lightbulb_circle,
-                            surfaceColor: Colors.green,
-                            title: 'Batchs',
-                            description: '230 items',
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (ctx) => const BatchScreen(),
-                              ),
+                    flex: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: MenuItems(
+                                    icon: Icons.playlist_add_circle_rounded,
+                                    surfaceColor: Colors.blue,
+                                    title: 'Recipes',
+                                    description: '230 items',
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (ctx) => const ProductScreen(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: MenuItems(
+                                    icon: Icons.playlist_add_check_circle,
+                                    surfaceColor: Colors.red,
+                                    title: 'Settings SPK',
+                                    description: '230 items',
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (ctx) => const SpkScreen(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: MenuItems(
-                            icon: Icons.circle_notifications,
-                            surfaceColor: Colors.yellow,
-                            title: 'Notifications',
-                            description: '230 items',
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (ctx) => const NotificationsScreen(),
-                              ),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: MenuItems(
+                                    icon: Icons.lightbulb_circle,
+                                    surfaceColor: Colors.green,
+                                    title: 'Batchs',
+                                    description: '230 items',
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (ctx) => const BatchScreen(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: MenuItems(
+                                    icon: Icons.circle_notifications,
+                                    surfaceColor: Colors.yellow,
+                                    title: 'Notifications',
+                                    description: '230 items',
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (ctx) =>
+                                            const NotificationsScreen(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: MenuItems(
+                        icon: Icons.build_circle,
+                        surfaceColor: Colors.purple,
+                        title: 'Monitoring Equipments',
+                        description: 'Looking your equipments in realtime',
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => const EquipmentScreen(),
+                          ),
                         ),
-                      ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(32),
+                    margin: const EdgeInsets.only(
+                      left: 16,
+                      top: 8,
+                      right: 16,
+                      bottom: 32,
+                    ),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: const Center(
+                      child: Text('© 2024 Miraswift Auto Solusi'),
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: MenuItems(
-                icon: Icons.build_circle,
-                surfaceColor: Colors.purple,
-                title: 'Monitoring Equipments',
-                description: 'Looking your equipments in realtime',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => const EquipmentScreen(),
-                  ),
-                ),
+            )
+          : Center(
+              child: LoadingAnimationWidget.inkDrop(
+                color: Colors.blue,
+                size: 50,
               ),
             ),
-          ),
-          Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(
-                left: 16,
-                top: 8,
-                right: 16,
-                bottom: 32,
-              ),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: const Center(
-                child: Text('© 2024 Miraswift Auto Solusi'),
-              )),
-        ],
-      ),
     );
   }
 }
@@ -173,7 +235,7 @@ class MenuItems extends StatelessWidget {
     required this.description,
     this.surfaceColor = Colors.blue,
     this.margin = const EdgeInsets.all(8),
-    this.padding = const EdgeInsets.all(12),
+    this.padding = const EdgeInsets.all(16),
   });
 
   final IconData icon;
@@ -193,7 +255,7 @@ class MenuItems extends StatelessWidget {
       borderRadius: BorderRadius.circular(24),
       child: Container(
         margin: margin,
-        padding: margin,
+        padding: padding,
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.8),
@@ -245,7 +307,7 @@ class MenuItems extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
           ],
         ),
       ),
