@@ -257,8 +257,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                       ),
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
+                  SizedBox(
+                    height: 200,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: MenuItems(
