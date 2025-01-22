@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswift_demo/models/logmsg_model.dart';
+import 'package:miraswift_demo/models/product_model.dart';
+import 'package:miraswift_demo/models/spk_model.dart';
 import 'package:miraswift_demo/screens/batch_screen.dart';
 import 'package:miraswift_demo/screens/equipment_screen.dart';
 import 'package:miraswift_demo/screens/notifications_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
 import 'package:miraswift_demo/screens/spk_screen.dart';
+import 'package:miraswift_demo/services/batch_api.dart';
+import 'package:miraswift_demo/services/logmsg_api.dart';
+import 'package:miraswift_demo/services/product_api.dart';
+import 'package:miraswift_demo/services/spk_api.dart';
 
 class DashboardV2Screen extends StatefulWidget {
   const DashboardV2Screen({super.key});
@@ -16,12 +24,16 @@ class DashboardV2Screen extends StatefulWidget {
 class _DashboarV2dScreenState extends State<DashboardV2Screen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  bool isLoading = true;
+  bool _isLoading = true;
+  List<ProductModel> products = [];
+  List<BatchModel> batchs = [];
+  List<SpkModel> listSpk = [];
+  List<LogMessageModel> messages = [];
 
   @override
   void initState() {
     super.initState();
-    dummyDelayed();
+    getProducts();
   }
 
   @override
@@ -35,16 +47,84 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
       const Duration(seconds: 1),
       () {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
         });
+      },
+    );
+  }
 
-        _animationController = AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 1000),
-          lowerBound: 0,
-          upperBound: 1,
-        );
-        _animationController.forward();
+  void initAnimations() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+      lowerBound: 0,
+      upperBound: 1,
+    );
+    _animationController.forward();
+  }
+
+  void getProducts() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await ProductApi().list(
+      onError: (msg) {
+        if (mounted) {
+          // showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          if (data != null) products = data;
+        });
+        getBatchs();
+      },
+    );
+  }
+
+  void getBatchs() async {
+    await BatchApiService().batchs(
+      onError: (msg) {
+        if (mounted) {
+          // showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          if (data != null) batchs = data;
+        });
+        getListSpk();
+      },
+    );
+  }
+
+  void getListSpk() async {
+    await SpkApi().list(
+      onError: (msg) {
+        if (mounted) {
+          // showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          if (data != null) listSpk = data;
+        });
+        getMessages();
+      },
+    );
+  }
+
+  void getMessages() async {
+    await LogMessageApi().list(
+      // onError: (msg) => showSnackBar(context, msg),
+      onCompleted: (data) {
+        if (mounted) {
+          setState(() {
+            if (data != null) messages = data;
+            initAnimations();
+            _isLoading = false;
+          });
+        }
       },
     );
   }
@@ -63,7 +143,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
       //   backgroundColor: Colors.transparent,
       //   scrolledUnderElevation: 0,
       // ),
-      body: !isLoading
+      body: !_isLoading
           ? AnimatedBuilder(
               animation: _animationController,
               builder: (ctx, kChild) => SlideTransition(
@@ -108,7 +188,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     icon: Icons.playlist_add_circle_rounded,
                                     surfaceColor: Colors.blue,
                                     title: 'Recipes',
-                                    description: '230 items',
+                                    description: '${products.length} products',
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -123,7 +203,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     icon: Icons.playlist_add_check_circle,
                                     surfaceColor: Colors.red,
                                     title: 'Settings SPK',
-                                    description: '230 items',
+                                    description: '${listSpk.length} items',
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -145,7 +225,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     icon: Icons.lightbulb_circle,
                                     surfaceColor: Colors.green,
                                     title: 'Batchs',
-                                    description: '230 items',
+                                    description: '${batchs.length} items',
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -160,7 +240,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     icon: Icons.circle_notifications,
                                     surfaceColor: Colors.yellow.shade700,
                                     title: 'Notifications',
-                                    description: '230 items',
+                                    description: '${messages.length} messages',
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
