@@ -354,7 +354,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                           color: Colors.blue,
                                         ),
                                     decoration: InputDecoration(
-                                      hintText: 'Click date icon to select ->',
+                                      hintText: 'Click date icon to select',
                                       hintStyle: Theme.of(context)
                                           .textTheme
                                           .bodySmall!

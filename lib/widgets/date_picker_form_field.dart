@@ -54,7 +54,7 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
         readOnly: true,
         style: Theme.of(context).textTheme.bodySmall,
         decoration: InputDecoration(
-          hintText: 'Click date icon to select ->',
+          hintText: 'Click date icon to select',
           hintStyle: const TextStyle(color: Colors.black87),
           contentPadding:
               const EdgeInsets.symmetric(vertical: 0, horizontal: 10),

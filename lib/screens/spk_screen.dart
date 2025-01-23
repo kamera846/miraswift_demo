@@ -18,19 +18,56 @@ class SpkScreen extends StatefulWidget {
 }
 
 class _SpkScreenState extends State<SpkScreen> {
+  List<SpkModel>? _listDate;
   List<SpkModel>? _listPast;
   List<SpkModel>? _listNow;
   List<SpkModel>? _listUpcoming;
   List<ProductModel> _listProduct = [];
   bool _isLoading = true;
   SpkModel? _selectedItem;
+  final TextEditingController _dateController = TextEditingController();
 
   double _keyboardHeight = 0;
 
   @override
   void initState() {
     super.initState();
-    _getListNow();
+    _getList();
+  }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  void _getList() async {
+    setState(() {
+      _listDate = null;
+      _listNow = null;
+      _listUpcoming = null;
+      _listPast = null;
+      _isLoading = true;
+    });
+    if (_dateController.text.isNotEmpty) {
+      await SpkApi().listByDate(
+        date: _dateController.text,
+        onError: (msg) {
+          if (mounted) {
+            showSnackBar(context, msg);
+          }
+        },
+        onCompleted: (data) {
+          setState(() {
+            _listDate = data;
+            _selectedItem = null;
+            _isLoading = false;
+          });
+        },
+      );
+    } else {
+      _getListNow();
+    }
   }
 
   void _getListNow() async {
@@ -198,7 +235,7 @@ class _SpkScreenState extends State<SpkScreen> {
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
-        _getListNow();
+        _getList();
       },
     );
   }
@@ -291,7 +328,7 @@ class _SpkScreenState extends State<SpkScreen> {
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
-        _getListNow();
+        _getList();
       },
     );
   }
@@ -328,9 +365,26 @@ class _SpkScreenState extends State<SpkScreen> {
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
-        _getListNow();
+        _getList();
       },
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != DateTime.now()) {
+      setState(() {
+        _dateController.text =
+            "${pickedDate.toLocal()}".split(' ')[0]; // Format to yyyy-mm-dd
+      });
+      _getList();
+    }
   }
 
   @override
@@ -352,83 +406,184 @@ class _SpkScreenState extends State<SpkScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            if (_isLoading)
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(
-                    _isLoading
-                        ? 'Loading..'
-                        : !_isLoading &&
-                                (_listNow == null || _listNow!.isEmpty) &&
-                                (_listPast == null || _listPast!.isEmpty) &&
-                                (_listUpcoming == null ||
-                                    _listUpcoming!.isEmpty)
-                            ? 'Data is empty.'
-                            : '',
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: TextFormField(
+                controller: _dateController,
+                readOnly: true,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Colors.blue,
+                    ),
+                decoration: InputDecoration(
+                  hintText: 'Click date icon to select',
+                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Colors.grey,
+                      ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: _dateController.text.isNotEmpty
+                          ? Colors.blue
+                          : Colors.grey,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  prefixIcon: InkWell(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      _selectDate(context);
+                    },
+                    child: const Icon(
+                      CupertinoIcons.calendar,
+                    ),
+                  ),
+                  suffixIcon: _dateController.text.isNotEmpty
+                      ? InkWell(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            setState(() {
+                              _dateController.clear();
+                            });
+                            _getList();
+                          },
+                          child: const Icon(
+                            CupertinoIcons.xmark_circle_fill,
+                          ),
+                        )
+                      : null,
+                ),
+              ),
+              // child: DatePickerFormField(
+              //   value: _dateController.text,
+              //   onChanged: (dateString) {
+              //     setState(() {
+              //       _dateController.text = dateString;
+              //     });
+              //     _getList();
+              //   },
+              // ),
+            ),
+            if (_isLoading)
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border:
+                      Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'Loading..',
+                  textAlign: TextAlign.center,
                 ),
               )
             else ...[
-              _listNow != null && _listNow!.isNotEmpty
-                  ? ListSpk(
-                      title: 'Now',
-                      listItem: _listNow!,
-                      selectedItem: _selectedItem,
-                      onEdit: (item) {
-                        // print('Edit ${jsonEncode(item)}');
-                        setState(() {
-                          _selectedItem = item;
-                        });
-                        _editItem();
-                      },
-                      onDelete: (item) {
-                        // print('Delete ${jsonEncode(item)}');
-                        setState(() {
-                          _selectedItem = item;
-                        });
-                        _deleteItem();
-                      },
-                    )
-                  : const SizedBox.shrink(),
-              _listUpcoming != null && _listUpcoming!.isNotEmpty
-                  ? ListSpk(
-                      title: 'Tomorrow',
-                      listItem: _listUpcoming!,
-                      selectedItem: _selectedItem,
-                      onEdit: (item) {
-                        setState(() {
-                          _selectedItem = item;
-                        });
-                        _editItem();
-                      },
-                      onDelete: (item) {
-                        setState(() {
-                          _selectedItem = item;
-                        });
-                        _deleteItem();
-                      },
-                    )
-                  : const SizedBox.shrink(),
-              _listPast != null && _listPast!.isNotEmpty
-                  ? ListSpk(
-                      title: 'Yesterday',
-                      listItem: _listPast!,
-                      selectedItem: _selectedItem,
-                      onEdit: (item) {
-                        setState(() {
-                          _selectedItem = item;
-                        });
-                        _editItem();
-                      },
-                      onDelete: (item) {
-                        setState(() {
-                          _selectedItem = item;
-                        });
-                        _deleteItem();
-                      },
-                    )
-                  : const SizedBox.shrink(),
+              if ((_listNow == null || _listNow!.isEmpty) &&
+                  (_listPast == null || _listPast!.isEmpty) &&
+                  (_listUpcoming == null || _listUpcoming!.isEmpty) &&
+                  (_listDate == null || _listDate!.isEmpty))
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'Data is empty.',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              else if (_dateController.text.isNotEmpty)
+                ListSpk(
+                  title: 'Filter by date',
+                  listItem: _listDate!,
+                  selectedItem: _selectedItem,
+                  onEdit: (item) {
+                    setState(() {
+                      _selectedItem = item;
+                    });
+                    _editItem();
+                  },
+                  onDelete: (item) {
+                    setState(() {
+                      _selectedItem = item;
+                    });
+                    _deleteItem();
+                  },
+                )
+              else ...[
+                _listNow != null && _listNow!.isNotEmpty
+                    ? ListSpk(
+                        title: 'Now',
+                        listItem: _listNow!,
+                        selectedItem: _selectedItem,
+                        onEdit: (item) {
+                          setState(() {
+                            _selectedItem = item;
+                          });
+                          _editItem();
+                        },
+                        onDelete: (item) {
+                          setState(() {
+                            _selectedItem = item;
+                          });
+                          _deleteItem();
+                        },
+                      )
+                    : const SizedBox.shrink(),
+                _listUpcoming != null && _listUpcoming!.isNotEmpty
+                    ? ListSpk(
+                        title: 'Tomorrow',
+                        listItem: _listUpcoming!,
+                        selectedItem: _selectedItem,
+                        onEdit: (item) {
+                          setState(() {
+                            _selectedItem = item;
+                          });
+                          _editItem();
+                        },
+                        onDelete: (item) {
+                          setState(() {
+                            _selectedItem = item;
+                          });
+                          _deleteItem();
+                        },
+                      )
+                    : const SizedBox.shrink(),
+                _listPast != null && _listPast!.isNotEmpty
+                    ? ListSpk(
+                        title: 'Yesterday',
+                        listItem: _listPast!,
+                        selectedItem: _selectedItem,
+                        onEdit: (item) {
+                          setState(() {
+                            _selectedItem = item;
+                          });
+                          _editItem();
+                        },
+                        onDelete: (item) {
+                          setState(() {
+                            _selectedItem = item;
+                          });
+                          _deleteItem();
+                        },
+                      )
+                    : const SizedBox.shrink(),
+              ]
             ]
           ],
         ),
