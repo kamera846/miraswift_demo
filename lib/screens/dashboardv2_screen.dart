@@ -22,8 +22,8 @@ class DashboardV2Screen extends StatefulWidget {
 }
 
 class _DashboarV2dScreenState extends State<DashboardV2Screen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  AnimationController? _animationController;
   bool _isLoading = true;
   List<ProductModel> products = [];
   List<BatchModel> batchs = [];
@@ -33,24 +33,23 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     getProducts();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _animationController!.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  void dummyDelayed() async {
-    await Future.delayed(
-      const Duration(seconds: 1),
-      () {
-        setState(() {
-          _isLoading = false;
-        });
-      },
-    );
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      getProducts(isLoading: false);
+    }
   }
 
   void initAnimations() {
@@ -60,12 +59,12 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
       lowerBound: 0,
       upperBound: 1,
     );
-    _animationController.forward();
+    _animationController!.forward();
   }
 
-  void getProducts() async {
+  void getProducts({bool isLoading = true}) async {
     setState(() {
-      _isLoading = true;
+      _isLoading = isLoading;
     });
     await ProductApi().list(
       onError: (msg) {
@@ -121,7 +120,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
         if (mounted) {
           setState(() {
             if (data != null) messages = data;
-            initAnimations();
+            if (_animationController == null) initAnimations();
             _isLoading = false;
           });
         }
@@ -145,14 +144,14 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
       // ),
       body: !_isLoading
           ? AnimatedBuilder(
-              animation: _animationController,
+              animation: _animationController!,
               builder: (ctx, kChild) => SlideTransition(
                 position: Tween(
                   begin: const Offset(0, -0.5),
                   end: const Offset(0, 0),
                 ).animate(
                   CurvedAnimation(
-                    parent: _animationController,
+                    parent: _animationController!,
                     curve: Curves.bounceOut,
                   ),
                 ),
@@ -193,6 +192,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                       MaterialPageRoute(
                                         builder: (ctx) => const ProductScreen(),
                                       ),
+                                    ).then(
+                                      (value) => getProducts(isLoading: false),
                                     ),
                                   ),
                                 ),
@@ -208,6 +209,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                       MaterialPageRoute(
                                         builder: (ctx) => const SpkScreen(),
                                       ),
+                                    ).then(
+                                      (value) => getProducts(isLoading: false),
                                     ),
                                   ),
                                 ),
@@ -230,6 +233,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                       MaterialPageRoute(
                                         builder: (ctx) => const BatchScreen(),
                                       ),
+                                    ).then(
+                                      (value) => getProducts(isLoading: false),
                                     ),
                                   ),
                                 ),
@@ -246,6 +251,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                         builder: (ctx) =>
                                             const NotificationsScreen(),
                                       ),
+                                    ).then(
+                                      (value) => getProducts(isLoading: false),
                                     ),
                                   ),
                                 ),
@@ -269,6 +276,8 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                             MaterialPageRoute(
                               builder: (ctx) => const EquipmentScreen(),
                             ),
+                          ).then(
+                            (value) => getProducts(isLoading: false),
                           ),
                         ),
                       ),
