@@ -129,9 +129,8 @@ class FormNewSpkState extends State<FormNewSpk> {
                     child: TextFormField(
                       controller: _descSpkController,
                       style: Theme.of(context).textTheme.bodySmall,
-                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: 'Name',
+                        labelText: 'Description',
                         labelStyle: Theme.of(context).textTheme.bodySmall,
                         hintText: 'e.g XPANDER GROUT',
                         hintStyle:
