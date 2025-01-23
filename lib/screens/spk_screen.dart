@@ -18,7 +18,9 @@ class SpkScreen extends StatefulWidget {
 }
 
 class _SpkScreenState extends State<SpkScreen> {
-  List<SpkModel>? _list;
+  List<SpkModel>? _listPast;
+  List<SpkModel>? _listNow;
+  List<SpkModel>? _listUpcoming;
   List<ProductModel> _listProduct = [];
   bool _isLoading = true;
   SpkModel? _selectedItem;
@@ -28,14 +30,15 @@ class _SpkScreenState extends State<SpkScreen> {
   @override
   void initState() {
     super.initState();
-    _getList();
+    _getListNow();
   }
 
-  void _getList() async {
+  void _getListNow() async {
     setState(() {
       _isLoading = true;
     });
-    await SpkApi().list(
+    await SpkApi().listByPeriod(
+      period: 'now',
       onError: (msg) {
         if (mounted) {
           showSnackBar(context, msg);
@@ -43,8 +46,47 @@ class _SpkScreenState extends State<SpkScreen> {
       },
       onCompleted: (data) {
         setState(() {
-          _list = data;
-          _selectedItem = null;
+          _listNow = data;
+        });
+        _getListUpcoming();
+      },
+    );
+  }
+
+  void _getListUpcoming() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await SpkApi().listByPeriod(
+      period: 'upcoming',
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          _listUpcoming = data;
+        });
+        _getListPast();
+      },
+    );
+  }
+
+  void _getListPast() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await SpkApi().listByPeriod(
+      period: 'past',
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          _listPast = data;
         });
         _getListProduct();
       },
@@ -71,6 +113,7 @@ class _SpkScreenState extends State<SpkScreen> {
               updatedAt: "",
             ),
           );
+          _selectedItem = null;
           _isLoading = false;
         });
       },
@@ -155,7 +198,7 @@ class _SpkScreenState extends State<SpkScreen> {
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
-        _getList();
+        _getListNow();
       },
     );
   }
@@ -248,7 +291,7 @@ class _SpkScreenState extends State<SpkScreen> {
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
-        _getList();
+        _getListNow();
       },
     );
   }
@@ -285,7 +328,7 @@ class _SpkScreenState extends State<SpkScreen> {
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
-        _getList();
+        _getListNow();
       },
     );
   }
@@ -293,12 +336,10 @@ class _SpkScreenState extends State<SpkScreen> {
   @override
   Widget build(BuildContext context) {
     _keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    int index = 0;
 
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('Setting SPK', style: Theme.of(context).textTheme.titleMedium),
+        title: Text('List SPK', style: Theme.of(context).textTheme.titleMedium),
         actions: [
           IconButton(
             onPressed: _isLoading ? null : _newItem,
@@ -311,147 +352,199 @@ class _SpkScreenState extends State<SpkScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 12, right: 12),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.token_rounded,
-                    color: Colors.grey,
-                    size: 20,
+            if (_isLoading)
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    _isLoading
+                        ? 'Loading..'
+                        : !_isLoading &&
+                                (_listNow == null || _listNow!.isEmpty) &&
+                                (_listPast == null || _listPast!.isEmpty) &&
+                                (_listUpcoming == null ||
+                                    _listUpcoming!.isEmpty)
+                            ? 'Data is empty.'
+                            : '',
                   ),
-                  const SizedBox(width: 8),
-                  Text('List SPK',
-                      style: Theme.of(context).textTheme.titleSmall),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: (!_isLoading && _list != null && _list!.isNotEmpty)
-                  ? Column(
-                      children: _list!.map((item) {
-                        final isLastIndex = (index == (_list!.length - 1));
-                        index++;
-                        return Column(
-                          children: [
-                            ListTileItem(
-                              onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (ctx) =>
-                                //         FormulaScreen(product: item),
-                                //   ),
-                                // );
-                              },
-                              isSelected: (_selectedItem != null &&
-                                      _selectedItem!.idProduct ==
-                                          item.idProduct)
-                                  ? true
-                                  : false,
-                              badge: '${item.jmlBatch} Batch',
-                              title: item.descSpk,
-                              description:
-                                  'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
-                              customTrailingIcon: PopupMenuButton<SpkModel>(
-                                  icon: const Icon(
-                                    Icons.more_vert_rounded,
-                                    color: Colors.grey,
-                                  ),
-                                  itemBuilder: (ctx) {
-                                    return [
-                                      // PopupMenuItem<SpkModel>(
-                                      //   onTap: () {
-                                      //     // Navigator.push(
-                                      //     //   context,
-                                      //     //   MaterialPageRoute(
-                                      //     //     builder: (ctx) =>
-                                      //     //         FormulaScreen(product: item),
-                                      //     //   ),
-                                      //     // );
-                                      //   },
-                                      //   child: const Row(
-                                      //     children: [
-                                      //       Icon(
-                                      //         CupertinoIcons
-                                      //             .arrow_up_right_circle_fill,
-                                      //         size: 20,
-                                      //       ),
-                                      //       SizedBox(width: 12),
-                                      //       Text('Open')
-                                      //     ],
-                                      //   ),
-                                      // ),
-                                      PopupMenuItem<SpkModel>(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedItem = item;
-                                          });
-                                          _editItem();
-                                        },
-                                        child: const Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons.pencil_circle_fill,
-                                              size: 20,
-                                            ),
-                                            SizedBox(width: 12),
-                                            Text('Edit')
-                                          ],
-                                        ),
-                                      ),
-                                      PopupMenuItem<SpkModel>(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedItem = item;
-                                          });
-                                          _deleteItem();
-                                        },
-                                        child: const Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons.trash_circle_fill,
-                                              size: 20,
-                                            ),
-                                            SizedBox(width: 12),
-                                            Text('Delete')
-                                          ],
-                                        ),
-                                      ),
-                                    ];
-                                  }),
-                            ),
-                            if (!isLastIndex)
-                              Divider(
-                                height: 0,
-                                color: Colors.grey.shade300,
-                              ),
-                          ],
-                        );
-                      }).toList(),
+                ),
+              )
+            else ...[
+              _listNow != null && _listNow!.isNotEmpty
+                  ? ListSpk(
+                      title: 'Now',
+                      listItem: _listNow!,
+                      selectedItem: _selectedItem,
+                      onEdit: (item) {
+                        // print('Edit ${jsonEncode(item)}');
+                        setState(() {
+                          _selectedItem = item;
+                        });
+                        _editItem();
+                      },
+                      onDelete: (item) {
+                        // print('Delete ${jsonEncode(item)}');
+                        setState(() {
+                          _selectedItem = item;
+                        });
+                        _deleteItem();
+                      },
                     )
-                  : Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Text(
-                          _isLoading
-                              ? 'Loading..'
-                              : !_isLoading && (_list == null || _list!.isEmpty)
-                                  ? 'Data is empty.'
-                                  : '',
-                        ),
-                      ),
-                    ),
-            ),
+                  : const SizedBox.shrink(),
+              _listUpcoming != null && _listUpcoming!.isNotEmpty
+                  ? ListSpk(
+                      title: 'Tomorrow',
+                      listItem: _listUpcoming!,
+                      selectedItem: _selectedItem,
+                      onEdit: (item) {
+                        setState(() {
+                          _selectedItem = item;
+                        });
+                        _editItem();
+                      },
+                      onDelete: (item) {
+                        setState(() {
+                          _selectedItem = item;
+                        });
+                        _deleteItem();
+                      },
+                    )
+                  : const SizedBox.shrink(),
+              _listPast != null && _listPast!.isNotEmpty
+                  ? ListSpk(
+                      title: 'Yesterday',
+                      listItem: _listPast!,
+                      selectedItem: _selectedItem,
+                      onEdit: (item) {
+                        setState(() {
+                          _selectedItem = item;
+                        });
+                        _editItem();
+                      },
+                      onDelete: (item) {
+                        setState(() {
+                          _selectedItem = item;
+                        });
+                        _deleteItem();
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ]
           ],
         ),
       ),
+    );
+  }
+}
+
+class ListSpk extends StatelessWidget {
+  const ListSpk({
+    super.key,
+    required this.title,
+    required this.listItem,
+    this.selectedItem,
+    this.onEdit,
+    this.onDelete,
+  });
+
+  final String title;
+  final List<SpkModel> listItem;
+  final SpkModel? selectedItem;
+  final Function(SpkModel item)? onEdit;
+  final Function(SpkModel item)? onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    var index = 0;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 12, right: 12),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.token_rounded,
+                color: Colors.grey,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(title, style: Theme.of(context).textTheme.titleSmall),
+            ],
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            children: listItem.map((item) {
+              final isLastIndex = (index == (listItem.length - 1));
+              index++;
+              return Column(
+                children: [
+                  ListTileItem(
+                    isSelected: (selectedItem != null &&
+                            selectedItem!.idSpk == item.idSpk)
+                        ? true
+                        : false,
+                    badge: '${item.jmlBatch} Batch',
+                    title: item.descSpk,
+                    description:
+                        'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
+                    customTrailingIcon: PopupMenuButton<SpkModel>(
+                        icon: const Icon(
+                          Icons.more_vert_rounded,
+                          color: Colors.grey,
+                        ),
+                        itemBuilder: (ctx) {
+                          return [
+                            PopupMenuItem<SpkModel>(
+                              onTap: () {
+                                onEdit!(item);
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.pencil_circle_fill,
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text('Edit')
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<SpkModel>(
+                              onTap: () {
+                                onDelete!(item);
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.trash_circle_fill,
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text('Delete')
+                                ],
+                              ),
+                            ),
+                          ];
+                        }),
+                  ),
+                  if (!isLastIndex)
+                    Divider(
+                      height: 0,
+                      color: Colors.grey.shade300,
+                    ),
+                ],
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
   }
 }
