@@ -538,24 +538,29 @@ class _BatchScreenState extends State<BatchScreen> {
                                   children: [
                                     ListTileItem(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                BatchDetailScreen(batch: item),
-                                          ),
-                                        );
+                                        Navigator.of(context)
+                                            .push(
+                                              MaterialPageRoute(
+                                                builder: (ctx) =>
+                                                    BatchDetailScreen(
+                                                        batch: item),
+                                              ),
+                                            )
+                                            .then((value) => _getBatchs());
                                       },
                                       badge: 'Thinbed',
                                       customTrailingIcon: IconButton(
                                         onPressed: () {
                                           FocusScope.of(context).unfocus();
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  BatchDetailScreen(
-                                                      batch: item),
-                                            ),
-                                          );
+                                          Navigator.of(context)
+                                              .push(
+                                                MaterialPageRoute(
+                                                  builder: (ctx) =>
+                                                      BatchDetailScreen(
+                                                          batch: item),
+                                                ),
+                                              )
+                                              .then((value) => _getBatchs());
                                         },
                                         icon: const Icon(
                                           Icons.chevron_right_rounded,

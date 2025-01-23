@@ -342,7 +342,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     builder: (ctx) =>
                                         FormulaScreen(product: item),
                                   ),
-                                );
+                                ).then((value) => _getList());
                               },
                               isSelected: (_selectedItem != null &&
                                       _selectedItem!.idProduct ==
@@ -368,7 +368,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                               builder: (ctx) =>
                                                   FormulaScreen(product: item),
                                             ),
-                                          );
+                                          ).then((value) => _getList());
                                         },
                                         child: const Row(
                                           children: [

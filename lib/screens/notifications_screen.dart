@@ -64,7 +64,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       MaterialPageRoute(
                         builder: (ctx) => const NotificationsTargetScreen(),
                       ),
-                    );
+                    ).then((value) => _getList());
                   },
                   child: const Row(
                     children: [
