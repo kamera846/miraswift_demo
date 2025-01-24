@@ -518,12 +518,12 @@ class _SpkScreenState extends State<SpkScreen> {
                     });
                     _editItem();
                   },
-                  onDelete: (item) {
-                    setState(() {
-                      _selectedItem = item;
-                    });
-                    _deleteItem();
-                  },
+                  // onDelete: (item) {
+                  //   setState(() {
+                  //     _selectedItem = item;
+                  //   });
+                  //   _deleteItem();
+                  // },
                 )
               else ...[
                 _listNow != null && _listNow!.isNotEmpty
@@ -671,21 +671,21 @@ class ListSpk extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            PopupMenuItem<SpkModel>(
-                              onTap: () {
-                                onDelete!(item);
-                              },
-                              child: const Row(
-                                children: [
-                                  Icon(
-                                    CupertinoIcons.trash_circle_fill,
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 12),
-                                  Text('Delete')
-                                ],
-                              ),
-                            ),
+                            // PopupMenuItem<SpkModel>(
+                            //   onTap: () {
+                            //     onDelete!(item);
+                            //   },
+                            //   child: const Row(
+                            //     children: [
+                            //       Icon(
+                            //         CupertinoIcons.trash_circle_fill,
+                            //         size: 20,
+                            //       ),
+                            //       SizedBox(width: 12),
+                            //       Text('Delete')
+                            //     ],
+                            //   ),
+                            // ),
                           ];
                         }),
                   ),
