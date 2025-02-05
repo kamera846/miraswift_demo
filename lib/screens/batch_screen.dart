@@ -548,7 +548,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                             )
                                             .then((value) => _getBatchs());
                                       },
-                                      badge: 'Thinbed',
+                                      badge: item.product?.nameProduct,
                                       customTrailingIcon: IconButton(
                                         onPressed: () {
                                           FocusScope.of(context).unfocus();
