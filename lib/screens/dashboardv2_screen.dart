@@ -167,7 +167,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                           left: 32, top: 80, right: 32, bottom: 32),
                       child: Image(
                         image: AssetImage(
-                            'assets/images/miraswift_transparent.png'),
+                            'assets/images/topmortar_transparent.png'),
                         height: 100,
                       ),
                     ),
