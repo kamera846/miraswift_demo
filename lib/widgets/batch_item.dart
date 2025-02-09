@@ -50,7 +50,7 @@ class BatchItem extends StatelessWidget {
           different = targetFormula - actualTimbang;
           actualIcon = const Icon(
             Icons.keyboard_double_arrow_down,
-            color: Colors.orange,
+            color: Colors.lightBlue,
             size: 12,
           );
           actualDifferent = Text(
@@ -58,7 +58,7 @@ class BatchItem extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodySmall!
-                .copyWith(color: Colors.orange),
+                .copyWith(color: Colors.lightBlue),
           );
         } else if (actualTimbang == targetFormula) {
           // pas

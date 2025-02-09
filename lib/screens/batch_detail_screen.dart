@@ -111,115 +111,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               dataProduct: _dataProduct,
               totalScales: totalScales,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.settings_applications,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 9),
-                  Text('Equipments',
-                      style: Theme.of(context).textTheme.titleSmall),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              margin: const EdgeInsets.only(
-                  left: 12, top: 12, right: 12, bottom: 0),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: (!isLoading &&
-                      _dataEquipment != null &&
-                      _dataEquipment!.isNotEmpty)
-                  ? Column(
-                      children: _dataEquipment!.map((item) {
-                        final isLastIndex = (dataEquipmentIndex ==
-                            (_dataEquipment!.length - 1));
-                        dataEquipmentIndex++;
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            top: 12,
-                            bottom: isLastIndex ? 12 : 0,
-                          ),
-                          child: BatchItem.equipment(
-                            equipment: item,
-                            isLastIndex: isLastIndex,
-                          ),
-                        );
-                      }).toList(),
-                    )
-                  : Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Text(isLoading
-                            ? 'Loading..'
-                            : !isLoading &&
-                                    (_dataEquipment == null ||
-                                        _dataEquipment!.isEmpty)
-                                ? 'Data is empty.'
-                                : ''),
-                      ),
-                    ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.scale_rounded,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 9),
-                  Text('Scales', style: Theme.of(context).textTheme.titleSmall),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              margin: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child:
-                  (!isLoading && _dataScales != null && _dataScales!.isNotEmpty)
-                      ? Column(
-                          children: _dataScales!.map((item) {
-                            final isLastIndex =
-                                (dataScalesIndex == (_dataScales!.length - 1));
-                            dataScalesIndex++;
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  top: 12, bottom: isLastIndex ? 12 : 0),
-                              child: BatchItem.scales(
-                                scales: item,
-                                isLastIndex: isLastIndex,
-                              ),
-                            );
-                          }).toList(),
-                        )
-                      : Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Text(isLoading
-                                ? 'Loading..'
-                                : !isLoading &&
-                                        (_dataScales == null ||
-                                            _dataScales!.isEmpty)
-                                    ? 'Data is empty.'
-                                    : ''),
-                          ),
-                        ),
-            ),
+            _equipmentsSection(context, dataEquipmentIndex),
+            _scalesSection(context, dataScalesIndex),
           ],
         ),
       ),
@@ -435,6 +328,126 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
     //     ],
     //   ),
     // );
+  }
+
+  Column _scalesSection(BuildContext context, int dataScalesIndex) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.scale_rounded,
+                color: Colors.grey,
+                size: 20,
+              ),
+              const SizedBox(width: 9),
+              Text('Scales', style: Theme.of(context).textTheme.titleSmall),
+            ],
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          margin: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: (!isLoading && _dataScales != null && _dataScales!.isNotEmpty)
+              ? Column(
+                  children: _dataScales!.map((item) {
+                    final isLastIndex =
+                        (dataScalesIndex == (_dataScales!.length - 1));
+                    dataScalesIndex++;
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          top: 12, bottom: isLastIndex ? 12 : 0),
+                      child: BatchItem.scales(
+                        scales: item,
+                        isLastIndex: isLastIndex,
+                      ),
+                    );
+                  }).toList(),
+                )
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(isLoading
+                        ? 'Loading..'
+                        : !isLoading &&
+                                (_dataScales == null || _dataScales!.isEmpty)
+                            ? 'Data is empty.'
+                            : ''),
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+
+  Column _equipmentsSection(BuildContext context, int dataEquipmentIndex) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.settings_applications,
+                color: Colors.grey,
+                size: 20,
+              ),
+              const SizedBox(width: 9),
+              Text('Equipments', style: Theme.of(context).textTheme.titleSmall),
+            ],
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          margin:
+              const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 0),
+          decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: (!isLoading &&
+                  _dataEquipment != null &&
+                  _dataEquipment!.isNotEmpty)
+              ? Column(
+                  children: _dataEquipment!.map((item) {
+                    final isLastIndex =
+                        (dataEquipmentIndex == (_dataEquipment!.length - 1));
+                    dataEquipmentIndex++;
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        top: 12,
+                        bottom: isLastIndex ? 12 : 0,
+                      ),
+                      child: BatchItem.equipment(
+                        equipment: item,
+                        isLastIndex: isLastIndex,
+                      ),
+                    );
+                  }).toList(),
+                )
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(isLoading
+                        ? 'Loading..'
+                        : !isLoading &&
+                                (_dataEquipment == null ||
+                                    _dataEquipment!.isEmpty)
+                            ? 'Data is empty.'
+                            : ''),
+                  ),
+                ),
+        ),
+      ],
+    );
   }
 }
 
