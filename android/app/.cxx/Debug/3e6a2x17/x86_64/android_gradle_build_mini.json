@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/masple/Development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/masple/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/masple/Projects/Flutter/miraswift_demo/android/app/.cxx/Debug/3e6a2x17/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/masple/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/masple/Projects/Flutter/miraswift_demo/android/app/.cxx/Debug/3e6a2x17/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
