@@ -7,13 +7,27 @@ import 'package:miraswift_demo/services/api.dart';
 
 class BatchApiService {
   Future<List<BatchModel>?> batchs({
+    String? batch,
+    String? date,
+    String? product,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
     Function(List<BatchModel>? data)? onCompleted,
   }) async {
     List<BatchModel>? data;
     try {
-      final url = Uri.https(baseUrl, 'api/batch');
+      Map<String, String> params = {};
+
+      if (batch != null || date != null || product != null) {
+        if (batch != null) params['batch'] = batch;
+        if (date != null) params['date'] = date;
+        if (product != null) params['prd'] = product;
+      }
+
+      var url = Uri.https(baseUrl, 'api/batch');
+      if (params.isNotEmpty) {
+        url = Uri.https(baseUrl, 'api/batch', params);
+      }
       final response = await http.get(
         url,
         headers: headerSetup,
