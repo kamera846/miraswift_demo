@@ -189,7 +189,7 @@ class _BatchScreenState extends State<BatchScreen> {
                       size: 20,
                     ),
                     const SizedBox(width: 8),
-                    Text('List Batch',
+                    Text('List Batch (${_batchs?.length})',
                         style: Theme.of(context).textTheme.titleSmall),
                   ],
                 ),
