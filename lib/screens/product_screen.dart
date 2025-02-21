@@ -42,7 +42,11 @@ class _ProductScreenState extends State<ProductScreen> {
       },
       onCompleted: (data) {
         setState(() {
-          _list = data;
+          if (data != null) {
+            _list = data.reversed.toList();
+          } else {
+            _list = data;
+          }
           _selectedItem = null;
         });
         _getListAccurate();

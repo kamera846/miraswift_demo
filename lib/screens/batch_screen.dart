@@ -113,7 +113,11 @@ class _BatchScreenState extends State<BatchScreen> {
       },
       onCompleted: (data) {
         setState(() {
-          _listProduct = data;
+          if (data != null) {
+            _listProduct = data.reversed.toList();
+          } else {
+            _listProduct = data;
+          }
           isLoading = false;
         });
       },

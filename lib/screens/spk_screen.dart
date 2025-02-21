@@ -139,7 +139,7 @@ class _SpkScreenState extends State<SpkScreen> {
       },
       onCompleted: (data) {
         setState(() {
-          if (data != null) _listProduct = data;
+          if (data != null) _listProduct = data.reversed.toList();
           _listProduct.insert(
             0,
             const ProductModel(
