@@ -292,7 +292,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                       ),
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.8),
+                        color: Colors.white.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(color: Colors.white, width: 2),
                       ),
@@ -338,7 +338,7 @@ class MenuItems extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      splashColor: surfaceColor!.withValues(alpha: 0.3),
+      splashColor: surfaceColor!.withOpacity(0.3),
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(24),
       child: Container(
@@ -346,7 +346,7 @@ class MenuItems extends StatelessWidget {
         padding: padding,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.8),
+          color: Colors.white.withOpacity(0.8),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: Colors.white, width: 2),
         ),

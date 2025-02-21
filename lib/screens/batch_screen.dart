@@ -281,7 +281,7 @@ class _BatchScreenState extends State<BatchScreen> {
         boxShadow: [
           if (isScrolled || isFilterShowed)
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 1,
             ),
