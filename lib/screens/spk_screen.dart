@@ -581,6 +581,7 @@ class _SpkScreenState extends State<SpkScreen> {
                         title: 'Past Spk',
                         listItem: _listPast!,
                         selectedItem: _selectedItem,
+                        withCustomTrailing: false,
                         onEdit: (item) {
                           setState(() {
                             _selectedItem = item;
@@ -635,6 +636,7 @@ class ListSpk extends StatelessWidget {
     required this.title,
     required this.listItem,
     this.selectedItem,
+    this.withCustomTrailing = true,
     this.onEdit,
     this.onDelete,
     this.onReorder,
@@ -643,6 +645,7 @@ class ListSpk extends StatelessWidget {
   final String title;
   final List<SpkModel> listItem;
   final SpkModel? selectedItem;
+  final bool withCustomTrailing;
   final Function(SpkModel item)? onEdit;
   final Function(SpkModel item)? onDelete;
   final Function(int oldIndex, int newIndex)? onReorder;
@@ -657,7 +660,7 @@ class ListSpk extends StatelessWidget {
           child: Row(
             children: [
               const Icon(
-                Icons.token_rounded,
+                Icons.playlist_add_check_circle,
                 color: Colors.grey,
                 size: 20,
               ),
@@ -695,45 +698,55 @@ class ListSpk extends StatelessWidget {
                     : null,
                 description:
                     'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
-                customTrailingIcon: PopupMenuButton<SpkModel>(
-                    icon: const Icon(
-                      Icons.more_vert_rounded,
-                      color: Colors.grey,
-                    ),
-                    itemBuilder: (ctx) {
-                      return [
-                        PopupMenuItem<SpkModel>(
-                          onTap: () {
-                            onEdit!(item);
-                          },
-                          child: const Row(
-                            children: [
-                              Icon(
-                                CupertinoIcons.pencil_circle_fill,
-                                size: 20,
-                              ),
-                              SizedBox(width: 12),
-                              Text('Edit')
-                            ],
-                          ),
+                customLeadingIcon: Badge(
+                  label: Text(item.orderingSpk),
+                  backgroundColor: Colors.blue.withAlpha(180),
+                  textColor: Colors.white,
+                  offset: const Offset(10, -10),
+                  child: const Text('No.'),
+                ),
+                customTrailingIcon: withCustomTrailing
+                    ? PopupMenuButton<SpkModel>(
+                        icon: const Icon(
+                          Icons.more_vert_rounded,
+                          color: Colors.grey,
                         ),
-                        // PopupMenuItem<SpkModel>(
-                        //   onTap: () {
-                        //     onDelete!(item);
-                        //   },
-                        //   child: const Row(
-                        //     children: [
-                        //       Icon(
-                        //         CupertinoIcons.trash_circle_fill,
-                        //         size: 20,
-                        //       ),
-                        //       SizedBox(width: 12),
-                        //       Text('Delete')
-                        //     ],
-                        //   ),
-                        // ),
-                      ];
-                    }),
+                        itemBuilder: (ctx) {
+                          return [
+                            PopupMenuItem<SpkModel>(
+                              onTap: () {
+                                onEdit!(item);
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.pencil_circle_fill,
+                                    color: Colors.orange.withAlpha(150),
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text('Edit')
+                                ],
+                              ),
+                            ),
+                            // PopupMenuItem<SpkModel>(
+                            //   onTap: () {
+                            //     onDelete!(item);
+                            //   },
+                            //   child: const Row(
+                            //     children: [
+                            //       Icon(
+                            //         CupertinoIcons.trash_circle_fill,
+                            //         size: 20,
+                            //       ),
+                            //       SizedBox(width: 12),
+                            //       Text('Delete')
+                            //     ],
+                            //   ),
+                            // ),
+                          ];
+                        })
+                    : null,
               );
             }).toList(),
           ),

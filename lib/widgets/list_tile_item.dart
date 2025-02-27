@@ -10,6 +10,7 @@ class ListTileItem extends StatelessWidget {
     this.badge,
     this.onTap,
     this.badgeModel,
+    this.customLeadingIcon,
     this.customTrailingIcon,
     this.border,
   });
@@ -18,6 +19,7 @@ class ListTileItem extends StatelessWidget {
   final String? description;
   final String? badge;
   final BadgeModel? badgeModel;
+  final Widget? customLeadingIcon;
   final Widget? customTrailingIcon;
   final Border? border;
   final bool isSelected;
@@ -49,6 +51,7 @@ class ListTileItem extends StatelessWidget {
             ),
         ],
       ),
+      leading: customLeadingIcon,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
