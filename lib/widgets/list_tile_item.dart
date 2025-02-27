@@ -11,6 +11,7 @@ class ListTileItem extends StatelessWidget {
     this.onTap,
     this.badgeModel,
     this.customTrailingIcon,
+    this.border,
   });
 
   final String title;
@@ -18,6 +19,7 @@ class ListTileItem extends StatelessWidget {
   final String? badge;
   final BadgeModel? badgeModel;
   final Widget? customTrailingIcon;
+  final Border? border;
   final bool isSelected;
   final void Function()? onTap;
 
@@ -28,6 +30,7 @@ class ListTileItem extends StatelessWidget {
       selected: isSelected,
       selectedTileColor: Theme.of(context).splashColor,
       splashColor: Theme.of(context).splashColor,
+      shape: border,
       contentPadding:
           const EdgeInsets.only(top: 4, right: 0, bottom: 4, left: 12),
       title: Column(

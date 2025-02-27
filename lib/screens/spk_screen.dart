@@ -547,7 +547,7 @@ class _SpkScreenState extends State<SpkScreen> {
                     : const SizedBox.shrink(),
                 _listUpcoming != null && _listUpcoming!.isNotEmpty
                     ? ListSpk(
-                        title: 'Tomorrow',
+                        title: 'Upcoming Spk',
                         listItem: _listUpcoming!,
                         selectedItem: _selectedItem,
                         onEdit: (item) {
@@ -566,7 +566,7 @@ class _SpkScreenState extends State<SpkScreen> {
                     : const SizedBox.shrink(),
                 _listPast != null && _listPast!.isNotEmpty
                     ? ListSpk(
-                        title: 'Yesterday',
+                        title: 'Past Spk',
                         listItem: _listPast!,
                         selectedItem: _selectedItem,
                         onEdit: (item) {
@@ -581,6 +581,31 @@ class _SpkScreenState extends State<SpkScreen> {
                           });
                           _deleteItem();
                         },
+                        // onReorder: (oldIndex, newIndex) {
+                        //   print('$oldIndex & $newIndex');
+                        //   if (_listPast != null) {
+                        //     setState(() {
+                        //       if (oldIndex < newIndex) {
+                        //         newIndex -= 1;
+                        //       }
+                        //       final SpkModel item =
+                        //           _listPast!.removeAt(oldIndex);
+                        //       _listPast!.insert(newIndex, item);
+                        //       showSnackBar(context,
+                        //           'Sedang mengganti urutan ${item.descSpk} dari $oldIndex ke $newIndex...');
+                        //     });
+                        //     Future.delayed(const Duration(seconds: 2), () {
+                        //       showSnackBar(
+                        //           context, 'Berhasil mengganti urutan');
+                        //       // setState(() {
+                        //       //   final SpkModel item =
+                        //       //       _listPast!.removeAt(newIndex);
+                        //       //   _listPast!.insert(oldIndex, item);
+                        //       //   showSnackBar(context, 'Gagal mengganti urutan');
+                        //       // });
+                        //     });
+                        //   }
+                        // },
                       )
                     : const SizedBox.shrink(),
               ]
@@ -600,6 +625,7 @@ class ListSpk extends StatelessWidget {
     this.selectedItem,
     this.onEdit,
     this.onDelete,
+    this.onReorder,
   });
 
   final String title;
@@ -607,6 +633,7 @@ class ListSpk extends StatelessWidget {
   final SpkModel? selectedItem;
   final Function(SpkModel item)? onEdit;
   final Function(SpkModel item)? onDelete;
+  final Function(int oldIndex, int newIndex)? onReorder;
 
   @override
   Widget build(BuildContext context) {
@@ -635,66 +662,66 @@ class ListSpk extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
+            // onReorder: onReorder ?? (o, n) => {},
+            // shrinkWrap: true,
+            // physics: const NeverScrollableScrollPhysics(),
             children: listItem.map((item) {
               final isLastIndex = (index == (listItem.length - 1));
               index++;
-              return Column(
-                children: [
-                  ListTileItem(
-                    isSelected: (selectedItem != null &&
-                            selectedItem!.idSpk == item.idSpk)
+              return ListTileItem(
+                key: Key('$index'),
+                isSelected:
+                    (selectedItem != null && selectedItem!.idSpk == item.idSpk)
                         ? true
                         : false,
-                    badge: '${item.jmlBatch} Batch',
-                    title: item.descSpk,
-                    description:
-                        'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
-                    customTrailingIcon: PopupMenuButton<SpkModel>(
-                        icon: const Icon(
-                          Icons.more_vert_rounded,
-                          color: Colors.grey,
-                        ),
-                        itemBuilder: (ctx) {
-                          return [
-                            PopupMenuItem<SpkModel>(
-                              onTap: () {
-                                onEdit!(item);
-                              },
-                              child: const Row(
-                                children: [
-                                  Icon(
-                                    CupertinoIcons.pencil_circle_fill,
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 12),
-                                  Text('Edit')
-                                ],
-                              ),
-                            ),
-                            // PopupMenuItem<SpkModel>(
-                            //   onTap: () {
-                            //     onDelete!(item);
-                            //   },
-                            //   child: const Row(
-                            //     children: [
-                            //       Icon(
-                            //         CupertinoIcons.trash_circle_fill,
-                            //         size: 20,
-                            //       ),
-                            //       SizedBox(width: 12),
-                            //       Text('Delete')
-                            //     ],
-                            //   ),
-                            // ),
-                          ];
-                        }),
-                  ),
-                  if (!isLastIndex)
-                    Divider(
-                      height: 0,
-                      color: Colors.grey.shade300,
+                badge: '${item.jmlBatch} Batch',
+                title: item.descSpk,
+                border: !isLastIndex
+                    ? Border(
+                        bottom:
+                            BorderSide(width: 1, color: Colors.grey.shade300))
+                    : null,
+                description:
+                    'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
+                customTrailingIcon: PopupMenuButton<SpkModel>(
+                    icon: const Icon(
+                      Icons.more_vert_rounded,
+                      color: Colors.grey,
                     ),
-                ],
+                    itemBuilder: (ctx) {
+                      return [
+                        PopupMenuItem<SpkModel>(
+                          onTap: () {
+                            onEdit!(item);
+                          },
+                          child: const Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.pencil_circle_fill,
+                                size: 20,
+                              ),
+                              SizedBox(width: 12),
+                              Text('Edit')
+                            ],
+                          ),
+                        ),
+                        // PopupMenuItem<SpkModel>(
+                        //   onTap: () {
+                        //     onDelete!(item);
+                        //   },
+                        //   child: const Row(
+                        //     children: [
+                        //       Icon(
+                        //         CupertinoIcons.trash_circle_fill,
+                        //         size: 20,
+                        //       ),
+                        //       SizedBox(width: 12),
+                        //       Text('Delete')
+                        //     ],
+                        //   ),
+                        // ),
+                      ];
+                    }),
               );
             }).toList(),
           ),
