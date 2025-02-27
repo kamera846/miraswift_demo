@@ -53,7 +53,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         actions: [
           PopupMenuButton(
             icon: const Icon(
-              Icons.settings,
+              Icons.edit_notifications_rounded,
             ),
             itemBuilder: (ctx) {
               return [

@@ -419,14 +419,15 @@ class _FormulaScreenState extends State<FormulaScreen> {
                                         });
                                         _editItem();
                                       },
-                                      child: const Row(
+                                      child: Row(
                                         children: [
                                           Icon(
                                             CupertinoIcons.pencil_circle_fill,
+                                            color: Colors.orange.withAlpha(150),
                                             size: 20,
                                           ),
-                                          SizedBox(width: 12),
-                                          Text('Edit')
+                                          const SizedBox(width: 12),
+                                          const Text('Edit')
                                         ],
                                       ),
                                     ),
@@ -437,14 +438,15 @@ class _FormulaScreenState extends State<FormulaScreen> {
                                         });
                                         _deleteItem();
                                       },
-                                      child: const Row(
+                                      child: Row(
                                         children: [
                                           Icon(
                                             CupertinoIcons.trash_circle_fill,
+                                            color: Colors.red.withAlpha(220),
                                             size: 20,
                                           ),
-                                          SizedBox(width: 12),
-                                          Text('Delete')
+                                          const SizedBox(width: 12),
+                                          const Text('Delete')
                                         ],
                                       ),
                                     ),

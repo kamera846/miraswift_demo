@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 class FullwidthButton extends StatefulWidget {
-  const FullwidthButton(
-      {super.key, required this.onPressed, required this.child});
+  const FullwidthButton({
+    super.key,
+    required this.onPressed,
+    required this.child,
+    this.backgroundColor = Colors.blue,
+  });
 
   final VoidCallback onPressed;
+  final Color backgroundColor;
   final Widget child;
 
   @override
@@ -31,7 +36,7 @@ class _FullwidthButtonState extends State<FullwidthButton> {
       child: ElevatedButton(
         onPressed: widget.onPressed,
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(Colors.blue),
+          backgroundColor: WidgetStateProperty.all(widget.backgroundColor),
           padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(vertical: 12.0),
           ),

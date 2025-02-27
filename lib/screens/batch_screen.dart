@@ -188,7 +188,7 @@ class _BatchScreenState extends State<BatchScreen> {
                 child: Row(
                   children: [
                     const Icon(
-                      Icons.miscellaneous_services_rounded,
+                      Icons.lightbulb_circle,
                       color: Colors.grey,
                       size: 20,
                     ),
@@ -382,7 +382,7 @@ class _BatchScreenState extends State<BatchScreen> {
                           padding: const EdgeInsets.only(left: 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            color: Colors.blue,
+                            color: Colors.blue.withAlpha(200),
                           ),
                           child: Row(
                             children: [
@@ -426,7 +426,7 @@ class _BatchScreenState extends State<BatchScreen> {
                           padding: const EdgeInsets.only(left: 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            color: Colors.blue,
+                            color: Colors.blue.withAlpha(200),
                           ),
                           child: Row(
                             children: [
@@ -560,27 +560,27 @@ class _BatchScreenState extends State<BatchScreen> {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                              color:
-                                                  _selectedProduct?.idProduct ==
-                                                          item.idProduct
-                                                      ? Colors.blue
-                                                      : Colors.black87),
+                                              color: _selectedProduct
+                                                          ?.idProduct ==
+                                                      item.idProduct
+                                                  ? Colors.blue.withAlpha(200)
+                                                  : Colors.black87),
                                     ),
                                     style: OutlinedButton.styleFrom(
                                       side: BorderSide(
                                         color: _selectedProduct?.idProduct ==
                                                 item.idProduct
-                                            ? Colors.blue
+                                            ? Colors.blue.withAlpha(200)
                                             : Colors.black54,
                                       ),
                                       iconColor: _selectedProduct?.idProduct ==
                                               item.idProduct
-                                          ? Colors.blue
+                                          ? Colors.blue.withAlpha(200)
                                           : Colors.black54,
                                       surfaceTintColor:
                                           _selectedProduct?.idProduct ==
                                                   item.idProduct
-                                              ? Colors.blue
+                                              ? Colors.blue.withAlpha(200)
                                               : Colors.black54,
                                     ),
                                     icon: const Icon(
@@ -616,6 +616,7 @@ class _BatchScreenState extends State<BatchScreen> {
                             });
                             _getBatchs();
                           },
+                          backgroundColor: Colors.blue.withAlpha(200),
                           child: const Text(
                             "Apply Filter",
                             style: TextStyle(

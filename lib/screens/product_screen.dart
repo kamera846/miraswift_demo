@@ -314,7 +314,7 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Row(
                 children: [
                   const Icon(
-                    Icons.token_rounded,
+                    Icons.playlist_add_circle_rounded,
                     color: Colors.grey,
                     size: 20,
                   ),
@@ -374,15 +374,16 @@ class _ProductScreenState extends State<ProductScreen> {
                                             ),
                                           ).then((value) => _getList());
                                         },
-                                        child: const Row(
+                                        child: Row(
                                           children: [
                                             Icon(
                                               CupertinoIcons
                                                   .arrow_up_right_circle_fill,
+                                              color: Colors.blue.withAlpha(220),
                                               size: 20,
                                             ),
-                                            SizedBox(width: 12),
-                                            Text('Open')
+                                            const SizedBox(width: 12),
+                                            const Text('Open')
                                           ],
                                         ),
                                       ),
@@ -393,14 +394,16 @@ class _ProductScreenState extends State<ProductScreen> {
                                           });
                                           _editItem();
                                         },
-                                        child: const Row(
+                                        child: Row(
                                           children: [
                                             Icon(
                                               CupertinoIcons.pencil_circle_fill,
+                                              color:
+                                                  Colors.orange.withAlpha(150),
                                               size: 20,
                                             ),
-                                            SizedBox(width: 12),
-                                            Text('Edit')
+                                            const SizedBox(width: 12),
+                                            const Text('Edit')
                                           ],
                                         ),
                                       ),
@@ -411,14 +414,15 @@ class _ProductScreenState extends State<ProductScreen> {
                                           });
                                           _deleteItem();
                                         },
-                                        child: const Row(
+                                        child: Row(
                                           children: [
                                             Icon(
                                               CupertinoIcons.trash_circle_fill,
+                                              color: Colors.red.withAlpha(220),
                                               size: 20,
                                             ),
-                                            SizedBox(width: 12),
-                                            Text('Delete')
+                                            const SizedBox(width: 12),
+                                            const Text('Delete')
                                           ],
                                         ),
                                       ),
