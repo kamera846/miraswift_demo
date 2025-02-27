@@ -5,6 +5,7 @@ class SpkModel {
     required this.jmlBatch,
     required this.dateSpk,
     required this.descSpk,
+    required this.orderingSpk,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -14,6 +15,7 @@ class SpkModel {
   final String jmlBatch;
   final String dateSpk;
   final String descSpk;
+  final String orderingSpk;
   final String createdAt;
   final String updatedAt;
 
@@ -24,6 +26,7 @@ class SpkModel {
       jmlBatch: json['jml_batch'] ?? '',
       dateSpk: json['date_spk'] ?? '',
       descSpk: json['desc_spk'] ?? '',
+      orderingSpk: json['ordering_spk'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
     );
@@ -35,6 +38,7 @@ class SpkModel {
         'jml_batch': jmlBatch,
         'date_spk': dateSpk,
         'desc_spk': descSpk,
+        'ordering_spk': orderingSpk,
         'created_at': createdAt,
         'updated_at': updatedAt,
       };

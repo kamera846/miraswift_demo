@@ -21,8 +21,12 @@ class FormNewSpk extends StatefulWidget {
   final SpkModel? item;
   final List<ProductModel> listProduct;
   final void Function(
-          String idProduct, String jmlBatch, String dateSpk, String descSpk)
-      onSubmitted;
+    String idProduct,
+    String jmlBatch,
+    String dateSpk,
+    String descSpk,
+    String orderingSpk,
+  ) onSubmitted;
 
   @override
   FormNewSpkState createState() => FormNewSpkState();
@@ -34,6 +38,7 @@ class FormNewSpkState extends State<FormNewSpk> {
   String _selectedDate = '';
 
   final TextEditingController _jmlBatchController = TextEditingController();
+  final TextEditingController _execSequenceController = TextEditingController();
   final TextEditingController _descSpkController = TextEditingController();
 
   @override
@@ -46,6 +51,7 @@ class FormNewSpkState extends State<FormNewSpk> {
       );
       _selectedDate = widget.item!.dateSpk;
       _jmlBatchController.text = widget.item!.jmlBatch;
+      _execSequenceController.text = widget.item!.orderingSpk;
       _descSpkController.text = widget.item!.descSpk;
     }
     super.initState();
@@ -54,6 +60,7 @@ class FormNewSpkState extends State<FormNewSpk> {
   @override
   void dispose() {
     _jmlBatchController.dispose();
+    _execSequenceController.dispose();
     _descSpkController.dispose();
     super.dispose();
   }
@@ -109,52 +116,51 @@ class FormNewSpkState extends State<FormNewSpk> {
                 },
               ),
               const SizedBox(height: 12.0),
-              DatePickerFormField(
-                value: _selectedDate,
-                onChanged: (dateString) => setState(() {
-                  _selectedDate = dateString;
-                }),
+              TextFormField(
+                controller: _descSpkController,
+                style: Theme.of(context).textTheme.bodySmall,
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  labelStyle: Theme.of(context).textTheme.bodySmall,
+                  hintText: 'e.g XPANDER GROUT',
+                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Colors.grey,
+                      ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please select the date';
+                    return 'Please enter name';
                   }
                   return null;
                 },
+                // onSaved: (value) {
+                //   _targetFormulaInput = value ?? '';
+                // },
               ),
               const SizedBox(height: 12.0),
               Row(
                 children: [
                   Expanded(
-                    flex: 2,
-                    child: TextFormField(
-                      controller: _descSpkController,
-                      style: Theme.of(context).textTheme.bodySmall,
-                      decoration: InputDecoration(
-                        labelText: 'Description',
-                        labelStyle: Theme.of(context).textTheme.bodySmall,
-                        hintText: 'e.g XPANDER GROUT',
-                        hintStyle:
-                            Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  color: Colors.grey,
-                                ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+                    flex: 3,
+                    child: DatePickerFormField(
+                      value: _selectedDate,
+                      onChanged: (dateString) => setState(() {
+                        _selectedDate = dateString;
+                      }),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter name';
+                          return 'Please select the date';
                         }
                         return null;
                       },
-                      // onSaved: (value) {
-                      //   _targetFormulaInput = value ?? '';
-                      // },
                     ),
                   ),
                   const SizedBox(width: 12.0),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: TextFormField(
                       controller: _jmlBatchController,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -182,6 +188,36 @@ class FormNewSpkState extends State<FormNewSpk> {
                       // },
                     ),
                   ),
+                  const SizedBox(width: 12.0),
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      controller: _execSequenceController,
+                      style: Theme.of(context).textTheme.bodySmall,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'No. Eksekusi',
+                        labelStyle: Theme.of(context).textTheme.bodySmall,
+                        hintText: '1,2,3,...',
+                        hintStyle:
+                            Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  color: Colors.grey,
+                                ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the execution number';
+                        }
+                        return null;
+                      },
+                      // onSaved: (value) {
+                      //   _fineFormulaInput = value ?? '';
+                      // },
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 12.0),
@@ -191,10 +227,12 @@ class FormNewSpkState extends State<FormNewSpk> {
                     _formKey.currentState?.save();
 
                     widget.onSubmitted(
-                        _selectedProduct!.idProduct,
-                        _jmlBatchController.text,
-                        _selectedDate,
-                        _descSpkController.text);
+                      _selectedProduct!.idProduct,
+                      _jmlBatchController.text,
+                      _selectedDate,
+                      _descSpkController.text,
+                      _execSequenceController.text,
+                    );
                     Navigator.pop(context);
                   }
                 },

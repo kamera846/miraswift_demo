@@ -215,6 +215,7 @@ class SpkApi {
     required String jmlBatch,
     required String dateSpk,
     required String descSpk,
+    required String orderingSpk,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
     Function()? onCompleted,
@@ -230,6 +231,7 @@ class SpkApi {
             'jml_batch': jmlBatch,
             'date_spk': dateSpk,
             'desc_spk': descSpk,
+            'ordering_spk': orderingSpk,
           },
         ),
       );
@@ -273,6 +275,7 @@ class SpkApi {
     required String jmlBatch,
     required String dateSpk,
     required String descSpk,
+    required String orderingSpk,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
     Function()? onCompleted,
@@ -288,6 +291,7 @@ class SpkApi {
             'jml_batch': jmlBatch,
             'date_spk': dateSpk,
             'desc_spk': descSpk,
+            'ordering_spk': orderingSpk,
           },
         ),
       );

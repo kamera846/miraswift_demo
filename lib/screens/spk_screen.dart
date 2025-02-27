@@ -221,7 +221,12 @@ class _SpkScreenState extends State<SpkScreen> {
   }
 
   void _submitNewItem(
-      String idProduct, String jmlBatch, String dateSpk, String descSpk) async {
+    String idProduct,
+    String jmlBatch,
+    String dateSpk,
+    String descSpk,
+    String orderingSpk,
+  ) async {
     // print('$idProduct, $jmlBatch, $dateSpk, $descSpk');
     // return;
     setState(() {
@@ -232,6 +237,7 @@ class _SpkScreenState extends State<SpkScreen> {
       jmlBatch: jmlBatch,
       dateSpk: dateSpk,
       descSpk: descSpk,
+      orderingSpk: orderingSpk,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
@@ -313,7 +319,12 @@ class _SpkScreenState extends State<SpkScreen> {
   }
 
   void _submitEditItem(
-      String idProduct, String jmlBatch, String dateSpk, String descSpk) async {
+    String idProduct,
+    String jmlBatch,
+    String dateSpk,
+    String descSpk,
+    String orderingSpk,
+  ) async {
     // print('$idProduct, $jmlBatch, $dateSpk, $descSpk');
     // return;
     setState(() {
@@ -325,6 +336,7 @@ class _SpkScreenState extends State<SpkScreen> {
       jmlBatch: jmlBatch,
       dateSpk: dateSpk,
       descSpk: descSpk,
+      orderingSpk: orderingSpk,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
