@@ -9,6 +9,7 @@ import 'package:miraswift_demo/screens/equipment_screen.dart';
 import 'package:miraswift_demo/screens/notifications_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
 import 'package:miraswift_demo/screens/spk_screen.dart';
+import 'package:miraswift_demo/screens/webview_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/services/logmsg_api.dart';
 import 'package:miraswift_demo/services/product_api.dart';
@@ -274,7 +275,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (ctx) => const EquipmentScreen(),
+                              builder: (ctx) => const WebviewScreen(),
                             ),
                           ).then(
                             (value) => getProducts(isLoading: false),
