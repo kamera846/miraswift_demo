@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:miraswift_demo/screens/dashboardv2_screen.dart';
+import 'package:miraswift_demo/screens/dashboardv3_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -15,8 +15,15 @@ void main() async {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  double opacityValue = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +67,17 @@ class MainApp extends StatelessWidget {
               )),
             ),
           ),
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Container(
-              color: Colors.white.withOpacity(0.5),
+          AnimatedOpacity(
+            opacity: opacityValue,
+            duration: const Duration(milliseconds: 500),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Container(
+                color: Colors.white.withOpacity(0.5),
+              ),
             ),
           ),
-          const DashboardV2Screen(),
+          if (opacityValue == 1) const DashboardV3Screen(),
           // Scaffold(
           //   backgroundColor: Colors.transparent,
           //   appBar: AppBar(
@@ -81,5 +92,19 @@ class MainApp extends StatelessWidget {
       ),
       // home: const DashboardScreen(),
     );
+  }
+
+  @override
+  void initState() {
+    changeOpacityValue();
+    super.initState();
+  }
+
+  void changeOpacityValue() {
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        opacityValue = 1;
+      });
+    });
   }
 }

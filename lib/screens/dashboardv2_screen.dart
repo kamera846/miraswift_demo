@@ -5,7 +5,6 @@ import 'package:miraswift_demo/models/logmsg_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/models/spk_model.dart';
 import 'package:miraswift_demo/screens/batch_screen.dart';
-import 'package:miraswift_demo/screens/equipment_screen.dart';
 import 'package:miraswift_demo/screens/notifications_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
 import 'package:miraswift_demo/screens/spk_screen.dart';
