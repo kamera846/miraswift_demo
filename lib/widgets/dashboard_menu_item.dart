@@ -8,7 +8,7 @@ class DashboardMenuItem extends StatelessWidget {
     required this.title,
     required this.description,
     this.surfaceColor = Colors.blue,
-    this.margin = const EdgeInsets.all(8),
+    this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(16),
   });
 

@@ -67,12 +67,55 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 pinned: true,
                 flexibleSpace: dashboardHeader(context),
               ),
+              SliverPadding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                sliver: SliverList.list(children: [
+                  Text(
+                    "Halo, Mochammad Rafli Ramadani",
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withOpacity(0.3),
+                          offset: const Offset(2.0, 2.0),
+                          blurRadius: 6.0,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    "v1.0.0",
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withOpacity(0.3),
+                          offset: const Offset(2.0, 2.0),
+                          blurRadius: 6.0,
+                        ),
+                      ],
+                    ),
+                  )
+                ]),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverGrid.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 1.2,
+                  children: dahsboardBody(context),
+                ),
+              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return dahsboardBody(context);
-                  },
                   childCount: 1,
+                  (context, index) {
+                    return dashboardFooter(context);
+                  },
                 ),
               ),
             ],
@@ -164,118 +207,154 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     );
   }
 
-  AnimatedBuilder dahsboardBody(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationControllerBody!,
-      builder: (ctx, kChild) => SlideTransition(
-        position: Tween(
-          begin: const Offset(0, 1),
-          end: const Offset(0, 0),
-        ).animate(
-          CurvedAnimation(
-            parent: _animationControllerBody!,
-            curve: Curves.ease,
-          ),
-        ),
-        child: kChild,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      SizedBox(
-                        height: 180,
-                        child: DashboardMenuItem(
-                          icon: Icons.playlist_add_circle_rounded,
-                          surfaceColor: Colors.blue,
-                          title: 'Recipes',
-                          description: '${products.length} products',
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => const ProductScreen(),
-                            ),
-                          ).then(
-                            (value) => getProducts(isLoading: false),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 220,
-                        child: DashboardMenuItem(
-                          icon: Icons.playlist_add_check_circle,
-                          surfaceColor: Colors.red,
-                          title: 'Settings SPK',
-                          description: '${listSpk.length} items',
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => const SpkScreen(),
-                            ),
-                          ).then(
-                            (value) => getProducts(isLoading: false),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      SizedBox(
-                        height: 220,
-                        child: DashboardMenuItem(
-                          icon: Icons.lightbulb_circle,
-                          surfaceColor: Colors.green,
-                          title: 'Batchs',
-                          description: '${batchs.length} items',
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => const BatchScreen(),
-                            ),
-                            // ).then(
-                            //   (value) => getProducts(isLoading: false),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 180,
-                        child: DashboardMenuItem(
-                          icon: Icons.circle_notifications,
-                          surfaceColor: Colors.yellow.shade700,
-                          title: 'Notifications',
-                          description: '${messages.length} messages',
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => const NotificationsScreen(),
-                            ),
-                          ).then(
-                            (value) => getProducts(isLoading: false),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+  List<Widget> dahsboardBody(BuildContext context) {
+    return [
+      AnimatedBuilder(
+        animation: _animationControllerBody!,
+        builder: (ctx, kChild) => SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 1),
+            end: const Offset(0, 0),
+          ).animate(
+            CurvedAnimation(
+              parent: _animationControllerBody!,
+              curve: Curves.ease,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: kChild,
+        ),
+        child: DashboardMenuItem(
+          icon: Icons.playlist_add_circle_rounded,
+          surfaceColor: Colors.blue,
+          title: 'Recipes',
+          description: '${products.length} products',
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => const ProductScreen(),
+            ),
+          ).then(
+            (value) => getProducts(isLoading: false),
+          ),
+        ),
+      ),
+      AnimatedBuilder(
+        animation: _animationControllerBody!,
+        builder: (ctx, kChild) => SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 1),
+            end: const Offset(0, 0),
+          ).animate(
+            CurvedAnimation(
+              parent: _animationControllerBody!,
+              curve: Curves.ease,
+            ),
+          ),
+          child: kChild,
+        ),
+        child: DashboardMenuItem(
+          icon: Icons.playlist_add_check_circle,
+          surfaceColor: Colors.red,
+          title: 'Settings SPK',
+          description: '${listSpk.length} items',
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => const SpkScreen(),
+            ),
+          ).then(
+            (value) => getProducts(isLoading: false),
+          ),
+        ),
+      ),
+      AnimatedBuilder(
+        animation: _animationControllerBody!,
+        builder: (ctx, kChild) => SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 1),
+            end: const Offset(0, 0),
+          ).animate(
+            CurvedAnimation(
+              parent: _animationControllerBody!,
+              curve: Curves.ease,
+            ),
+          ),
+          child: kChild,
+        ),
+        child: DashboardMenuItem(
+          icon: Icons.lightbulb_circle,
+          surfaceColor: Colors.green,
+          title: 'Batchs',
+          description: '${batchs.length} items',
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => const BatchScreen(),
+            ),
+          ).then(
+            (value) => getProducts(isLoading: false),
+          ),
+        ),
+      ),
+      AnimatedBuilder(
+        animation: _animationControllerBody!,
+        builder: (ctx, kChild) => SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 1),
+            end: const Offset(0, 0),
+          ).animate(
+            CurvedAnimation(
+              parent: _animationControllerBody!,
+              curve: Curves.ease,
+            ),
+          ),
+          child: kChild,
+        ),
+        child: DashboardMenuItem(
+          icon: Icons.circle_notifications,
+          surfaceColor: Colors.yellow.shade700,
+          title: 'Notifications',
+          description: '${messages.length} messages',
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => const NotificationsScreen(),
+            ),
+          ).then(
+            (value) => getProducts(isLoading: false),
+          ),
+        ),
+      ),
+    ];
+  }
+
+  Column dashboardFooter(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 0,
+            left: 16,
+            right: 16,
+            bottom: 8,
+          ),
+          child: AnimatedBuilder(
+            animation: _animationControllerBody!,
+            builder: (ctx, kChild) => SlideTransition(
+              position: Tween(
+                begin: const Offset(0, 1),
+                end: const Offset(0, 0),
+              ).animate(
+                CurvedAnimation(
+                  parent: _animationControllerBody!,
+                  curve: Curves.ease,
+                ),
+              ),
+              child: kChild,
+            ),
             child: SizedBox(
-              height: 180,
+              height: 150,
               child: DashboardMenuItem(
                 icon: Icons.build_circle,
                 surfaceColor: Colors.purple,
@@ -292,13 +371,28 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
               ),
             ),
           ),
-          Container(
+        ),
+        AnimatedBuilder(
+          animation: _animationControllerBody!,
+          builder: (ctx, kChild) => SlideTransition(
+            position: Tween(
+              begin: const Offset(0, 1),
+              end: const Offset(0, 0),
+            ).animate(
+              CurvedAnimation(
+                parent: _animationControllerBody!,
+                curve: Curves.ease,
+              ),
+            ),
+            child: kChild,
+          ),
+          child: Container(
             padding: const EdgeInsets.all(32),
             margin: const EdgeInsets.only(
               left: 16,
               top: 8,
               right: 16,
-              bottom: 32,
+              bottom: 250,
             ),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -306,12 +400,14 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: Colors.white, width: 2),
             ),
-            child: const Center(
-              child: Text('© 2024 Miraswift Auto Solusi'),
+            child: const Column(
+              children: [
+                Text('© 2024 Miraswift Auto Solusi'),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -435,7 +531,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
   void iniScrollController() {
     _scrollController.addListener(() {
       setState(() {
-        if (_scrollController.offset > 50) {
+        if (_scrollController.offset > 16) {
           _opacityValue = 1;
         } else {
           _opacityValue = 0;
