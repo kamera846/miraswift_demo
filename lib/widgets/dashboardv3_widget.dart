@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
@@ -26,18 +26,18 @@ class Dashboardv3Widget extends StatefulWidget {
   State<Dashboardv3Widget> createState() => _Dashboardv3WidgetState();
 }
 
-final List<DropdownMenuItem<String>> plantDropdownItem = List.of([
+final List<DropdownMenuItem<String>> planDropdownItem = List.of([
   const DropdownMenuItem(
-    value: "Plant 1",
-    child: Text("Plant 1"),
+    value: "Plan 1",
+    child: Text("Plan 1"),
   ),
   const DropdownMenuItem(
-    value: "Plant 2",
-    child: Text("Plant 2"),
+    value: "Plan 2",
+    child: Text("Plan 2"),
   ),
   const DropdownMenuItem(
-    value: "Plant 3",
-    child: Text("Plant 3"),
+    value: "Plan 3",
+    child: Text("Plan 3"),
   ),
 ]);
 
@@ -50,7 +50,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
   List<BatchModel> batchs = [];
   List<SpkModel> listSpk = [];
   List<LogMessageModel> messages = [];
-  String _selectedPlant = plantDropdownItem.first.value!;
+  String _selectedPlan = planDropdownItem.first.value!;
   double _opacityValue = 0;
 
   final ScrollController _scrollController = ScrollController();
@@ -125,8 +125,8 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: DropdownButton<String>(
-                  items: plantDropdownItem,
-                  value: _selectedPlant,
+                  items: planDropdownItem,
+                  value: _selectedPlan,
                   onChanged: dropdownCallback,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
@@ -163,7 +163,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
 
   SliverPadding dashboardHero(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
+      padding: const EdgeInsets.only(top: 16),
       sliver: SliverList.list(children: [
         AnimatedBuilder(
           animation: _animationControllerHeader!,
@@ -182,64 +182,104 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Halo, Mochammad Rafli Ramadani",
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.3),
-                      offset: const Offset(2.0, 2.0),
-                      blurRadius: 6.0,
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "v1.0.0",
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.3),
+                        offset: const Offset(2.0, 2.0),
+                        blurRadius: 6.0,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Text(
-                "v1.0.0",
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.3),
-                      offset: const Offset(2.0, 2.0),
-                      blurRadius: 6.0,
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Halo, Mochammad Rafli Ramadani",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.3),
+                        offset: const Offset(2.0, 2.0),
+                        blurRadius: 6.0,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                padding: const EdgeInsets.all(16),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
-                  border: Border.all(width: 2, color: Colors.white),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          CupertinoIcons.chart_bar_circle_fill,
-                          color: Colors.green,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          "Chart Data",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
+              const SizedBox(height: 32),
+              CarouselSlider(
+                options: CarouselOptions(),
+                items: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.all(16),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      border: Border.all(width: 2, color: Colors.white),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: const DashboardHeroChart(
+                      title: 'Total Scales',
+                      description: '(kg)',
+                      icon: Icon(
+                        Icons.scale,
+                        color: Colors.blue,
+                      ),
+                      listColorGradient: [
+                        Colors.green,
+                        Colors.blue,
                       ],
+                      chartInterval: 50,
+                      maxChartValue: 1000,
+                      listChartValue: [350, 450, 550, 650, 500, 300, 750],
+                      leftTitleKey: ['0', '250', '500', '750', '1K'],
+                      leftTitleValue: [0, 250, 500, 750, 1000],
                     ),
-                    const SizedBox(
-                      height: 16,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.all(16),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      border: Border.all(width: 2, color: Colors.white),
+                      borderRadius: BorderRadius.circular(24),
                     ),
-                    const DashboardHeroChart(),
-                  ],
-                ),
+                    child: const DashboardHeroChart(
+                      title: 'Total Time',
+                      description: '(minutes)',
+                      icon: Icon(
+                        Icons.timelapse_rounded,
+                        color: Colors.red,
+                      ),
+                      listColorGradient: [
+                        Colors.orange,
+                        Colors.red,
+                      ],
+                      maxChartValue: 30,
+                      chartInterval: 2,
+                      listChartValue: [11, 15, 18, 12, 8, 16, 13],
+                      leftTitleKey: ['0', '10', '20', '30'],
+                      leftTitleValue: [0, 10, 20, 30],
+                    ),
+                  ),
+                ].map((item) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return item;
+                    },
+                  );
+                }).toList(),
               ),
             ],
           ),
@@ -301,14 +341,14 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 child: kChild,
               ),
               child: DashboardMenuItem(
-                icon: Icons.playlist_add_check_circle,
-                surfaceColor: Colors.red,
-                title: 'Settings SPK',
-                description: '${listSpk.length} items',
+                icon: Icons.lightbulb_circle,
+                surfaceColor: Colors.green,
+                title: 'Batchs',
+                description: '${batchs.length} items',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (ctx) => const SpkScreen(),
+                    builder: (ctx) => const BatchScreen(),
                   ),
                 ).then(
                   (value) => getProducts(isLoading: false),
@@ -330,14 +370,14 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 child: kChild,
               ),
               child: DashboardMenuItem(
-                icon: Icons.lightbulb_circle,
-                surfaceColor: Colors.green,
-                title: 'Batchs',
-                description: '${batchs.length} items',
+                icon: Icons.playlist_add_check_circle,
+                surfaceColor: Colors.red,
+                title: 'Settings SPK',
+                description: '${listSpk.length} items',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (ctx) => const BatchScreen(),
+                    builder: (ctx) => const SpkScreen(),
                   ),
                 ).then(
                   (value) => getProducts(isLoading: false),
@@ -562,7 +602,8 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
   void dropdownCallback(String? value) {
     if (value is String) {
       setState(() {
-        _selectedPlant = value;
+        _selectedPlan = value;
+        getProducts();
       });
     }
   }

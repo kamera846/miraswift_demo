@@ -2,257 +2,187 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class DashboardHeroChart extends StatefulWidget {
-  const DashboardHeroChart({super.key});
-
+  const DashboardHeroChart({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.maxChartValue,
+    required this.chartInterval,
+    required this.leftTitleKey,
+    required this.leftTitleValue,
+    required this.listChartValue,
+    required this.listColorGradient,
+  });
+  final String title;
+  final String description;
+  final Icon icon;
+  final double maxChartValue;
+  final double chartInterval;
+  final List<String> leftTitleKey;
+  final List<double> leftTitleValue;
+  final List<double> listChartValue;
+  final List<Color> listColorGradient;
   @override
-  State<DashboardHeroChart> createState() => _DashboardHeroChartState();
+  State<StatefulWidget> createState() => DashboardHeroChartState();
 }
 
-class _DashboardHeroChartState extends State<DashboardHeroChart> {
-  List<Color> gradientColors = [Colors.blue, Colors.green];
-  bool showAvg = false;
+class DashboardHeroChartState extends State<DashboardHeroChart> {
+  final double width = 20;
+  late List<BarChartGroupData> showingBarGroups;
+
+  int touchedGroupIndex = -1;
 
   @override
   void initState() {
     super.initState();
+
+    List<BarChartGroupData> items = [];
+
+    for (var map in widget.listChartValue) {
+      var index = widget.listChartValue.indexOf(map);
+      items.add(makeGroupData(index, map));
+    }
+
+    showingBarGroups = items;
   }
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 2,
-      child: LineChart(
-        showAvg ? avgData() : mainData(),
-      ),
-    );
-  }
-
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    var style = Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Colors.black,
-        );
-    Widget text;
-    switch (value.toInt()) {
-      case 2:
-        text = Text('MAR', style: style);
-        break;
-      case 5:
-        text = Text('JUN', style: style);
-        break;
-      case 8:
-        text = Text('SEP', style: style);
-        break;
-      default:
-        text = Text('', style: style);
-        break;
-    }
-
-    return SideTitleWidget(
-      // meta: meta,
-      axisSide: AxisSide.bottom,
-      child: text,
-    );
-  }
-
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
-    var style = Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Colors.black,
-        );
-    String text;
-    switch (value.toInt()) {
-      case 1:
-        text = '10K';
-        break;
-      case 3:
-        text = '30k';
-        break;
-      case 5:
-        text = '50k';
-        break;
-      default:
-        return Container();
-    }
-
-    return Text(text, style: style, textAlign: TextAlign.left);
-  }
-
-  LineChartData mainData() {
-    return LineChartData(
-      gridData: FlGridData(
-        show: true,
-        drawVerticalLine: true,
-        horizontalInterval: 1,
-        verticalInterval: 1,
-        getDrawingHorizontalLine: (value) {
-          return const FlLine(
-            color: Colors.black12,
-            strokeWidth: 1,
-          );
-        },
-        getDrawingVerticalLine: (value) {
-          return const FlLine(
-            color: Colors.black12,
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            interval: 1,
-            getTitlesWidget: bottomTitleWidgets,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            interval: 1,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: Colors.black12),
-      ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            widget.icon,
+            const SizedBox(
+              width: 16,
+            ),
+            Text(
+              widget.title,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(
+              width: 4,
+            ),
+            Text(
+              widget.description,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Colors.black38,
+                  ),
+            ),
           ],
-          isCurved: true,
-          gradient: LinearGradient(
-            colors: gradientColors,
-          ),
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              colors: gradientColors
-                  .map((color) => color.withOpacity(0.3))
-                  .toList(),
+        ),
+        const SizedBox(
+          height: 38,
+        ),
+        Expanded(
+          child: BarChart(
+            BarChartData(
+              maxY: widget.maxChartValue,
+              barTouchData: BarTouchData(
+                enabled: true,
+                touchTooltipData: BarTouchTooltipData(
+                  tooltipBgColor: Colors.black87.withOpacity(0.7),
+                  tooltipMargin: 8,
+                  tooltipPadding: const EdgeInsets.only(
+                    left: 16,
+                    top: 12,
+                    right: 16,
+                    bottom: 8,
+                  ),
+                  getTooltipItem: (
+                    BarChartGroupData group,
+                    int groupIndex,
+                    BarChartRodData rod,
+                    int rodIndex,
+                  ) {
+                    return BarTooltipItem(
+                      'Date: 11 Maret 2025\nBatch: 09298731\nTotal: ${rod.toY}kg',
+                      textAlign: TextAlign.start,
+                      const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              titlesData: FlTitlesData(
+                show: true,
+                rightTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                topTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                bottomTitles: const AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: false,
+                  ),
+                ),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 35,
+                    interval: widget.chartInterval,
+                    getTitlesWidget: leftTitles,
+                  ),
+                ),
+              ),
+              borderData: FlBorderData(
+                show: false,
+              ),
+              barGroups: showingBarGroups,
+              gridData: const FlGridData(show: false),
             ),
           ),
+        ),
+        const SizedBox(
+          height: 12,
         ),
       ],
     );
   }
 
-  LineChartData avgData() {
-    return LineChartData(
-      lineTouchData: const LineTouchData(enabled: false),
-      gridData: FlGridData(
-        show: true,
-        drawHorizontalLine: true,
-        verticalInterval: 1,
-        horizontalInterval: 1,
-        getDrawingVerticalLine: (value) {
-          return const FlLine(
-            color: Colors.black12,
-            strokeWidth: 1,
-          );
-        },
-        getDrawingHorizontalLine: (value) {
-          return const FlLine(
-            color: Colors.black12,
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: bottomTitleWidgets,
-            interval: 1,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-            interval: 1,
-          ),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: Colors.black12),
-      ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
-          ],
-          isCurved: true,
+  Widget leftTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Color(0xff7589a2),
+      fontWeight: FontWeight.bold,
+      fontSize: 12,
+    );
+
+    String text = '';
+    int val = widget.leftTitleValue
+        .indexWhere((element) => element.toDouble() == value);
+    if (val != -1) {
+      String key = widget.leftTitleKey[val];
+      text = key;
+    }
+
+    return SideTitleWidget(
+      axisSide: AxisSide.bottom,
+      space: 0,
+      child: Text(text, style: style),
+    );
+  }
+
+  BarChartGroupData makeGroupData(int x, double y1) {
+    return BarChartGroupData(
+      barsSpace: 2,
+      x: x,
+      barRods: [
+        BarChartRodData(
+          toY: y1,
+          width: width,
+          borderRadius: BorderRadius.circular(4),
           gradient: LinearGradient(
-            colors: [
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-            ],
-          ),
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              colors: [
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-              ],
-            ),
+            colors: widget.listColorGradient,
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
           ),
         ),
       ],
