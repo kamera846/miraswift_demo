@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
@@ -15,6 +16,7 @@ import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/services/logmsg_api.dart';
 import 'package:miraswift_demo/services/product_api.dart';
 import 'package:miraswift_demo/services/spk_api.dart';
+import 'package:miraswift_demo/widgets/dashboard_hero_chart.dart';
 import 'package:miraswift_demo/widgets/dashboard_menu_item.dart';
 
 class Dashboardv3Widget extends StatefulWidget {
@@ -59,65 +61,10 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
         ? CustomScrollView(
             controller: _scrollController,
             slivers: [
-              SliverAppBar(
-                backgroundColor: Colors.transparent,
-                scrolledUnderElevation: 0,
-                elevation: 0,
-                floating: false,
-                pinned: true,
-                flexibleSpace: dashboardHeader(context),
-              ),
-              SliverPadding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                sliver: SliverList.list(children: [
-                  Text(
-                    "Halo, Mochammad Rafli Ramadani",
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black.withOpacity(0.3),
-                          offset: const Offset(2.0, 2.0),
-                          blurRadius: 6.0,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "v1.0.0",
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black.withOpacity(0.3),
-                          offset: const Offset(2.0, 2.0),
-                          blurRadius: 6.0,
-                        ),
-                      ],
-                    ),
-                  )
-                ]),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.all(16),
-                sliver: SliverGrid.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 1.2,
-                  children: dahsboardBody(context),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  childCount: 1,
-                  (context, index) {
-                    return dashboardFooter(context);
-                  },
-                ),
-              ),
+              dashboardHeader(context),
+              dashboardHero(context),
+              dahsboardBody(context),
+              dashboardFooter(context),
             ],
           )
         : Center(
@@ -128,246 +75,340 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
           );
   }
 
-  FlexibleSpaceBar dashboardHeader(BuildContext context) {
-    return FlexibleSpaceBar(
-      expandedTitleScale: 1,
-      background: AnimatedOpacity(
-        opacity: _opacityValue,
-        duration: const Duration(milliseconds: 500),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            color: Colors.blue.withOpacity(0.2),
-          ),
-        ),
-      ),
-      title: AnimatedBuilder(
-        animation: _animationControllerHeader!,
-        builder: (ctx, kChild) => SlideTransition(
-          position: Tween(
-            begin: const Offset(0, -1),
-            end: const Offset(0, 0),
-          ).animate(
-            CurvedAnimation(
-              parent: _animationControllerHeader!,
-              curve: Curves.ease,
+  SliverAppBar dashboardHeader(BuildContext context) {
+    return SliverAppBar(
+      backgroundColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+      elevation: 0,
+      floating: false,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        expandedTitleScale: 1,
+        background: AnimatedOpacity(
+          opacity: _opacityValue,
+          duration: const Duration(milliseconds: 500),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              color: Colors.blue.withOpacity(0.2),
             ),
           ),
-          child: kChild,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Image(
-              image: AssetImage('assets/images/miraswift_transparent.png'),
-              height: 35,
-            ),
-            const Expanded(child: SizedBox.shrink()),
-            Container(
-              height: 40,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
-                border: Border.all(width: 2, color: Colors.white),
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: DropdownButton<String>(
-                items: plantDropdownItem,
-                value: _selectedPlant,
-                onChanged: dropdownCallback,
-                style: Theme.of(context).textTheme.titleSmall,
+        title: AnimatedBuilder(
+          animation: _animationControllerHeader!,
+          builder: (ctx, kChild) => SlideTransition(
+            position: Tween(
+              begin: const Offset(0, -1),
+              end: const Offset(0, 0),
+            ).animate(
+              CurvedAnimation(
+                parent: _animationControllerHeader!,
+                curve: Curves.ease,
               ),
             ),
-            const SizedBox(
-              width: 16,
-            ),
-            Container(
-              width: 40,
-              height: 40,
-              padding: const EdgeInsets.all(0),
-              decoration: BoxDecoration(
+            child: kChild,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Image(
+                image: AssetImage('assets/images/miraswift_transparent.png'),
+                height: 35,
+              ),
+              const Expanded(child: SizedBox.shrink()),
+              Container(
+                height: 40,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.5),
                   border: Border.all(width: 2, color: Colors.white),
-                  borderRadius: BorderRadius.circular(100)),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.logout_rounded,
-                  size: 16,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: DropdownButton<String>(
+                  items: plantDropdownItem,
+                  value: _selectedPlant,
+                  onChanged: dropdownCallback,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(
+                width: 16,
+              ),
+              Container(
+                width: 40,
+                height: 40,
+                padding: const EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.5),
+                    border: Border.all(width: 2, color: Colors.white),
+                    borderRadius: BorderRadius.circular(100)),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.logout_rounded,
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      titlePadding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 20,
+        titlePadding: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 20,
+        ),
       ),
     );
   }
 
-  List<Widget> dahsboardBody(BuildContext context) {
-    return [
-      AnimatedBuilder(
-        animation: _animationControllerBody!,
-        builder: (ctx, kChild) => SlideTransition(
-          position: Tween(
-            begin: const Offset(0, 1),
-            end: const Offset(0, 0),
-          ).animate(
-            CurvedAnimation(
-              parent: _animationControllerBody!,
-              curve: Curves.ease,
+  SliverPadding dashboardHero(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
+      sliver: SliverList.list(children: [
+        AnimatedBuilder(
+          animation: _animationControllerHeader!,
+          builder: (ctx, kChild) => SlideTransition(
+            position: Tween(
+              begin: const Offset(0, -1),
+              end: const Offset(0, 0),
+            ).animate(
+              CurvedAnimation(
+                parent: _animationControllerHeader!,
+                curve: Curves.ease,
+              ),
             ),
+            child: kChild,
           ),
-          child: kChild,
-        ),
-        child: DashboardMenuItem(
-          icon: Icons.playlist_add_circle_rounded,
-          surfaceColor: Colors.blue,
-          title: 'Recipes',
-          description: '${products.length} products',
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (ctx) => const ProductScreen(),
-            ),
-          ).then(
-            (value) => getProducts(isLoading: false),
-          ),
-        ),
-      ),
-      AnimatedBuilder(
-        animation: _animationControllerBody!,
-        builder: (ctx, kChild) => SlideTransition(
-          position: Tween(
-            begin: const Offset(0, 1),
-            end: const Offset(0, 0),
-          ).animate(
-            CurvedAnimation(
-              parent: _animationControllerBody!,
-              curve: Curves.ease,
-            ),
-          ),
-          child: kChild,
-        ),
-        child: DashboardMenuItem(
-          icon: Icons.playlist_add_check_circle,
-          surfaceColor: Colors.red,
-          title: 'Settings SPK',
-          description: '${listSpk.length} items',
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (ctx) => const SpkScreen(),
-            ),
-          ).then(
-            (value) => getProducts(isLoading: false),
-          ),
-        ),
-      ),
-      AnimatedBuilder(
-        animation: _animationControllerBody!,
-        builder: (ctx, kChild) => SlideTransition(
-          position: Tween(
-            begin: const Offset(0, 1),
-            end: const Offset(0, 0),
-          ).animate(
-            CurvedAnimation(
-              parent: _animationControllerBody!,
-              curve: Curves.ease,
-            ),
-          ),
-          child: kChild,
-        ),
-        child: DashboardMenuItem(
-          icon: Icons.lightbulb_circle,
-          surfaceColor: Colors.green,
-          title: 'Batchs',
-          description: '${batchs.length} items',
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (ctx) => const BatchScreen(),
-            ),
-          ).then(
-            (value) => getProducts(isLoading: false),
-          ),
-        ),
-      ),
-      AnimatedBuilder(
-        animation: _animationControllerBody!,
-        builder: (ctx, kChild) => SlideTransition(
-          position: Tween(
-            begin: const Offset(0, 1),
-            end: const Offset(0, 0),
-          ).animate(
-            CurvedAnimation(
-              parent: _animationControllerBody!,
-              curve: Curves.ease,
-            ),
-          ),
-          child: kChild,
-        ),
-        child: DashboardMenuItem(
-          icon: Icons.circle_notifications,
-          surfaceColor: Colors.yellow.shade700,
-          title: 'Notifications',
-          description: '${messages.length} messages',
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (ctx) => const NotificationsScreen(),
-            ),
-          ).then(
-            (value) => getProducts(isLoading: false),
-          ),
-        ),
-      ),
-    ];
-  }
-
-  Column dashboardFooter(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 0,
-            left: 16,
-            right: 16,
-            bottom: 8,
-          ),
-          child: AnimatedBuilder(
-            animation: _animationControllerBody!,
-            builder: (ctx, kChild) => SlideTransition(
-              position: Tween(
-                begin: const Offset(0, 1),
-                end: const Offset(0, 0),
-              ).animate(
-                CurvedAnimation(
-                  parent: _animationControllerBody!,
-                  curve: Curves.ease,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Halo, Mochammad Rafli Ramadani",
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.3),
+                      offset: const Offset(2.0, 2.0),
+                      blurRadius: 6.0,
+                    ),
+                  ],
                 ),
               ),
-              child: kChild,
-            ),
-            child: SizedBox(
-              height: 150,
+              Text(
+                "v1.0.0",
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.3),
+                      offset: const Offset(2.0, 2.0),
+                      blurRadius: 6.0,
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.all(16),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  border: Border.all(width: 2, color: Colors.white),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          CupertinoIcons.chart_bar_circle_fill,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          "Chart Data",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const DashboardHeroChart(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ]),
+    );
+  }
+
+  SliverPadding dahsboardBody(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(16),
+      sliver: SliverGrid.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1.2,
+          children: [
+            AnimatedBuilder(
+              animation: _animationControllerBody!,
+              builder: (ctx, kChild) => SlideTransition(
+                position: Tween(
+                  begin: const Offset(0, 1),
+                  end: const Offset(0, 0),
+                ).animate(
+                  CurvedAnimation(
+                    parent: _animationControllerBody!,
+                    curve: Curves.ease,
+                  ),
+                ),
+                child: kChild,
+              ),
               child: DashboardMenuItem(
-                icon: Icons.build_circle,
-                surfaceColor: Colors.purple,
-                title: 'Monitoring Equipments',
-                description: 'Looking your equipments in realtime',
+                icon: Icons.playlist_add_circle_rounded,
+                surfaceColor: Colors.blue,
+                title: 'Recipes',
+                description: '${products.length} products',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (ctx) => const WebviewScreen(),
+                    builder: (ctx) => const ProductScreen(),
                   ),
                 ).then(
                   (value) => getProducts(isLoading: false),
                 ),
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _animationControllerBody!,
+              builder: (ctx, kChild) => SlideTransition(
+                position: Tween(
+                  begin: const Offset(0, 1),
+                  end: const Offset(0, 0),
+                ).animate(
+                  CurvedAnimation(
+                    parent: _animationControllerBody!,
+                    curve: Curves.ease,
+                  ),
+                ),
+                child: kChild,
+              ),
+              child: DashboardMenuItem(
+                icon: Icons.playlist_add_check_circle,
+                surfaceColor: Colors.red,
+                title: 'Settings SPK',
+                description: '${listSpk.length} items',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => const SpkScreen(),
+                  ),
+                ).then(
+                  (value) => getProducts(isLoading: false),
+                ),
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _animationControllerBody!,
+              builder: (ctx, kChild) => SlideTransition(
+                position: Tween(
+                  begin: const Offset(0, 1),
+                  end: const Offset(0, 0),
+                ).animate(
+                  CurvedAnimation(
+                    parent: _animationControllerBody!,
+                    curve: Curves.ease,
+                  ),
+                ),
+                child: kChild,
+              ),
+              child: DashboardMenuItem(
+                icon: Icons.lightbulb_circle,
+                surfaceColor: Colors.green,
+                title: 'Batchs',
+                description: '${batchs.length} items',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => const BatchScreen(),
+                  ),
+                ).then(
+                  (value) => getProducts(isLoading: false),
+                ),
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _animationControllerBody!,
+              builder: (ctx, kChild) => SlideTransition(
+                position: Tween(
+                  begin: const Offset(0, 1),
+                  end: const Offset(0, 0),
+                ).animate(
+                  CurvedAnimation(
+                    parent: _animationControllerBody!,
+                    curve: Curves.ease,
+                  ),
+                ),
+                child: kChild,
+              ),
+              child: DashboardMenuItem(
+                icon: Icons.circle_notifications,
+                surfaceColor: Colors.yellow.shade700,
+                title: 'Notifications',
+                description: '${messages.length} messages',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => const NotificationsScreen(),
+                  ),
+                ).then(
+                  (value) => getProducts(isLoading: false),
+                ),
+              ),
+            ),
+          ]),
+    );
+  }
+
+  SliverPadding dashboardFooter(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      sliver: SliverList.list(children: [
+        AnimatedBuilder(
+          animation: _animationControllerBody!,
+          builder: (ctx, kChild) => SlideTransition(
+            position: Tween(
+              begin: const Offset(0, 1),
+              end: const Offset(0, 0),
+            ).animate(
+              CurvedAnimation(
+                parent: _animationControllerBody!,
+                curve: Curves.ease,
+              ),
+            ),
+            child: kChild,
+          ),
+          child: SizedBox(
+            height: 150,
+            child: DashboardMenuItem(
+              icon: Icons.build_circle,
+              surfaceColor: Colors.purple,
+              title: 'Monitoring Equipments',
+              description: 'Looking your equipments in realtime',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => const WebviewScreen(),
+                ),
+              ).then(
+                (value) => getProducts(isLoading: false),
               ),
             ),
           ),
@@ -389,10 +430,8 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
           child: Container(
             padding: const EdgeInsets.all(32),
             margin: const EdgeInsets.only(
-              left: 16,
-              top: 8,
-              right: 16,
-              bottom: 250,
+              top: 16,
+              bottom: 32,
             ),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -407,7 +446,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
             ),
           ),
         ),
-      ],
+      ]),
     );
   }
 
@@ -439,14 +478,14 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
   void initAnimations() {
     _animationControllerHeader = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 800),
       lowerBound: 0,
       upperBound: 1,
     );
     _animationControllerHeader!.forward();
     _animationControllerBody = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 700),
       lowerBound: 0,
       upperBound: 1,
     );
