@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswift_demo/models/hero_chart_model.dart';
 import 'package:miraswift_demo/models/logmsg_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/models/spk_model.dart';
@@ -49,6 +50,13 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
   List<ProductModel> products = [];
   List<BatchModel> batchs = [];
   List<SpkModel> listSpk = [];
+  List<double> chartScaleValues = [];
+  List<HeroChartModel> chartScalesData = [];
+  List<double> chartTimeValues = [];
+  List<HeroChartModel> chartScalesYearData = [];
+  List<double> chartScaleYearValues = [];
+  List<String> chartScalesYearBottomTitle = [];
+  List<HeroChartModel> chartTimeData = [];
   List<LogMessageModel> messages = [];
   String _selectedPlan = planDropdownItem.first.value!;
   double _opacityValue = 0;
@@ -201,7 +209,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  "Halo, Mochammad Rafli Ramadani",
+                  "Hello, Mochammad Rafli Ramadani",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -219,64 +227,80 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
               CarouselSlider(
                 options: CarouselOptions(),
                 items: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    padding: const EdgeInsets.all(16),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      border: Border.all(width: 2, color: Colors.white),
-                      borderRadius: BorderRadius.circular(24),
+                  DashboardHeroChart(
+                    title: 'Total Scales 2025',
+                    unit: 'kg',
+                    icon: const Icon(
+                      Icons.scale,
+                      color: Colors.blue,
                     ),
-                    child: const DashboardHeroChart(
-                      title: 'Total Scales',
-                      description: '(kg)',
-                      icon: Icon(
-                        Icons.scale,
-                        color: Colors.blue,
-                      ),
-                      listColorGradient: [
-                        Colors.green,
-                        Colors.blue,
-                      ],
-                      chartInterval: 50,
-                      maxChartValue: 1000,
-                      listChartValue: [350, 450, 550, 650, 500, 300, 750],
-                      leftTitleKey: ['0', '250', '500', '750', '1K'],
-                      leftTitleValue: [0, 250, 500, 750, 1000],
-                    ),
+                    listColorGradient: const [
+                      Colors.blue,
+                      Colors.lightBlueAccent,
+                    ],
+                    chartInterval: 20000,
+                    maxChartValue: 80000,
+                    listChartValue: chartScaleYearValues,
+                    leftTitleKey: const ['0', '20k', '40k', '60k', '80k'],
+                    leftTitleValue: const [0, 20000, 40000, 60000, 80000],
+                    heroChartData: chartScalesYearData,
+                    bottomTitleKey: chartScalesYearBottomTitle,
                   ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    padding: const EdgeInsets.all(16),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      border: Border.all(width: 2, color: Colors.white),
-                      borderRadius: BorderRadius.circular(24),
+                  DashboardHeroChart(
+                    title: 'Best Scales',
+                    unit: 'kg',
+                    icon: const Icon(
+                      Icons.scale,
+                      color: Colors.green,
                     ),
-                    child: const DashboardHeroChart(
-                      title: 'Total Time',
-                      description: '(minutes)',
-                      icon: Icon(
-                        Icons.timelapse_rounded,
-                        color: Colors.red,
-                      ),
-                      listColorGradient: [
-                        Colors.orange,
-                        Colors.red,
-                      ],
-                      maxChartValue: 30,
-                      chartInterval: 2,
-                      listChartValue: [11, 15, 18, 12, 8, 16, 13],
-                      leftTitleKey: ['0', '10', '20', '30'],
-                      leftTitleValue: [0, 10, 20, 30],
+                    listColorGradient: const [
+                      Colors.green,
+                      Colors.lightGreen,
+                    ],
+                    chartInterval: 250,
+                    maxChartValue: 1000,
+                    listChartValue: chartScaleValues,
+                    leftTitleKey: const ['0', '250', '500', '750', '1K'],
+                    leftTitleValue: const [0, 250, 500, 750, 1000],
+                    heroChartData: chartScalesData,
+                  ),
+                  DashboardHeroChart(
+                    title: 'Best Time',
+                    unit: 'minutes',
+                    icon: const Icon(
+                      Icons.timelapse_rounded,
+                      color: Colors.red,
                     ),
+                    listColorGradient: const [
+                      Colors.red,
+                      Colors.redAccent,
+                    ],
+                    maxChartValue: 30,
+                    chartInterval: 10,
+                    listChartValue: chartTimeValues,
+                    leftTitleKey: const ['0', '10', '20', '30'],
+                    leftTitleValue: const [0, 10, 20, 30],
+                    heroChartData: chartTimeData,
                   ),
                 ].map((item) {
                   return Builder(
                     builder: (BuildContext context) {
-                      return item;
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: EdgeInsets.only(
+                          left: 12,
+                          top: 12,
+                          right: 12,
+                          bottom: item.bottomTitleKey != null ? 0 : 12,
+                        ),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          border: Border.all(width: 2, color: Colors.white),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: item,
+                      );
                     },
                   );
                 }).toList(),
@@ -494,6 +518,8 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    generateChartData();
     iniScrollController();
     getProducts();
   }
@@ -618,5 +644,234 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
         }
       });
     });
+  }
+
+  void generateChartData() {
+    // ChartScalesYear
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '01 Maret 2025',
+        batch: '1234567890',
+        value: 12000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '02 Maret 2025',
+        batch: '0987654321',
+        value: 15000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '07 Maret 2025',
+        batch: '1231431234',
+        value: 20000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '08 Maret 2025',
+        batch: '9873918273',
+        value: 26000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '09 Maret 2025',
+        batch: '7481379123',
+        value: 22000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '10 Maret 2025',
+        batch: '9709134100',
+        value: 30000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '11 Maret 2025',
+        batch: '0019231099',
+        value: 19000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '12 Maret 2025',
+        batch: '0019231099',
+        value: 27000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '13 Maret 2025',
+        batch: '0019231099',
+        value: 40000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '14 Maret 2025',
+        batch: '0019231099',
+        value: 50000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '15 Maret 2025',
+        batch: '0019231099',
+        value: 60000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '16 Maret 2025',
+        batch: '0019231099',
+        value: 72000,
+      ),
+    );
+
+    for (var item in chartScalesYearData) {
+      chartScaleYearValues.add(item.value);
+    }
+
+    chartScalesYearBottomTitle = [
+      'Ja',
+      'Fe',
+      'Ma',
+      'Ap',
+      'Me',
+      'Ju',
+      'Ju',
+      'Ag',
+      'Se',
+      'Ok',
+      'No',
+      'De'
+      // '1',
+      // '2',
+      // '3',
+      // '4',
+      // '5',
+      // '6',
+      // '7',
+      // '8',
+      // '9',
+      // '10',
+      // '11',
+      // '12'
+    ];
+
+    // ChartScales
+    chartScalesData.add(
+      const HeroChartModel(
+        date: '05 Maret 2025',
+        batch: '1234567890',
+        value: 310,
+      ),
+    );
+    chartScalesData.add(
+      const HeroChartModel(
+        date: '06 Maret 2025',
+        batch: '0987654321',
+        value: 450,
+      ),
+    );
+    chartScalesData.add(
+      const HeroChartModel(
+        date: '07 Maret 2025',
+        batch: '1231431234',
+        value: 750,
+      ),
+    );
+    chartScalesData.add(
+      const HeroChartModel(
+        date: '08 Maret 2025',
+        batch: '9873918273',
+        value: 790,
+      ),
+    );
+    chartScalesData.add(
+      const HeroChartModel(
+        date: '09 Maret 2025',
+        batch: '7481379123',
+        value: 650,
+      ),
+    );
+    chartScalesData.add(
+      const HeroChartModel(
+        date: '10 Maret 2025',
+        batch: '9709134100',
+        value: 900,
+      ),
+    );
+    chartScalesData.add(
+      const HeroChartModel(
+        date: '11 Maret 2025',
+        batch: '0019231099',
+        value: 880,
+      ),
+    );
+
+    for (var item in chartScalesData) {
+      chartScaleValues.add(item.value);
+    }
+
+    // Chart Time
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '05 Maret 2025',
+        batch: '1234567890',
+        value: 12,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '06 Maret 2025',
+        batch: '0987654321',
+        value: 15,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '07 Maret 2025',
+        batch: '1231431234',
+        value: 19,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '08 Maret 2025',
+        batch: '9873918273',
+        value: 16,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '09 Maret 2025',
+        batch: '7481379123',
+        value: 10,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '10 Maret 2025',
+        batch: '9709134100',
+        value: 17,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '11 Maret 2025',
+        batch: '0019231099',
+        value: 17.5,
+      ),
+    );
+
+    for (var item in chartTimeData) {
+      chartTimeValues.add(item.value);
+    }
   }
 }
