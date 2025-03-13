@@ -228,10 +228,11 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 options: CarouselOptions(),
                 items: [
                   DashboardHeroChart(
+                    barWidth: 20,
                     title: 'Total Scales 2025',
                     unit: 'kg',
                     icon: const Icon(
-                      Icons.scale,
+                      Icons.scale_rounded,
                       color: Colors.blue,
                     ),
                     listColorGradient: const [
@@ -250,7 +251,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     title: 'Best Scales',
                     unit: 'kg',
                     icon: const Icon(
-                      Icons.scale,
+                      Icons.scale_outlined,
                       color: Colors.green,
                     ),
                     listColorGradient: const [
@@ -263,6 +264,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     leftTitleKey: const ['0', '250', '500', '750', '1K'],
                     leftTitleValue: const [0, 250, 500, 750, 1000],
                     heroChartData: chartScalesData,
+                    bottomTitleKey: const ['1', '2', '3', '4', '5', '6', '7'],
                   ),
                   DashboardHeroChart(
                     title: 'Best Time',
@@ -273,14 +275,15 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     ),
                     listColorGradient: const [
                       Colors.red,
-                      Colors.redAccent,
+                      Colors.orange,
                     ],
-                    maxChartValue: 30,
-                    chartInterval: 10,
+                    maxChartValue: 20,
+                    chartInterval: 5,
                     listChartValue: chartTimeValues,
-                    leftTitleKey: const ['0', '10', '20', '30'],
-                    leftTitleValue: const [0, 10, 20, 30],
+                    leftTitleKey: const ['0', '5', '10', '15', '20'],
+                    leftTitleValue: const [0, 5, 10, 15, 20],
                     heroChartData: chartTimeData,
+                    bottomTitleKey: const ['1', '2', '3', '4', '5', '6', '7'],
                   ),
                 ].map((item) {
                   return Builder(
@@ -541,7 +544,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     }
   }
 
-  void initAnimations() {
+  Future<void> initAnimations() async {
     _animationControllerHeader = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
@@ -616,8 +619,19 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
         if (mounted) {
           setState(() {
             if (data != null) messages = data;
-            if (_animationControllerHeader == null ||
-                _animationControllerBody == null) initAnimations();
+          });
+        }
+      },
+    ).then(
+      (value) async {
+        if (_animationControllerHeader == null ||
+            _animationControllerBody == null) {
+          await initAnimations();
+          setState(() {
+            _isLoading = false;
+          });
+        } else {
+          setState(() {
             _isLoading = false;
           });
         }

@@ -5,6 +5,8 @@ import 'package:miraswift_demo/models/hero_chart_model.dart';
 class DashboardHeroChart extends StatefulWidget {
   const DashboardHeroChart({
     super.key,
+    this.barWidth = 24,
+    this.barSpace = 2,
     required this.title,
     required this.unit,
     required this.icon,
@@ -17,6 +19,8 @@ class DashboardHeroChart extends StatefulWidget {
     required this.listColorGradient,
     required this.heroChartData,
   });
+  final double barWidth;
+  final double barSpace;
   final String title;
   final String unit;
   final Icon icon;
@@ -33,7 +37,6 @@ class DashboardHeroChart extends StatefulWidget {
 }
 
 class DashboardHeroChartState extends State<DashboardHeroChart> {
-  final double width = 16;
   late List<BarChartGroupData> showingBarGroups;
 
   int touchedGroupIndex = -1;
@@ -214,21 +217,28 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
 
   BarChartGroupData makeGroupData(int x, double y1, {bool isTouched = false}) {
     return BarChartGroupData(
-      barsSpace: 2,
+      barsSpace: widget.barSpace,
       x: x,
       barRods: [
         BarChartRodData(
           toY: y1,
-          width: width,
+          width: widget.barWidth,
           borderRadius: BorderRadius.circular(4),
-          color: isTouched ? widget.listColorGradient[0].withAlpha(100) : null,
+          // color: isTouched ? widget.listColorGradient[0].withAlpha(100) : null,
           gradient: !isTouched
               ? LinearGradient(
                   colors: widget.listColorGradient,
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                 )
-              : null,
+              : LinearGradient(
+                  colors: [
+                    widget.listColorGradient[0].withAlpha(80),
+                    widget.listColorGradient[0].withAlpha(80)
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
         ),
       ],
     );
