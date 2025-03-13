@@ -13,7 +13,6 @@ import 'package:miraswift_demo/screens/notifications_screen.dart';
 import 'package:miraswift_demo/screens/panel_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
 import 'package:miraswift_demo/screens/spk_screen.dart';
-import 'package:miraswift_demo/screens/webview_screen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/services/logmsg_api.dart';
 import 'package:miraswift_demo/services/product_api.dart';
@@ -229,7 +228,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 options: CarouselOptions(),
                 items: [
                   DashboardHeroChart(
-                    barWidth: 20,
+                    barWidth: 16,
                     title: 'Total Scales 2025',
                     unit: 'kg',
                     icon: const Icon(
@@ -652,7 +651,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
   void iniScrollController() {
     _scrollController.addListener(() {
       setState(() {
-        if (_scrollController.offset > 16) {
+        if (_scrollController.offset > 26) {
           _opacityValue = 1;
         } else {
           _opacityValue = 0;
@@ -753,18 +752,18 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     }
 
     chartScalesYearBottomTitle = [
-      'Ja',
-      'Fe',
-      'Ma',
-      'Ap',
-      'Me',
-      'Ju',
-      'Ju',
-      'Ag',
-      'Se',
-      'Ok',
-      'No',
-      'De'
+      'J',
+      'F',
+      'M',
+      'A',
+      'M',
+      'J',
+      'J',
+      'A',
+      'S',
+      'O',
+      'N',
+      'D'
       // '1',
       // '2',
       // '3',
