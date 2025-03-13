@@ -10,6 +10,7 @@ import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/models/spk_model.dart';
 import 'package:miraswift_demo/screens/batch_screen.dart';
 import 'package:miraswift_demo/screens/notifications_screen.dart';
+import 'package:miraswift_demo/screens/panel_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
 import 'package:miraswift_demo/screens/spk_screen.dart';
 import 'package:miraswift_demo/screens/webview_screen.dart';
@@ -472,7 +473,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (ctx) => const WebviewScreen(),
+                  builder: (ctx) => const PanelScreen(),
                 ),
               ).then(
                 (value) => getProducts(isLoading: false),
