@@ -69,8 +69,9 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
         }
 
         if (dataEquipment != null && dataEquipment.isNotEmpty) {
-          var startTime = DateTime.parse(dataEquipment.last.timeOn);
-          var endTime = DateTime.parse(dataEquipment.first.timeOff);
+          dataEquipment.sort((a, b) => a.timeOn.compareTo(b.timeOn));
+          var startTime = DateTime.parse(dataEquipment.first.timeOn);
+          var endTime = DateTime.parse(dataEquipment.last.timeOff);
           Duration duration = endTime.difference(startTime);
           String timeFormatted = formatDuration(duration);
 
