@@ -24,10 +24,13 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
   ProductModel? _dataProduct;
   bool isLoading = true;
   double totalScales = 0.0;
+  String totalTimesEquipment = '-';
+  String totalTimesScales = '-';
+  bool _isPanelEquipmentOpen = true;
+  bool _isPanelScalesOpen = false;
 
   @override
   void initState() {
-    // _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     super.initState();
     _getBatchDetail();
   }
@@ -36,6 +39,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
     setState(() {
       isLoading = true;
       totalScales = 0.0;
+      totalTimesEquipment = '-';
+      totalTimesScales = '-';
       _dataProduct = null;
     });
     await BatchApiService().detail(
@@ -47,11 +52,31 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
       },
       onCompleted: (dataEquipment, dataScales, dataProduct) {
         if (dataScales != null && dataScales.isNotEmpty) {
+          var startTime = DateTime.parse(dataScales.first.createdAt);
+          var endTime = DateTime.parse(dataScales.last.createdAt);
+          Duration duration = endTime.difference(startTime);
+          String timeFormatted = formatDuration(duration);
+
+          setState(() {
+            totalTimesScales = timeFormatted;
+          });
+
           for (var item in dataScales) {
             setState(() {
               totalScales += double.parse(item.actualTimbang);
             });
           }
+        }
+
+        if (dataEquipment != null && dataEquipment.isNotEmpty) {
+          var startTime = DateTime.parse(dataEquipment.last.timeOn);
+          var endTime = DateTime.parse(dataEquipment.first.timeOff);
+          Duration duration = endTime.difference(startTime);
+          String timeFormatted = formatDuration(duration);
+
+          setState(() {
+            totalTimesEquipment = timeFormatted;
+          });
         }
 
         setState(() {
@@ -60,41 +85,24 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           _dataProduct = dataProduct;
           isLoading = false;
         });
-
-        // _getListFormula();
       },
     );
   }
 
-  // void _getListFormula() async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   await FormulaApi().list(
-  //     idProduct: _dataProduct!.idProduct,
-  //     onError: (msg) {
-  //       if (mounted) {
-  //         showSnackBar(context, msg);
-  //       }
-  //     },
-  //     onCompleted: (data) {
-  //       setState(() {
-  //         _dataFormula = data;
-  //         isLoading = false;
-  //       });
-  //     },
-  //   );
-  // }
+  String formatDuration(Duration duration) {
+    int minutes = duration.inMinutes;
+    int seconds = duration.inSeconds % 60;
+    return '$minutes mnt $seconds scnd';
+  }
 
   @override
   Widget build(BuildContext context) {
     int dataEquipmentIndex = 0;
     int dataScalesIndex = 0;
-    // int dataFormulaIndex = 0;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Batch Detail',
+        title: Text('Batch - ${widget.batch.noBatch}',
             style: Theme.of(context).textTheme.titleMedium),
         actions: [
           IconButton(
@@ -111,342 +119,261 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               dataProduct: _dataProduct,
               totalScales: totalScales,
             ),
-            _equipmentsSection(context, dataEquipmentIndex),
-            _scalesSection(context, dataScalesIndex),
+            _expansionSection(context, dataEquipmentIndex, dataScalesIndex),
           ],
         ),
       ),
     );
-    //   body: Column(
-    //     mainAxisSize: MainAxisSize.min,
-    //     children: [
-    //       BatchDetailHeader(
-    //         batch: widget.batch,
-    //         dataProduct: _dataProduct,
-    //         totalScales: totalScales,
-    //       ),
-    //       Container(
-    //         margin:
-    //             const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 0),
-    //         decoration: BoxDecoration(
-    //           border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-    //           borderRadius: BorderRadius.circular(8),
-    //         ),
-    //         child: TabBar(
-    //           controller: _tabController,
-    //           indicatorSize: TabBarIndicatorSize.tab,
-    //           dividerHeight: 0,
-    //           labelColor: Theme.of(context).primaryColorDark,
-    //           labelStyle: Theme.of(context).textTheme.titleSmall,
-    //           // unselectedLabelColor: Colors.grey,
-    //           unselectedLabelStyle: Theme.of(context).textTheme.bodySmall,
-    //           indicatorColor: Theme.of(context).primaryColorDark,
-    //           indicatorPadding: const EdgeInsets.symmetric(horizontal: 12),
-    //           labelPadding: const EdgeInsets.only(top: 6),
-    //           tabs: const [
-    //             Tab(
-    //               icon: Icon(
-    //                 Icons.settings_applications,
-    //                 size: 20,
-    //               ),
-    //               text: "Equipments",
-    //             ),
-    //             Tab(
-    //               icon: Icon(
-    //                 Icons.scale_rounded,
-    //                 size: 20,
-    //               ),
-    //               text: "Scales",
-    //             ),
-    //             Tab(
-    //               icon: Icon(
-    //                 Icons.receipt_rounded,
-    //                 size: 20,
-    //               ),
-    //               text: "Formula",
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //       Expanded(
-    //         child: TabBarView(
-    //           controller: _tabController,
-    //           children: [
-    //             // List Equipments
-    //             SingleChildScrollView(
-    //               child: Column(
-    //                 children: [
-    //                   Container(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 12),
-    //                     margin: const EdgeInsets.only(
-    //                         left: 12, top: 12, right: 12, bottom: 0),
-    //                     decoration: BoxDecoration(
-    //                       border: Border.all(
-    //                           width: 1, color: Colors.grey.withAlpha(75)),
-    //                       borderRadius: BorderRadius.circular(8),
-    //                     ),
-    //                     child: (!isLoading &&
-    //                             _dataEquipment != null &&
-    //                             _dataEquipment!.isNotEmpty)
-    //                         ? Column(
-    //                             children: _dataEquipment!.map((item) {
-    //                               final isLastIndex = (dataEquipmentIndex ==
-    //                                   (_dataEquipment!.length - 1));
-    //                               dataEquipmentIndex++;
-    //                               return Padding(
-    //                                 padding: EdgeInsets.only(
-    //                                   top: 12,
-    //                                   bottom: isLastIndex ? 12 : 0,
-    //                                 ),
-    //                                 child: BatchItem.equipment(
-    //                                   equipment: item,
-    //                                   isLastIndex: isLastIndex,
-    //                                 ),
-    //                               );
-    //                             }).toList(),
-    //                           )
-    //                         : Center(
-    //                             child: Padding(
-    //                               padding: const EdgeInsets.all(12),
-    //                               child: Text(isLoading
-    //                                   ? 'Loading..'
-    //                                   : !isLoading &&
-    //                                           (_dataEquipment == null ||
-    //                                               _dataEquipment!.isEmpty)
-    //                                       ? 'Data is empty.'
-    //                                       : ''),
-    //                             ),
-    //                           ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //             // List Scales
-    //             SingleChildScrollView(
-    //               child: Column(
-    //                 children: [
-    //                   Container(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 12),
-    //                     margin: const EdgeInsets.all(12),
-    //                     decoration: BoxDecoration(
-    //                       border: Border.all(
-    //                           width: 1, color: Colors.grey.withAlpha(75)),
-    //                       borderRadius: BorderRadius.circular(8),
-    //                     ),
-    //                     child: (!isLoading &&
-    //                             _dataScales != null &&
-    //                             _dataScales!.isNotEmpty)
-    //                         ? Column(
-    //                             children: _dataScales!.map((item) {
-    //                               final isLastIndex = (dataScalesIndex ==
-    //                                   (_dataScales!.length - 1));
-    //                               dataScalesIndex++;
-    //                               return Padding(
-    //                                 padding: EdgeInsets.only(
-    //                                     top: 12, bottom: isLastIndex ? 12 : 0),
-    //                                 child: BatchItem.scales(
-    //                                   scales: item,
-    //                                   isLastIndex: isLastIndex,
-    //                                 ),
-    //                               );
-    //                             }).toList(),
-    //                           )
-    //                         : Center(
-    //                             child: Padding(
-    //                               padding: const EdgeInsets.all(12),
-    //                               child: Text(isLoading
-    //                                   ? 'Loading..'
-    //                                   : !isLoading &&
-    //                                           (_dataScales == null ||
-    //                                               _dataScales!.isEmpty)
-    //                                       ? 'Data is empty.'
-    //                                       : ''),
-    //                             ),
-    //                           ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //             // List Formula
-    //             SingleChildScrollView(
-    //               child: Column(
-    //                 children: [
-    //                   Container(
-    //                     width: double.infinity,
-    //                     margin: const EdgeInsets.all(12),
-    //                     decoration: BoxDecoration(
-    //                       border: Border.all(
-    //                           width: 1, color: Colors.grey.withAlpha(75)),
-    //                       borderRadius: BorderRadius.circular(8),
-    //                     ),
-    //                     child: (!isLoading &&
-    //                             _dataFormula != null &&
-    //                             _dataFormula!.isNotEmpty)
-    //                         ? Column(
-    //                             children: _dataFormula!.map((item) {
-    //                               final isLastIndex = (dataFormulaIndex ==
-    //                                   (_dataFormula!.length - 1));
-    //                               dataFormulaIndex++;
-    //                               return Column(
-    //                                 children: [
-    //                                   ListTileItem(
-    //                                     badge: item.kodeMaterial,
-    //                                     title: item.nameMaterial,
-    //                                     description:
-    //                                         '${item.targetFormula} kg in ${item.timeTarget} second (Fine ${item.fineFormula} kg)',
-    //                                   ),
-    //                                   if (!isLastIndex)
-    //                                     Divider(
-    //                                       height: 0,
-    //                                       color: Colors.grey.shade300,
-    //                                     ),
-    //                                 ],
-    //                               );
-    //                             }).toList(),
-    //                           )
-    //                         : Center(
-    //                             child: Padding(
-    //                               padding: const EdgeInsets.all(12),
-    //                               child: Text(
-    //                                 isLoading
-    //                                     ? 'Loading..'
-    //                                     : !isLoading &&
-    //                                             (_dataFormula == null ||
-    //                                                 _dataFormula!.isEmpty)
-    //                                         ? 'Data is empty.'
-    //                                         : '',
-    //                               ),
-    //                             ),
-    //                           ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 
-  Column _scalesSection(BuildContext context, int dataScalesIndex) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.scale_rounded,
-                color: Colors.grey,
-                size: 20,
-              ),
-              const SizedBox(width: 9),
-              Text('Scales', style: Theme.of(context).textTheme.titleSmall),
-            ],
-          ),
-        ),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          margin: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: (!isLoading && _dataScales != null && _dataScales!.isNotEmpty)
-              ? Column(
-                  children: _dataScales!.map((item) {
-                    final isLastIndex =
-                        (dataScalesIndex == (_dataScales!.length - 1));
-                    dataScalesIndex++;
-                    return Padding(
-                      padding: EdgeInsets.only(
-                          top: 12, bottom: isLastIndex ? 12 : 0),
-                      child: BatchItem.scales(
-                        scales: item,
-                        isLastIndex: isLastIndex,
-                      ),
-                    );
-                  }).toList(),
-                )
-              : Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(isLoading
-                        ? 'Loading..'
-                        : !isLoading &&
-                                (_dataScales == null || _dataScales!.isEmpty)
-                            ? 'Data is empty.'
-                            : ''),
-                  ),
-                ),
-        ),
-      ],
+  Padding _expansionSection(
+      BuildContext context, int dataEquipmentIndex, int dataScalesIndex) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: ExpansionPanelList(
+        elevation: 0,
+        materialGapSize: 0,
+        expandedHeaderPadding: const EdgeInsets.all(0),
+        dividerColor: Colors.transparent,
+        expansionCallback: (panelIndex, isExpanded) {
+          setState(() {
+            if (panelIndex == 0) {
+              _isPanelEquipmentOpen = isExpanded;
+            } else {
+              _isPanelScalesOpen = isExpanded;
+            }
+          });
+        },
+        children: [
+          _expansionEquipment(dataEquipmentIndex),
+          _expansionScales(dataScalesIndex),
+        ],
+      ),
     );
   }
 
-  Column _equipmentsSection(BuildContext context, int dataEquipmentIndex) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
+  ExpansionPanel _expansionEquipment(int dataIndex) {
+    return ExpansionPanel(
+      hasIcon: false,
+      canTapOnHeader: true,
+      isExpanded: _isPanelEquipmentOpen,
+      backgroundColor: Colors.white,
+      splashColor: Colors.transparent,
+      headerBuilder: (context, isExpanded) {
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            gradient: _isPanelEquipmentOpen
+                ? LinearGradient(
+                    tileMode: TileMode.clamp,
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Colors.blue.shade50, Colors.blue.shade50])
+                : const LinearGradient(colors: [Colors.white, Colors.white]),
+            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+            borderRadius: _isPanelEquipmentOpen
+                ? const BorderRadius.only(
+                    topLeft: Radius.circular(8), topRight: Radius.circular(8))
+                : BorderRadius.circular(8),
+          ),
           child: Row(
             children: [
-              const Icon(
-                Icons.settings_applications,
-                color: Colors.grey,
-                size: 20,
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.settings_applications,
+                          color: Colors.grey.shade800,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 9),
+                        Expanded(
+                          child: Text('Equipment',
+                              style: Theme.of(context).textTheme.titleSmall),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Text('Times: $totalTimesEquipment',
+                            style: Theme.of(context).textTheme.bodySmall),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(width: 9),
-              Text('Equipments', style: Theme.of(context).textTheme.titleSmall),
+              Icon(
+                _isPanelEquipmentOpen
+                    ? Icons.keyboard_arrow_up_rounded
+                    : Icons.keyboard_arrow_down_rounded,
+                color: Colors.grey,
+                size: 28,
+              ),
             ],
           ),
+        );
+      },
+      body: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        margin: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+          borderRadius: _isPanelEquipmentOpen
+              ? const BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8))
+              : BorderRadius.circular(8),
         ),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          margin:
-              const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 0),
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: (!isLoading &&
-                  _dataEquipment != null &&
-                  _dataEquipment!.isNotEmpty)
-              ? Column(
-                  children: _dataEquipment!.map((item) {
-                    final isLastIndex =
-                        (dataEquipmentIndex == (_dataEquipment!.length - 1));
-                    dataEquipmentIndex++;
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        top: 12,
-                        bottom: isLastIndex ? 12 : 0,
-                      ),
-                      child: BatchItem.equipment(
-                        equipment: item,
-                        isLastIndex: isLastIndex,
-                      ),
-                    );
-                  }).toList(),
-                )
-              : Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(isLoading
-                        ? 'Loading..'
-                        : !isLoading &&
-                                (_dataEquipment == null ||
-                                    _dataEquipment!.isEmpty)
-                            ? 'Data is empty.'
-                            : ''),
+        child:
+            (!isLoading && _dataEquipment != null && _dataEquipment!.isNotEmpty)
+                ? Column(
+                    children: _dataEquipment!.map((item) {
+                      final isLastIndex =
+                          (dataIndex == (_dataEquipment!.length - 1));
+                      dataIndex++;
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          top: 12,
+                          bottom: isLastIndex ? 12 : 0,
+                        ),
+                        child: BatchItem.equipment(
+                          equipment: item,
+                          isLastIndex: isLastIndex,
+                        ),
+                      );
+                    }).toList(),
+                  )
+                : Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text(isLoading
+                          ? 'Loading..'
+                          : !isLoading &&
+                                  (_dataEquipment == null ||
+                                      _dataEquipment!.isEmpty)
+                              ? 'Data is empty.'
+                              : ''),
+                    ),
                   ),
+      ),
+    );
+  }
+
+  ExpansionPanel _expansionScales(int dataIndex) {
+    return ExpansionPanel(
+      hasIcon: false,
+      canTapOnHeader: true,
+      isExpanded: _isPanelScalesOpen,
+      backgroundColor: Colors.white,
+      splashColor: Colors.transparent,
+      headerBuilder: (context, isExpanded) {
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(top: 12, left: 12, right: 12),
+          decoration: BoxDecoration(
+            gradient: _isPanelScalesOpen
+                ? LinearGradient(
+                    tileMode: TileMode.clamp,
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Colors.blue.shade50, Colors.blue.shade50])
+                : const LinearGradient(colors: [Colors.white, Colors.white]),
+            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+            borderRadius: _isPanelScalesOpen
+                ? const BorderRadius.only(
+                    topLeft: Radius.circular(8), topRight: Radius.circular(8))
+                : BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.scale_rounded,
+                          color: Colors.grey.shade800,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 9),
+                        Expanded(
+                          child: Text('Scales',
+                              style: Theme.of(context).textTheme.titleSmall),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Text('Times: $totalTimesScales',
+                            style: Theme.of(context).textTheme.bodySmall),
+                        Text(' • Scales: $totalScales Kg',
+                            style: Theme.of(context).textTheme.bodySmall),
+                      ],
+                    ),
+                  ],
                 ),
+              ),
+              Icon(
+                _isPanelScalesOpen
+                    ? Icons.keyboard_arrow_up_rounded
+                    : Icons.keyboard_arrow_down_rounded,
+                color: Colors.grey,
+                size: 28,
+              ),
+            ],
+          ),
+        );
+      },
+      body: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        margin: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+          borderRadius: _isPanelScalesOpen
+              ? const BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8))
+              : BorderRadius.circular(8),
         ),
-      ],
+        child: (!isLoading && _dataScales != null && _dataScales!.isNotEmpty)
+            ? Column(
+                children: _dataScales!.map((item) {
+                  final isLastIndex = (dataIndex == (_dataScales!.length - 1));
+                  dataIndex++;
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      top: 12,
+                      bottom: isLastIndex ? 12 : 0,
+                    ),
+                    child: BatchItem.scales(
+                      scales: item,
+                      isLastIndex: isLastIndex,
+                    ),
+                  );
+                }).toList(),
+              )
+            : Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(isLoading
+                      ? 'Loading..'
+                      : !isLoading &&
+                              (_dataScales == null || _dataScales!.isEmpty)
+                          ? 'Data is empty.'
+                          : ''),
+                ),
+              ),
+      ),
     );
   }
 }
@@ -476,47 +403,8 @@ class BatchDetailHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Batch Number',
-                      ),
-                      Text(
-                        batch.noBatch,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 24,
-                  color: Colors.grey.shade300,
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Total Scales',
-                      ),
-                      Text(
-                        '${totalScales.toStringAsFixed(2)} KG',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-            color: Colors.grey.shade300,
-          ),
-          Padding(
+          Container(
+            color: Colors.blue.shade50,
             padding: const EdgeInsets.all(12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -524,27 +412,13 @@ class BatchDetailHeader extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Produk',
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          dataProduct != null ? dataProduct!.nameProduct : '-',
-                        ),
-                        // const SizedBox(width: 8),
-                        // CustomBadge(
-                        //   badgeText: dataProduct != null
-                        //       ? dataProduct!.kodeProduct
-                        //       : '-',
-                        // ),
-                      ],
+                    Text(
+                      dataProduct != null ? dataProduct!.nameProduct : '-',
+                      style: Theme.of(context).textTheme.titleSmall!,
                     ),
                     Text(
                       'Tanggal Produksi ${formattedDate(dateStr: batch.dateEquipment)}',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: Colors.grey.shade600,
-                          ),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
@@ -552,32 +426,6 @@ class BatchDetailHeader extends StatelessWidget {
                   badgeText:
                       dataProduct != null ? dataProduct!.kodeProduct : '-',
                 ),
-                // InkWell(
-                //   onTap: dataProduct == null
-                //       ? null
-                //       : () {
-                //           Navigator.push(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (ctx) => FormulaScreen(
-                //                 product: dataProduct!,
-                //               ),
-                //             ),
-                //           );
-                //         },
-                //   child: Padding(
-                //     padding: const EdgeInsets.symmetric(
-                //       horizontal: 8,
-                //       vertical: 4,
-                //     ),
-                //     child: Text(
-                //       dataProduct == null ? '-' : 'Detail Formula',
-                //       style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                //             color: Theme.of(context).primaryColorDark,
-                //           ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -585,13 +433,15 @@ class BatchDetailHeader extends StatelessWidget {
             height: 0,
             color: Colors.grey.shade300,
           ),
-          Padding(
+          Container(
+            // color: Colors.blue.shade50,
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Status',
+                  style: Theme.of(context).textTheme.titleSmall!,
                 ),
                 const SizedBox(height: 8),
                 Row(
