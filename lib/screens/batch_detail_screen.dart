@@ -1,3 +1,4 @@
+import 'package:accordion/accordion.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
@@ -19,15 +20,11 @@ class BatchDetailScreen extends StatefulWidget {
 class _BatchDetailScreenState extends State<BatchDetailScreen> {
   List<BatchModel>? _dataEquipment;
   List<BatchModel>? _dataScales;
-  // List<FormulaModel>? _dataFormula;
-  // TabController? _tabController;
   ProductModel? _dataProduct;
   bool isLoading = true;
   double totalScales = 0.0;
   String totalTimesEquipment = '-';
   String totalTimesScales = '-';
-  bool _isPanelEquipmentOpen = true;
-  bool _isPanelScalesOpen = false;
 
   @override
   void initState() {
@@ -120,261 +117,115 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               dataProduct: _dataProduct,
               totalScales: totalScales,
             ),
-            _expansionSection(context, dataEquipmentIndex, dataScalesIndex),
+            _accordionSection(context, dataEquipmentIndex, dataScalesIndex)
           ],
         ),
       ),
     );
   }
 
-  Padding _expansionSection(
+  Accordion _accordionSection(
       BuildContext context, int dataEquipmentIndex, int dataScalesIndex) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: ExpansionPanelList(
-        elevation: 0,
-        materialGapSize: 0,
-        expandedHeaderPadding: const EdgeInsets.all(0),
-        dividerColor: Colors.transparent,
-        expansionCallback: (panelIndex, isExpanded) {
-          setState(() {
-            if (panelIndex == 0) {
-              _isPanelEquipmentOpen = isExpanded;
-            } else {
-              _isPanelScalesOpen = isExpanded;
-            }
-          });
-        },
+    return Accordion(
+        maxOpenSections: 2,
+        accordionId: 'accordion-batch',
+        headerPadding: const EdgeInsets.all(12),
+        headerBorderRadius: 8,
+        headerBorderWidth: 1,
+        headerBackgroundColorOpened: Colors.blue.shade50,
+        headerBackgroundColor: Colors.white,
+        headerBorderColor: Colors.grey.withAlpha(75),
+        flipRightIconIfOpen: true,
+        rightIcon: const Icon(
+          Icons.keyboard_arrow_down_rounded,
+          color: Colors.grey,
+          size: 28,
+        ),
+        contentBackgroundColor: Colors.white,
+        contentBorderRadius: 8,
+        contentBorderWidth: 1,
+        contentBorderColor: Colors.grey.withAlpha(75),
+        contentHorizontalPadding: 12,
+        contentVerticalPadding: 0,
+        scaleWhenAnimating: false,
         children: [
-          _expansionEquipment(dataEquipmentIndex),
-          _expansionScales(dataScalesIndex),
+          _accordionItem(
+            context,
+            'Equipment',
+            'Times: $totalTimesEquipment',
+            Icons.settings_applications,
+            _dataEquipment,
+            dataEquipmentIndex,
+          ),
+          _accordionItem(
+            context,
+            'Scales',
+            'Times: $totalTimesScales • Scales: $totalScales Kg',
+            Icons.scale_rounded,
+            _dataEquipment,
+            dataEquipmentIndex,
+          ),
+        ]);
+  }
+
+  AccordionSection _accordionItem(
+    BuildContext context,
+    String title,
+    String description,
+    IconData icon,
+    List<BatchModel>? items,
+    int itemIndex,
+  ) {
+    return AccordionSection(
+      isOpen: true,
+      header: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                icon,
+                color: Colors.grey.shade800,
+                size: 20,
+              ),
+              const SizedBox(width: 9),
+              Expanded(
+                child:
+                    Text(title, style: Theme.of(context).textTheme.titleSmall),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
-    );
-  }
-
-  ExpansionPanel _expansionEquipment(int dataIndex) {
-    return ExpansionPanel(
-      hasIcon: false,
-      canTapOnHeader: true,
-      isExpanded: _isPanelEquipmentOpen,
-      backgroundColor: Colors.white,
-      splashColor: Colors.transparent,
-      headerBuilder: (context, isExpanded) {
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            gradient: _isPanelEquipmentOpen
-                ? LinearGradient(
-                    tileMode: TileMode.clamp,
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Colors.blue.shade50, Colors.blue.shade50])
-                : const LinearGradient(colors: [Colors.white, Colors.white]),
-            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-            borderRadius: _isPanelEquipmentOpen
-                ? const BorderRadius.only(
-                    topLeft: Radius.circular(8), topRight: Radius.circular(8))
-                : BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.settings_applications,
-                          color: Colors.grey.shade800,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 9),
-                        Expanded(
-                          child: Text('Equipment',
-                              style: Theme.of(context).textTheme.titleSmall),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text('Times: $totalTimesEquipment',
-                            style: Theme.of(context).textTheme.bodySmall),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Icon(
-                _isPanelEquipmentOpen
-                    ? Icons.keyboard_arrow_up_rounded
-                    : Icons.keyboard_arrow_down_rounded,
-                color: Colors.grey,
-                size: 28,
-              ),
-            ],
-          ),
-        );
-      },
-      body: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        margin: const EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-          borderRadius: _isPanelEquipmentOpen
-              ? const BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8))
-              : BorderRadius.circular(8),
-        ),
-        child:
-            (!isLoading && _dataEquipment != null && _dataEquipment!.isNotEmpty)
-                ? Column(
-                    children: _dataEquipment!.map((item) {
-                      final isLastIndex =
-                          (dataIndex == (_dataEquipment!.length - 1));
-                      dataIndex++;
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          top: 12,
-                          bottom: isLastIndex ? 12 : 0,
-                        ),
-                        child: BatchItem.equipment(
-                          equipment: item,
-                          isLastIndex: isLastIndex,
-                        ),
-                      );
-                    }).toList(),
-                  )
-                : Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Text(isLoading
-                          ? 'Loading..'
-                          : !isLoading &&
-                                  (_dataEquipment == null ||
-                                      _dataEquipment!.isEmpty)
-                              ? 'Data is empty.'
-                              : ''),
-                    ),
+      content: (!isLoading && items != null && items.isNotEmpty)
+          ? Column(
+              children: items.map((item) {
+                final isLastIndex = (itemIndex == (items.length - 1));
+                itemIndex++;
+                return Padding(
+                  padding: EdgeInsets.only(
+                    top: 12,
+                    bottom: isLastIndex ? 12 : 0,
                   ),
-      ),
-    );
-  }
-
-  ExpansionPanel _expansionScales(int dataIndex) {
-    return ExpansionPanel(
-      hasIcon: false,
-      canTapOnHeader: true,
-      isExpanded: _isPanelScalesOpen,
-      backgroundColor: Colors.white,
-      splashColor: Colors.transparent,
-      headerBuilder: (context, isExpanded) {
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.only(top: 12, left: 12, right: 12),
-          decoration: BoxDecoration(
-            gradient: _isPanelScalesOpen
-                ? LinearGradient(
-                    tileMode: TileMode.clamp,
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Colors.blue.shade50, Colors.blue.shade50])
-                : const LinearGradient(colors: [Colors.white, Colors.white]),
-            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-            borderRadius: _isPanelScalesOpen
-                ? const BorderRadius.only(
-                    topLeft: Radius.circular(8), topRight: Radius.circular(8))
-                : BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.scale_rounded,
-                          color: Colors.grey.shade800,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 9),
-                        Expanded(
-                          child: Text('Scales',
-                              style: Theme.of(context).textTheme.titleSmall),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text('Times: $totalTimesScales',
-                            style: Theme.of(context).textTheme.bodySmall),
-                        Text(' • Scales: $totalScales Kg',
-                            style: Theme.of(context).textTheme.bodySmall),
-                      ],
-                    ),
-                  ],
-                ),
+                  child: BatchItem.equipment(
+                    equipment: item,
+                    isLastIndex: isLastIndex,
+                  ),
+                );
+              }).toList(),
+            )
+          : Center(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(isLoading
+                    ? 'Loading..'
+                    : !isLoading && (items == null || items.isEmpty)
+                        ? 'Data is empty.'
+                        : ''),
               ),
-              Icon(
-                _isPanelScalesOpen
-                    ? Icons.keyboard_arrow_up_rounded
-                    : Icons.keyboard_arrow_down_rounded,
-                color: Colors.grey,
-                size: 28,
-              ),
-            ],
-          ),
-        );
-      },
-      body: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        margin: const EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-          borderRadius: _isPanelScalesOpen
-              ? const BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8))
-              : BorderRadius.circular(8),
-        ),
-        child: (!isLoading && _dataScales != null && _dataScales!.isNotEmpty)
-            ? Column(
-                children: _dataScales!.map((item) {
-                  final isLastIndex = (dataIndex == (_dataScales!.length - 1));
-                  dataIndex++;
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      top: 12,
-                      bottom: isLastIndex ? 12 : 0,
-                    ),
-                    child: BatchItem.scales(
-                      scales: item,
-                      isLastIndex: isLastIndex,
-                    ),
-                  );
-                }).toList(),
-              )
-            : Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(isLoading
-                      ? 'Loading..'
-                      : !isLoading &&
-                              (_dataScales == null || _dataScales!.isEmpty)
-                          ? 'Data is empty.'
-                          : ''),
-                ),
-              ),
-      ),
+            ),
     );
   }
 }
