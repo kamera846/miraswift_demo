@@ -162,7 +162,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
             'Scales',
             'Times: $totalTimesScales • Scales: $totalScales Kg',
             Icons.scale_rounded,
-            _dataEquipment,
+            _dataScales,
             dataEquipmentIndex,
           ),
         ]);
@@ -209,10 +209,15 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                     top: 12,
                     bottom: isLastIndex ? 12 : 0,
                   ),
-                  child: BatchItem.equipment(
-                    equipment: item,
-                    isLastIndex: isLastIndex,
-                  ),
+                  child: title == 'Equipment'
+                      ? BatchItem.equipment(
+                          equipment: item,
+                          isLastIndex: isLastIndex,
+                        )
+                      : BatchItem.scales(
+                          scales: item,
+                          isLastIndex: isLastIndex,
+                        ),
                 );
               }).toList(),
             )
