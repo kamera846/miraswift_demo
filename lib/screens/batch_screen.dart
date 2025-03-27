@@ -360,7 +360,9 @@ class _BatchScreenState extends State<BatchScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Icon(
-                            CupertinoIcons.line_horizontal_3_decrease,
+                            isFilterShowed
+                                ? CupertinoIcons.xmark
+                                : CupertinoIcons.line_horizontal_3_decrease,
                             color: isFilterShowed ? Colors.blue : Colors.black,
                           ),
                         ),

@@ -148,6 +148,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
         contentHorizontalPadding: 12,
         contentVerticalPadding: 0,
         scaleWhenAnimating: false,
+        disableScrolling: true,
         children: [
           _accordionItem(
             context,
@@ -251,7 +252,6 @@ class BatchDetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      // padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
@@ -291,7 +291,6 @@ class BatchDetailHeader extends StatelessWidget {
             color: Colors.grey.shade300,
           ),
           Container(
-            // color: Colors.blue.shade50,
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

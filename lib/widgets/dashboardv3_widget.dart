@@ -264,7 +264,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     leftTitleKey: const ['0', '250', '500', '750', '1K'],
                     leftTitleValue: const [0, 250, 500, 750, 1000],
                     heroChartData: chartScalesData,
-                    bottomTitleKey: const ['1', '2', '3', '4', '5', '6', '7'],
+                    bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
                   ),
                   DashboardHeroChart(
                     title: 'Best Time',
@@ -283,7 +283,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     leftTitleKey: const ['0', '5', '10', '15', '20'],
                     leftTitleValue: const [0, 5, 10, 15, 20],
                     heroChartData: chartTimeData,
-                    bottomTitleKey: const ['1', '2', '3', '4', '5', '6', '7'],
+                    bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
                   ),
                 ].map((item) {
                   return Builder(
@@ -664,86 +664,86 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     // ChartScalesYear
     chartScalesYearData.add(
       const HeroChartModel(
-        date: '01 Maret 2025',
-        batch: '1234567890',
-        value: 12000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '02 Maret 2025',
-        batch: '0987654321',
-        value: 15000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '07 Maret 2025',
-        batch: '1231431234',
-        value: 20000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '08 Maret 2025',
-        batch: '9873918273',
-        value: 26000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '09 Maret 2025',
-        batch: '7481379123',
-        value: 22000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '10 Maret 2025',
-        batch: '9709134100',
-        value: 30000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '11 Maret 2025',
-        batch: '0019231099',
-        value: 19000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '12 Maret 2025',
-        batch: '0019231099',
-        value: 27000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '13 Maret 2025',
-        batch: '0019231099',
-        value: 40000,
-      ),
-    );
-    chartScalesYearData.add(
-      const HeroChartModel(
-        date: '14 Maret 2025',
-        batch: '0019231099',
+        date: '01 Jan 2025',
+        batch: '111111',
         value: 50000,
       ),
     );
     chartScalesYearData.add(
       const HeroChartModel(
-        date: '15 Maret 2025',
-        batch: '0019231099',
+        date: '02 Feb 2025',
+        batch: '222222',
+        value: 70000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '07 Mar 2025',
+        batch: '333333',
+        value: 40000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '08 Apr 2025',
+        batch: '444444',
         value: 60000,
       ),
     );
     chartScalesYearData.add(
       const HeroChartModel(
-        date: '16 Maret 2025',
-        batch: '0019231099',
-        value: 72000,
+        date: '09 May 2025',
+        batch: '555555',
+        value: 35000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '10 Jun 2025',
+        batch: '666666',
+        value: 30000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '11 Jul 2025',
+        batch: '777777',
+        value: 38000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '12 Aug 2025',
+        batch: '888888',
+        value: 75000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '13 Sep 2025',
+        batch: '999999',
+        value: 65000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '14 Okt 2025',
+        batch: '101010',
+        value: 78000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '15 Nov 2025',
+        batch: '121212',
+        value: 55000,
+      ),
+    );
+    chartScalesYearData.add(
+      const HeroChartModel(
+        date: '16 Dec 2025',
+        batch: '131313',
+        value: 60000,
       ),
     );
 
@@ -781,51 +781,51 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     // ChartScales
     chartScalesData.add(
       const HeroChartModel(
-        date: '05 Maret 2025',
-        batch: '1234567890',
-        value: 310,
+        date: '05 Jan 2019',
+        batch: '123123',
+        value: 300,
       ),
     );
     chartScalesData.add(
       const HeroChartModel(
-        date: '06 Maret 2025',
-        batch: '0987654321',
-        value: 450,
+        date: '06 Mar 2020',
+        batch: '321321',
+        value: 400,
       ),
     );
     chartScalesData.add(
       const HeroChartModel(
-        date: '07 Maret 2025',
-        batch: '1231431234',
-        value: 750,
+        date: '07 May 2021',
+        batch: '111222',
+        value: 500,
       ),
     );
     chartScalesData.add(
       const HeroChartModel(
-        date: '08 Maret 2025',
-        batch: '9873918273',
-        value: 790,
+        date: '08 Jul 2022',
+        batch: '444333',
+        value: 600,
       ),
     );
     chartScalesData.add(
       const HeroChartModel(
-        date: '09 Maret 2025',
-        batch: '7481379123',
-        value: 650,
+        date: '09 Sep 2023',
+        batch: '111444',
+        value: 700,
       ),
     );
     chartScalesData.add(
       const HeroChartModel(
-        date: '10 Maret 2025',
-        batch: '9709134100',
+        date: '10 Nov 2024',
+        batch: '444111',
+        value: 800,
+      ),
+    );
+    chartScalesData.add(
+      const HeroChartModel(
+        date: '11 Jan 2025',
+        batch: '123321',
         value: 900,
-      ),
-    );
-    chartScalesData.add(
-      const HeroChartModel(
-        date: '11 Maret 2025',
-        batch: '0019231099',
-        value: 880,
       ),
     );
 
@@ -836,51 +836,51 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     // Chart Time
     chartTimeData.add(
       const HeroChartModel(
-        date: '05 Maret 2025',
-        batch: '1234567890',
+        date: '01 Feb 2019',
+        batch: '123123',
+        value: 3,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '02 Apr 2020',
+        batch: '321321',
+        value: 6,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '03 Jun 2021',
+        batch: '111222',
+        value: 9,
+      ),
+    );
+    chartTimeData.add(
+      const HeroChartModel(
+        date: '04 Aug 2022',
+        batch: '444333',
         value: 12,
       ),
     );
     chartTimeData.add(
       const HeroChartModel(
-        date: '06 Maret 2025',
-        batch: '0987654321',
+        date: '05 Okt 2023',
+        batch: '111444',
         value: 15,
       ),
     );
     chartTimeData.add(
       const HeroChartModel(
-        date: '07 Maret 2025',
-        batch: '1231431234',
-        value: 19,
+        date: '06 Dec 2024',
+        batch: '444111',
+        value: 18,
       ),
     );
     chartTimeData.add(
       const HeroChartModel(
-        date: '08 Maret 2025',
-        batch: '9873918273',
-        value: 16,
-      ),
-    );
-    chartTimeData.add(
-      const HeroChartModel(
-        date: '09 Maret 2025',
-        batch: '7481379123',
-        value: 10,
-      ),
-    );
-    chartTimeData.add(
-      const HeroChartModel(
-        date: '10 Maret 2025',
-        batch: '9709134100',
-        value: 17,
-      ),
-    );
-    chartTimeData.add(
-      const HeroChartModel(
-        date: '11 Maret 2025',
-        batch: '0019231099',
-        value: 17.5,
+        date: '07 Feb 2025',
+        batch: '123321',
+        value: 20,
       ),
     );
 

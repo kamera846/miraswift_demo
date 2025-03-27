@@ -42,20 +42,6 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
   int touchedGroupIndex = -1;
 
   @override
-  void initState() {
-    super.initState();
-
-    // List<BarChartGroupData> items = [];
-
-    // widget.listChartValue.asMap().forEach((index, value) {
-    //   items.add(
-    //       makeGroupData(index, value, isTouched: index == touchedGroupIndex));
-    // });
-
-    // showingBarGroups = items;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -201,7 +187,6 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
     );
 
     String text = '';
-    // print('Bottom Value: ${value.toInt()}');
     if (value.toInt() < widget.bottomTitleKey!.length) {
       text = widget.bottomTitleKey![value.toInt()];
     } else {
@@ -224,7 +209,6 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
           toY: y1,
           width: widget.barWidth,
           borderRadius: BorderRadius.circular(4),
-          // color: isTouched ? widget.listColorGradient[0].withAlpha(100) : null,
           gradient: !isTouched
               ? LinearGradient(
                   colors: widget.listColorGradient,
