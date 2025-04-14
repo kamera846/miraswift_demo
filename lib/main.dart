@@ -101,7 +101,7 @@ class _MainAppState extends State<MainApp> {
   }
 
   void changeOpacityValue() {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         opacityValue = 1;
       });

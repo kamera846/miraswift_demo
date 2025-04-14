@@ -185,9 +185,9 @@ class _SpkScreenState extends State<SpkScreen> {
     //                       borderRadius: BorderRadius.circular(24),
     //                     ),
     //                     padding: const EdgeInsets.all(12),
-    //                     child: FormNewProduct(
-    //                       onSubmitted: _submitNewItem,
-    //                     ),
+    //                     child: FormNewSpk(
+    //                         onSubmitted: _submitNewItem,
+    //                         listProduct: _listProduct),
     //                   ),
     //                 ],
     //               ),
@@ -225,7 +225,6 @@ class _SpkScreenState extends State<SpkScreen> {
     String jmlBatch,
     String dateSpk,
     String descSpk,
-    String orderingSpk,
   ) async {
     // print('$idProduct, $jmlBatch, $dateSpk, $descSpk');
     // return;
@@ -237,7 +236,6 @@ class _SpkScreenState extends State<SpkScreen> {
       jmlBatch: jmlBatch,
       dateSpk: dateSpk,
       descSpk: descSpk,
-      orderingSpk: orderingSpk,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
@@ -323,7 +321,6 @@ class _SpkScreenState extends State<SpkScreen> {
     String jmlBatch,
     String dateSpk,
     String descSpk,
-    String orderingSpk,
   ) async {
     // print('$idProduct, $jmlBatch, $dateSpk, $descSpk');
     // return;
@@ -336,7 +333,6 @@ class _SpkScreenState extends State<SpkScreen> {
       jmlBatch: jmlBatch,
       dateSpk: dateSpk,
       descSpk: descSpk,
-      orderingSpk: orderingSpk,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
@@ -427,7 +423,7 @@ class _SpkScreenState extends State<SpkScreen> {
                       color: Colors.blue,
                     ),
                 decoration: InputDecoration(
-                  hintText: 'Click date icon to select',
+                  hintText: 'Click date icon to filter',
                   hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,
                       ),
@@ -698,13 +694,6 @@ class ListSpk extends StatelessWidget {
                     : null,
                 description:
                     'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
-                customLeadingIcon: Badge(
-                  label: Text(item.orderingSpk),
-                  backgroundColor: Colors.blue.withAlpha(180),
-                  textColor: Colors.white,
-                  offset: const Offset(10, -10),
-                  child: const Text('No.'),
-                ),
                 customTrailingIcon: withCustomTrailing
                     ? PopupMenuButton<SpkModel>(
                         icon: const Icon(
