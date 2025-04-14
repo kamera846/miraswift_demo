@@ -18,13 +18,16 @@ class SpkScreen extends StatefulWidget {
 }
 
 class _SpkScreenState extends State<SpkScreen> {
-  List<SpkModel>? _listDate;
-  List<SpkModel>? _listPast;
-  List<SpkModel>? _listNow;
-  List<SpkModel>? _listUpcoming;
+  // List<SpkModel>? _listDate;
+  // List<SpkModel>? _listPast;
+  // List<SpkModel>? _listNow;
+  // List<SpkModel>? _listUpcoming;
+  List<SpkModel>? _listFiltered;
   List<ProductModel> _listProduct = [];
-  bool _isLoading = true;
   SpkModel? _selectedItem;
+  bool _isLoading = true;
+  String _filterStatus = 'all';
+
   final TextEditingController _dateController = TextEditingController();
 
   double _keyboardHeight = 0;
@@ -32,6 +35,9 @@ class _SpkScreenState extends State<SpkScreen> {
   @override
   void initState() {
     super.initState();
+    var dateNow = DateTime.now();
+    _dateController.text = "${dateNow.toLocal()}".split(' ')[0];
+    _filterStatus = 'all';
     _getList();
   }
 
@@ -43,31 +49,34 @@ class _SpkScreenState extends State<SpkScreen> {
 
   void _getList() async {
     setState(() {
-      _listDate = null;
-      _listNow = null;
-      _listUpcoming = null;
-      _listPast = null;
+      // _listDate = null;
+      // _listNow = null;
+      // _listUpcoming = null;
+      // _listPast = null;
+      _listFiltered = null;
       _isLoading = true;
     });
-    if (_dateController.text.isNotEmpty) {
-      await SpkApi().listByDate(
-        date: _dateController.text,
-        onError: (msg) {
-          if (mounted) {
-            showSnackBar(context, msg);
-          }
-        },
-        onCompleted: (data) {
-          setState(() {
-            _listDate = data;
-            _selectedItem = null;
-            _isLoading = false;
-          });
-        },
-      );
-    } else {
-      _getListNow();
-    }
+    // if (_dateController.text.isNotEmpty) {
+    await SpkApi().listWithFilter(
+      date: _dateController.text,
+      status: _filterStatus,
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          // _listDate = data;
+          _listFiltered = data;
+          _selectedItem = null;
+        });
+        _getListProduct();
+      },
+    );
+    // } else {
+    //   _getListNow();
+    // }
   }
 
   void _getListNow() async {
@@ -83,7 +92,7 @@ class _SpkScreenState extends State<SpkScreen> {
       },
       onCompleted: (data) {
         setState(() {
-          _listNow = data;
+          // _listNow = data;
         });
         _getListUpcoming();
       },
@@ -103,7 +112,7 @@ class _SpkScreenState extends State<SpkScreen> {
       },
       onCompleted: (data) {
         setState(() {
-          _listUpcoming = data;
+          // _listUpcoming = data;
         });
         _getListPast();
       },
@@ -123,7 +132,7 @@ class _SpkScreenState extends State<SpkScreen> {
       },
       onCompleted: (data) {
         setState(() {
-          _listPast = data;
+          // _listPast = data;
         });
         _getListProduct();
       },
@@ -388,6 +397,7 @@ class _SpkScreenState extends State<SpkScreen> {
 
     if (pickedDate != null && pickedDate != DateTime.now()) {
       setState(() {
+        _filterStatus = 'all';
         _dateController.text =
             "${pickedDate.toLocal()}".split(' ')[0]; // Format to yyyy-mm-dd
       });
@@ -417,6 +427,12 @@ class _SpkScreenState extends State<SpkScreen> {
             Padding(
               padding: const EdgeInsets.all(12),
               child: TextFormField(
+                onTap: () {
+                  if (!_isLoading) {
+                    FocusScope.of(context).unfocus();
+                    _selectDate(context);
+                  }
+                },
                 controller: _dateController,
                 readOnly: true,
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
@@ -448,27 +464,29 @@ class _SpkScreenState extends State<SpkScreen> {
                   ),
                   prefixIcon: InkWell(
                     onTap: () {
-                      FocusScope.of(context).unfocus();
-                      _selectDate(context);
+                      if (!_isLoading) {
+                        FocusScope.of(context).unfocus();
+                        _selectDate(context);
+                      }
                     },
                     child: const Icon(
                       CupertinoIcons.calendar,
                     ),
                   ),
-                  suffixIcon: _dateController.text.isNotEmpty
-                      ? InkWell(
-                          onTap: () {
-                            FocusScope.of(context).unfocus();
-                            setState(() {
-                              _dateController.clear();
-                            });
-                            _getList();
-                          },
-                          child: const Icon(
-                            CupertinoIcons.xmark_circle_fill,
-                          ),
-                        )
-                      : null,
+                  // suffixIcon: _dateController.text.isNotEmpty
+                  //     ? InkWell(
+                  //         onTap: () {
+                  //           FocusScope.of(context).unfocus();
+                  //           setState(() {
+                  //             _dateController.clear();
+                  //           });
+                  //           _getList();
+                  //         },
+                  //         child: const Icon(
+                  //           CupertinoIcons.xmark_circle_fill,
+                  //         ),
+                  //       )
+                  //     : null,
                 ),
               ),
               // child: DatePickerFormField(
@@ -480,6 +498,63 @@ class _SpkScreenState extends State<SpkScreen> {
               //     _getList();
               //   },
               // ),
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: ['all', 'pending', 'running', 'done', 'stopped']
+                    .map((item) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        if (!_isLoading) {
+                          setState(() {
+                            _filterStatus = item;
+                          });
+                          _getList();
+                        }
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: _filterStatus == item
+                              ? _isLoading
+                                  ? Colors.blue.withAlpha(50)
+                                  : Colors.blue.withAlpha(100)
+                              : _isLoading
+                                  ? Colors.black12
+                                  : Colors.black26,
+                        ),
+                        backgroundColor: _filterStatus == item
+                            ? _isLoading
+                                ? Colors.blue.withAlpha(50)
+                                : Colors.blue.withAlpha(100)
+                            : _isLoading
+                                ? Colors.black12
+                                : Colors.black26,
+                        padding: const EdgeInsets.all(14),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                      child: Text(
+                        item.toUpperCase(),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: _filterStatus == item
+                                  ? _isLoading
+                                      ? Colors.blueAccent
+                                      : Colors.blue
+                                  : _isLoading
+                                      ? Colors.black38
+                                      : Colors.black54,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
             if (_isLoading)
               Container(
@@ -496,129 +571,161 @@ class _SpkScreenState extends State<SpkScreen> {
                   textAlign: TextAlign.center,
                 ),
               )
-            else ...[
-              if ((_listNow == null || _listNow!.isEmpty) &&
-                  (_listPast == null || _listPast!.isEmpty) &&
-                  (_listUpcoming == null || _listUpcoming!.isEmpty) &&
-                  (_listDate == null || _listDate!.isEmpty))
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.all(12),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    'Data is empty.',
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              else if (_dateController.text.isNotEmpty)
-                ListSpk(
-                  title: 'Filter by date',
-                  listItem: _listDate!,
-                  selectedItem: _selectedItem,
-                  onEdit: (item) {
-                    setState(() {
-                      _selectedItem = item;
-                    });
-                    _editItem();
-                  },
-                  // onDelete: (item) {
-                  //   setState(() {
-                  //     _selectedItem = item;
-                  //   });
-                  //   _deleteItem();
-                  // },
-                )
-              else ...[
-                _listNow != null && _listNow!.isNotEmpty
-                    ? ListSpk(
-                        title: 'Now',
-                        listItem: _listNow!,
-                        selectedItem: _selectedItem,
-                        onEdit: (item) {
-                          setState(() {
-                            _selectedItem = item;
-                          });
-                          _editItem();
-                        },
-                        onDelete: (item) {
-                          setState(() {
-                            _selectedItem = item;
-                          });
-                          _deleteItem();
-                        },
-                      )
-                    : const SizedBox.shrink(),
-                _listUpcoming != null && _listUpcoming!.isNotEmpty
-                    ? ListSpk(
-                        title: 'Upcoming Spk',
-                        listItem: _listUpcoming!,
-                        selectedItem: _selectedItem,
-                        onEdit: (item) {
-                          setState(() {
-                            _selectedItem = item;
-                          });
-                          _editItem();
-                        },
-                        onDelete: (item) {
-                          setState(() {
-                            _selectedItem = item;
-                          });
-                          _deleteItem();
-                        },
-                      )
-                    : const SizedBox.shrink(),
-                _listPast != null && _listPast!.isNotEmpty
-                    ? ListSpk(
-                        title: 'Past Spk',
-                        listItem: _listPast!,
-                        selectedItem: _selectedItem,
-                        withCustomTrailing: false,
-                        onEdit: (item) {
-                          setState(() {
-                            _selectedItem = item;
-                          });
-                          _editItem();
-                        },
-                        onDelete: (item) {
-                          setState(() {
-                            _selectedItem = item;
-                          });
-                          _deleteItem();
-                        },
-                        // onReorder: (oldIndex, newIndex) {
-                        //   print('$oldIndex & $newIndex');
-                        //   if (_listPast != null) {
-                        //     setState(() {
-                        //       if (oldIndex < newIndex) {
-                        //         newIndex -= 1;
-                        //       }
-                        //       final SpkModel item =
-                        //           _listPast!.removeAt(oldIndex);
-                        //       _listPast!.insert(newIndex, item);
-                        //       showSnackBar(context,
-                        //           'Sedang mengganti urutan ${item.descSpk} dari $oldIndex ke $newIndex...');
-                        //     });
-                        //     Future.delayed(const Duration(seconds: 2), () {
-                        //       showSnackBar(
-                        //           context, 'Berhasil mengganti urutan');
-                        //       // setState(() {
-                        //       //   final SpkModel item =
-                        //       //       _listPast!.removeAt(newIndex);
-                        //       //   _listPast!.insert(oldIndex, item);
-                        //       //   showSnackBar(context, 'Gagal mengganti urutan');
-                        //       // });
-                        //     });
-                        //   }
-                        // },
-                      )
-                    : const SizedBox.shrink(),
-              ]
-            ]
+            else if (_listFiltered == null || _listFiltered!.isEmpty)
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border:
+                      Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'Data is empty.',
+                  textAlign: TextAlign.center,
+                ),
+              )
+            else
+              ListSpk(
+                listItem: _listFiltered!,
+                selectedItem: _selectedItem,
+                onEdit: (item) {
+                  setState(() {
+                    _selectedItem = item;
+                  });
+                  _editItem();
+                },
+                onDelete: (item) {
+                  setState(() {
+                    _selectedItem = item;
+                  });
+                  _deleteItem();
+                },
+              )
+            // else ...[
+            // if ((_listNow == null || _listNow!.isEmpty) &&
+            //     (_listPast == null || _listPast!.isEmpty) &&
+            //     (_listUpcoming == null || _listUpcoming!.isEmpty) &&
+            //     (_listDate == null || _listDate!.isEmpty))
+            //   Container(
+            //     width: double.infinity,
+            //     margin: const EdgeInsets.all(12),
+            //     padding: const EdgeInsets.all(12),
+            //     decoration: BoxDecoration(
+            //       border:
+            //           Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+            //       borderRadius: BorderRadius.circular(8),
+            //     ),
+            //     child: const Text(
+            //       'Data is empty.',
+            //       textAlign: TextAlign.center,
+            //     ),
+            //   )
+            // else if (_dateController.text.isNotEmpty)
+            //   ListSpk(
+            //     title: 'Filter by date',
+            //     listItem: _listDate!,
+            //     selectedItem: _selectedItem,
+            //     onEdit: (item) {
+            //       setState(() {
+            //         _selectedItem = item;
+            //       });
+            //       _editItem();
+            //     },
+            //     // onDelete: (item) {
+            //     //   setState(() {
+            //     //     _selectedItem = item;
+            //     //   });
+            //     //   _deleteItem();
+            //     // },
+            //   )
+            // else ...[
+            //   _listNow != null && _listNow!.isNotEmpty
+            //       ? ListSpk(
+            //           title: 'Now',
+            //           listItem: _listNow!,
+            //           selectedItem: _selectedItem,
+            //           onEdit: (item) {
+            //             setState(() {
+            //               _selectedItem = item;
+            //             });
+            //             _editItem();
+            //           },
+            //           onDelete: (item) {
+            //             setState(() {
+            //               _selectedItem = item;
+            //             });
+            //             _deleteItem();
+            //           },
+            //         )
+            //       : const SizedBox.shrink(),
+            //   _listUpcoming != null && _listUpcoming!.isNotEmpty
+            //       ? ListSpk(
+            //           title: 'Upcoming Spk',
+            //           listItem: _listUpcoming!,
+            //           selectedItem: _selectedItem,
+            //           onEdit: (item) {
+            //             setState(() {
+            //               _selectedItem = item;
+            //             });
+            //             _editItem();
+            //           },
+            //           onDelete: (item) {
+            //             setState(() {
+            //               _selectedItem = item;
+            //             });
+            //             _deleteItem();
+            //           },
+            //         )
+            //       : const SizedBox.shrink(),
+            //   _listPast != null && _listPast!.isNotEmpty
+            //       ? ListSpk(
+            //           title: 'Past Spk',
+            //           listItem: _listPast!,
+            //           selectedItem: _selectedItem,
+            //           withCustomTrailing: false,
+            //           onEdit: (item) {
+            //             setState(() {
+            //               _selectedItem = item;
+            //             });
+            //             _editItem();
+            //           },
+            //           onDelete: (item) {
+            //             setState(() {
+            //               _selectedItem = item;
+            //             });
+            //             _deleteItem();
+            //           },
+            //           // onReorder: (oldIndex, newIndex) {
+            //           //   print('$oldIndex & $newIndex');
+            //           //   if (_listPast != null) {
+            //           //     setState(() {
+            //           //       if (oldIndex < newIndex) {
+            //           //         newIndex -= 1;
+            //           //       }
+            //           //       final SpkModel item =
+            //           //           _listPast!.removeAt(oldIndex);
+            //           //       _listPast!.insert(newIndex, item);
+            //           //       showSnackBar(context,
+            //           //           'Sedang mengganti urutan ${item.descSpk} dari $oldIndex ke $newIndex...');
+            //           //     });
+            //           //     Future.delayed(const Duration(seconds: 2), () {
+            //           //       showSnackBar(
+            //           //           context, 'Berhasil mengganti urutan');
+            //           //       // setState(() {
+            //           //       //   final SpkModel item =
+            //           //       //       _listPast!.removeAt(newIndex);
+            //           //       //   _listPast!.insert(oldIndex, item);
+            //           //       //   showSnackBar(context, 'Gagal mengganti urutan');
+            //           //       // });
+            //           //     });
+            //           //   }
+            //           // },
+            //         )
+            //       : const SizedBox.shrink(),
+            // ]
+            // ]
           ],
         ),
       ),
@@ -629,7 +736,7 @@ class _SpkScreenState extends State<SpkScreen> {
 class ListSpk extends StatelessWidget {
   const ListSpk({
     super.key,
-    required this.title,
+    this.title,
     required this.listItem,
     this.selectedItem,
     this.withCustomTrailing = true,
@@ -638,7 +745,7 @@ class ListSpk extends StatelessWidget {
     this.onReorder,
   });
 
-  final String title;
+  final String? title;
   final List<SpkModel> listItem;
   final SpkModel? selectedItem;
   final bool withCustomTrailing;
@@ -651,20 +758,23 @@ class ListSpk extends StatelessWidget {
     var index = 0;
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 12, right: 12),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.playlist_add_check_circle,
-                color: Colors.grey,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Text(title, style: Theme.of(context).textTheme.titleSmall),
-            ],
-          ),
-        ),
+        title != null
+            ? Padding(
+                padding: const EdgeInsets.only(left: 12, right: 12),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.playlist_add_check_circle,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(title ?? '',
+                        style: Theme.of(context).textTheme.titleSmall),
+                  ],
+                ),
+              )
+            : const SizedBox.shrink(),
         Container(
           width: double.infinity,
           margin: const EdgeInsets.all(12),
@@ -694,48 +804,68 @@ class ListSpk extends StatelessWidget {
                     : null,
                 description:
                     'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
-                customTrailingIcon: withCustomTrailing
-                    ? PopupMenuButton<SpkModel>(
-                        icon: const Icon(
-                          Icons.more_vert_rounded,
-                          color: Colors.grey,
-                        ),
-                        itemBuilder: (ctx) {
-                          return [
-                            PopupMenuItem<SpkModel>(
-                              onTap: () {
-                                onEdit!(item);
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    CupertinoIcons.pencil_circle_fill,
-                                    color: Colors.orange.withAlpha(150),
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  const Text('Edit')
-                                ],
+                customLeadingIcon: item.statusSpk == 'pending'
+                    ? Icon(
+                        Icons.watch_later_rounded,
+                        color: Colors.grey.shade700,
+                      )
+                    : item.statusSpk == 'running'
+                        ? Icon(
+                            Icons.radio_button_on_rounded,
+                            color: Colors.yellow.shade800,
+                          )
+                        : item.statusSpk == 'done'
+                            ? Icon(
+                                Icons.check_circle_rounded,
+                                color: Colors.green.shade700,
+                              )
+                            : Icon(
+                                Icons.stop_circle_rounded,
+                                color: Colors.red.shade700,
                               ),
+                customTrailingIcon:
+                    withCustomTrailing && item.statusSpk != 'done'
+                        ? PopupMenuButton<SpkModel>(
+                            icon: const Icon(
+                              Icons.more_vert_rounded,
+                              color: Colors.grey,
                             ),
-                            // PopupMenuItem<SpkModel>(
-                            //   onTap: () {
-                            //     onDelete!(item);
-                            //   },
-                            //   child: const Row(
-                            //     children: [
-                            //       Icon(
-                            //         CupertinoIcons.trash_circle_fill,
-                            //         size: 20,
-                            //       ),
-                            //       SizedBox(width: 12),
-                            //       Text('Delete')
-                            //     ],
-                            //   ),
-                            // ),
-                          ];
-                        })
-                    : null,
+                            itemBuilder: (ctx) {
+                              return [
+                                PopupMenuItem<SpkModel>(
+                                  onTap: () {
+                                    onEdit!(item);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.pencil_circle_fill,
+                                        color: Colors.orange.withAlpha(150),
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      const Text('Edit')
+                                    ],
+                                  ),
+                                ),
+                                // PopupMenuItem<SpkModel>(
+                                //   onTap: () {
+                                //     onDelete!(item);
+                                //   },
+                                //   child: const Row(
+                                //     children: [
+                                //       Icon(
+                                //         CupertinoIcons.trash_circle_fill,
+                                //         size: 20,
+                                //       ),
+                                //       SizedBox(width: 12),
+                                //       Text('Delete')
+                                //     ],
+                                //   ),
+                                // ),
+                              ];
+                            })
+                        : null,
               );
             }).toList(),
           ),
