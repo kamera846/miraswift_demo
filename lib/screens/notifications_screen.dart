@@ -53,7 +53,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         actions: [
           PopupMenuButton(
             icon: const Icon(
-              Icons.edit_notifications_rounded,
+              Icons.settings_applications,
             ),
             itemBuilder: (ctx) {
               return [
@@ -70,7 +70,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     children: [
                       Icon(Icons.person),
                       SizedBox(width: 12),
-                      Text('Target Users')
+                      Text('Manage Target Users')
                     ],
                   ),
                 ),

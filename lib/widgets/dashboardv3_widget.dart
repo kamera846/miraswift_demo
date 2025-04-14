@@ -151,10 +151,22 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     border: Border.all(width: 2, color: Colors.white),
                     borderRadius: BorderRadius.circular(100)),
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.logout_rounded,
-                    size: 16,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => const NotificationsScreen(),
+                      ),
+                    ).then(
+                      (value) => getProducts(isLoading: false),
+                    );
+                  },
+                  icon: const Badge(
+                    // label: Text('9999'),
+                    child: Icon(
+                      Icons.notifications,
+                      size: 20,
+                    ),
                   ),
                 ),
               ),
@@ -223,7 +235,70 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              Container(
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.all(16),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.timelapse_rounded,
+                                color: Colors.yellow.shade900,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                'Production is running...',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'EXPANDER GROUT 40KG',
+                            style: Theme.of(context).textTheme.titleMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'Execution number 5 of 10 on batch 101010',
+                            style: Theme.of(context).textTheme.bodySmall,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.stop_circle_rounded,
+                        size: 48,
+                        color: Colors.red.shade800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               CarouselSlider(
                 options: CarouselOptions(),
                 items: [
@@ -427,13 +502,13 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
               ),
               child: DashboardMenuItem(
                 icon: Icons.circle_notifications,
-                surfaceColor: Colors.yellow.shade700,
-                title: 'Notifications',
-                description: '${messages.length} messages',
+                surfaceColor: Colors.purple,
+                title: 'Monitoring',
+                description: 'Looking your equipments in realtime',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (ctx) => const NotificationsScreen(),
+                    builder: (ctx) => const PanelScreen(),
                   ),
                 ).then(
                   (value) => getProducts(isLoading: false),
@@ -448,38 +523,38 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       sliver: SliverList.list(children: [
-        AnimatedBuilder(
-          animation: _animationControllerBody!,
-          builder: (ctx, kChild) => SlideTransition(
-            position: Tween(
-              begin: const Offset(0, 1),
-              end: const Offset(0, 0),
-            ).animate(
-              CurvedAnimation(
-                parent: _animationControllerBody!,
-                curve: Curves.ease,
-              ),
-            ),
-            child: kChild,
-          ),
-          child: SizedBox(
-            height: 150,
-            child: DashboardMenuItem(
-              icon: Icons.build_circle,
-              surfaceColor: Colors.purple,
-              title: 'Monitoring Equipments',
-              description: 'Looking your equipments in realtime',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) => const PanelScreen(),
-                ),
-              ).then(
-                (value) => getProducts(isLoading: false),
-              ),
-            ),
-          ),
-        ),
+        // AnimatedBuilder(
+        //   animation: _animationControllerBody!,
+        //   builder: (ctx, kChild) => SlideTransition(
+        //     position: Tween(
+        //       begin: const Offset(0, 1),
+        //       end: const Offset(0, 0),
+        //     ).animate(
+        //       CurvedAnimation(
+        //         parent: _animationControllerBody!,
+        //         curve: Curves.ease,
+        //       ),
+        //     ),
+        //     child: kChild,
+        //   ),
+        //   child: SizedBox(
+        //     height: 150,
+        //     child: DashboardMenuItem(
+        //       icon: Icons.build_circle,
+        //       surfaceColor: Colors.purple,
+        //       title: 'Monitoring Equipments',
+        //       description: 'Looking your equipments in realtime',
+        //       onTap: () => Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: (ctx) => const PanelScreen(),
+        //         ),
+        //       ).then(
+        //         (value) => getProducts(isLoading: false),
+        //       ),
+        //     ),
+        //   ),
+        // ),
         AnimatedBuilder(
           animation: _animationControllerBody!,
           builder: (ctx, kChild) => SlideTransition(
@@ -497,8 +572,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
           child: Container(
             padding: const EdgeInsets.all(32),
             margin: const EdgeInsets.only(
-              top: 16,
-              bottom: 32,
+              bottom: 16,
             ),
             width: double.infinity,
             decoration: BoxDecoration(
