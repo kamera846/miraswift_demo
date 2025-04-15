@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/screens/product_screen.dart';
-import 'package:miraswift_demo/screens/production_screen.dart';
+import 'package:miraswift_demo/screens/production_list_sreen.dart';
 import 'package:miraswift_demo/widgets/dashboardv3_widget.dart';
 
 class DashboardV3Screen extends StatefulWidget {
@@ -57,12 +56,11 @@ class _DashboarV2dScreenState extends State<DashboardV3Screen> {
   }
 
   void onNavTapped(int index) {
-    print('Bottom Nav Index: $index');
     if (index == 1) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (ctx) => const ProductionScreen(),
+          builder: (ctx) => const ProductionListSreen(),
         ),
       );
     }
