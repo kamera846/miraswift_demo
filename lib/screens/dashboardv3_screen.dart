@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/screens/production_list_sreen.dart';
+import 'package:miraswift_demo/screens/transactions_sreen.dart';
 import 'package:miraswift_demo/widgets/dashboardv3_widget.dart';
 
 class DashboardV3Screen extends StatefulWidget {
@@ -60,7 +60,7 @@ class _DashboarV2dScreenState extends State<DashboardV3Screen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (ctx) => const ProductionListSreen(),
+          builder: (ctx) => const TransactionsSreen(),
         ),
       );
     }

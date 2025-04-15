@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:miraswift_demo/models/transaction_detail_model.dart';
 import 'package:miraswift_demo/models/transaction_model.dart';
 import 'package:miraswift_demo/services/api.dart';
 
@@ -64,9 +63,9 @@ class TransactionApi {
     required String id,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
-    Function(TransactionDetailModel? data)? onCompleted,
+    Function(TransactionModel? data)? onCompleted,
   }) async {
-    TransactionDetailModel? data;
+    TransactionModel? data;
     try {
       final url = Uri.https(baseUrl, 'api/transaction/$id');
       final response = await http.get(
@@ -80,7 +79,7 @@ class TransactionApi {
 
         if (apiResponse.code == 200) {
           if (apiResponse.data != null) {
-            data = TransactionDetailModel.fromJson(apiResponse.data!);
+            data = TransactionModel.fromJson(apiResponse.data!);
           }
           if (onSuccess != null) {
             onSuccess(apiResponse.msg);
@@ -111,7 +110,7 @@ class TransactionApi {
   }
 
   Future<void> create({
-    required List<String> listSpk,
+    required String listSpk,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
     Function()? onCompleted,
@@ -161,69 +160,58 @@ class TransactionApi {
     }
   }
 
-  // Future<void> edit({
-  //   required String id,
-  //   required String productId,
-  //   required String code,
-  //   required String name,
-  //   required String target,
-  //   required String fine,
-  //   required String date,
-  //   required String status,
-  //   required String time,
-  //   Function(String msg)? onSuccess,
-  //   Function(String msg)? onError,
-  //   Function()? onCompleted,
-  // }) async {
-  //   try {
-  //     final url = Uri.https(baseUrl, 'api/transaction/$id');
-  //     final response = await http.post(
-  //       url,
-  //       headers: headerSetup,
-  //       body: jsonEncode(
-  //         {
-  //           'id_product': productId,
-  //           'target_formula': target,
-  //           'fine_formula': fine,
-  //           'kode_material': code,
-  //           'name_material': name,
-  //           'time_target': time,
-  //         },
-  //       ),
-  //     );
+  Future<void> edit({
+    required String idTransaction,
+    required String listSpk,
+    Function(String msg)? onSuccess,
+    Function(String msg)? onError,
+    Function()? onCompleted,
+  }) async {
+    try {
+      final url = Uri.https(baseUrl, 'api/transaction');
+      final response = await http.post(
+        url,
+        headers: headerSetup,
+        body: jsonEncode(
+          {
+            'id_transaction': idTransaction,
+            'list_spk': listSpk,
+          },
+        ),
+      );
 
-  //     if (response.statusCode == 200) {
-  //       final responseBody = json.decode(response.body);
-  //       final apiResponse = ApiResponse.fromJson(responseBody);
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final apiResponse = ApiResponse.fromJson(responseBody);
 
-  //       if (apiResponse.code == 200) {
-  //         if (onSuccess != null) {
-  //           onSuccess(apiResponse.msg);
-  //         }
-  //         return;
-  //       }
+        if (apiResponse.code == 200) {
+          if (onSuccess != null) {
+            onSuccess(apiResponse.msg);
+          }
+          return;
+        }
 
-  //       if (onError != null) {
-  //         onError(apiResponse.msg);
-  //         return;
-  //       }
-  //     } else {
-  //       if (onError != null) {
-  //         onError('$failedRequestText. Status Code: ${response.statusCode}');
-  //         return;
-  //       }
-  //     }
-  //   } catch (e) {
-  //     if (onError != null) {
-  //       onError('$failedRequestText. Exception: $e');
-  //       return;
-  //     }
-  //   } finally {
-  //     if (onCompleted != null) {
-  //       onCompleted();
-  //     }
-  //   }
-  // }
+        if (onError != null) {
+          onError(apiResponse.msg);
+          return;
+        }
+      } else {
+        if (onError != null) {
+          onError('$failedRequestText. Status Code: ${response.statusCode}');
+          return;
+        }
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError('$failedRequestText. Exception: $e');
+        return;
+      }
+    } finally {
+      if (onCompleted != null) {
+        onCompleted();
+      }
+    }
+  }
 
   // Future<void> delete({
   //   required String date,

@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/transaction_model.dart';
+import 'package:miraswift_demo/screens/production_screen.dart';
+import 'package:miraswift_demo/screens/spk_available_screen.dart';
 import 'package:miraswift_demo/services/transaction_api.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
-class ProductionListSreen extends StatefulWidget {
-  const ProductionListSreen({super.key});
+class TransactionsSreen extends StatefulWidget {
+  const TransactionsSreen({super.key});
 
   @override
-  State<ProductionListSreen> createState() => _ProductionListSreenState();
+  State<TransactionsSreen> createState() => _TransactionsSreenState();
 }
 
-class _ProductionListSreenState extends State<ProductionListSreen> {
+class _TransactionsSreenState extends State<TransactionsSreen> {
   List<TransactionModel>? _listFiltered;
   TransactionModel? _selectedItem;
   bool _isLoading = true;
@@ -85,7 +87,20 @@ class _ProductionListSreenState extends State<ProductionListSreen> {
             style: Theme.of(context).textTheme.titleMedium),
         actions: [
           IconButton(
-            onPressed: _isLoading ? null : () {},
+            onPressed: _isLoading
+                ? null
+                : () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => const SpkAvailableScreen(),
+                      ),
+                    ).then(
+                      (value) {
+                        _getList();
+                      },
+                    );
+                  },
             icon: const Icon(
               CupertinoIcons.add_circled_solid,
             ),
@@ -301,6 +316,16 @@ class ListSpk extends StatelessWidget {
               index++;
               return ListTileItem(
                 key: Key('$index'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => ProductionScreen(
+                        idTransaction: item.idTransaction,
+                      ),
+                    ),
+                  );
+                },
                 isSelected: (selectedItem != null &&
                         selectedItem!.idTransaction == item.idTransaction)
                     ? true
@@ -322,7 +347,7 @@ class ListSpk extends StatelessWidget {
                             Icons.timelapse_rounded,
                             color: Colors.yellow.shade900,
                           )
-                        : item.statusTransaction == 'DONE'
+                        : item.statusTransaction == 'COMPLETE'
                             ? Icon(
                                 Icons.check_circle_rounded,
                                 color: Colors.green.shade700,

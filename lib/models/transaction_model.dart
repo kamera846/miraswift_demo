@@ -15,7 +15,7 @@ class TransactionModel {
   final String statusTransaction;
   final String createdAt;
   final String updatedAt;
-  final TransactionDetailModel? detail;
+  final List<TransactionDetailModel>? detail;
 
   TransactionModel copyWith({
     String? idTransaction,
@@ -23,7 +23,7 @@ class TransactionModel {
     String? statusTransaction,
     String? createdAt,
     String? updatedAt,
-    TransactionDetailModel? detail,
+    List<TransactionDetailModel>? detail,
   }) {
     return TransactionModel(
       idTransaction: idTransaction ?? this.idTransaction,
@@ -42,7 +42,11 @@ class TransactionModel {
       statusTransaction: json['status_transaction'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
-      detail: json['detail'],
+      detail: json['detail'] != null
+          ? (json['detail'] as List)
+              .map((e) => TransactionDetailModel.fromJson(e))
+              .toList()
+          : null,
     );
   }
 

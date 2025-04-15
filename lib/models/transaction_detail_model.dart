@@ -48,7 +48,7 @@ class TransactionDetailModel {
       statusTransactionDetail: json['status_transaction_detail'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
-      spk: json['spk'],
+      spk: SpkModel.fromJson(json['spk']),
     );
   }
 

@@ -1,12 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/spk_model.dart';
-import 'package:miraswift_demo/screens/spk_screen.dart';
+import 'package:miraswift_demo/models/transaction_detail_model.dart';
+import 'package:miraswift_demo/models/transaction_model.dart';
+import 'package:miraswift_demo/screens/spk_available_screen.dart';
+import 'package:miraswift_demo/services/transaction_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
 class ProductionScreen extends StatefulWidget {
-  const ProductionScreen({super.key});
+  const ProductionScreen({super.key, required this.idTransaction});
+
+  final String idTransaction;
 
   @override
   State<ProductionScreen> createState() => _ProductionScreenState();
@@ -15,33 +20,48 @@ class ProductionScreen extends StatefulWidget {
 class _ProductionScreenState extends State<ProductionScreen> {
   bool _isLoading = true;
   bool _isStarted = false;
-  List<SpkModel> _listItem = [];
+  TransactionModel? _detailTransaction;
+  List<TransactionDetailModel> _listItem = [];
+  List<SpkModel> _listSpkItem = [];
   SpkModel? _selectedItem = null;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        for (var i = 1; i < 6; i++) {
-          _listItem.add(
-            SpkModel(
-              idSpk: '$i',
-              idProduct: '$i',
-              jmlBatch: '20',
-              dateSpk: '2025-04-15',
-              descSpk: 'Spk $i',
-              statusSpk: 'pending',
-              createdAt: '2025-04-15',
-              updatedAt: '2025-04-15',
-            ),
-          );
-        }
-        _isLoading = false;
-        _selectedItem = null;
-        _isStarted = false;
-      });
+    _getList();
+  }
+
+  void _getList() async {
+    setState(() {
+      _listItem = [];
+      _isLoading = true;
     });
+    await TransactionApi().detail(
+      id: widget.idTransaction,
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          _detailTransaction = data;
+          if (_detailTransaction != null &&
+              _detailTransaction!.detail != null &&
+              _detailTransaction!.detail!.isNotEmpty) {
+            _listItem = _detailTransaction!.detail!;
+
+            for (var element in _listItem) {
+              if (element.spk != null) {
+                _listSpkItem.add(element.spk!);
+              }
+            }
+          }
+          _selectedItem = null;
+          _isLoading = false;
+        });
+      },
+    );
   }
 
   @override
@@ -53,16 +73,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
             style: Theme.of(context).textTheme.titleMedium),
         actions: [
           IconButton(
-            onPressed: _isLoading
-                ? null
-                : () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => const SpkScreen(),
-                      ),
-                    );
-                  },
+            onPressed: _isLoading ? null : _addSpk,
             icon: const Icon(
               CupertinoIcons.add_circled_solid,
             ),
@@ -98,7 +109,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
                               }
 
                               setState(() {
-                                final SpkModel item =
+                                final TransactionDetailModel item =
                                     _listItem.removeAt(oldIndex);
                                 _listItem.insert(newIndex, item);
                               });
@@ -121,7 +132,8 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                     ? true
                                     : false,
                                 badge: '111000222',
-                                title: item.descSpk,
+                                title:
+                                    item.spk != null ? item.spk!.descSpk : '',
                                 border: !isLastIndex
                                     ? Border(
                                         bottom: BorderSide(
@@ -129,7 +141,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                             color: Colors.grey.shade300))
                                     : null,
                                 description:
-                                    'Execution batch 0 of ${item.jmlBatch}',
+                                    'Execution batch 0 of ${item.spk != null ? item.spk!.jmlBatch : ''}',
                                 customLeadingIcon: _isStarted &&
                                             _isLockedItem(item) == false ||
                                         _isStarted == false
@@ -139,7 +151,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                       )
                                     : null,
                                 customTrailingIcon: _isStarted &&
-                                        item.statusSpk == 'done'
+                                        item.statusTransactionDetail == 'DONE'
                                     ? IconButton(
                                         onPressed: () {},
                                         icon: Icon(
@@ -147,27 +159,32 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                           color: Colors.green.shade700,
                                         ),
                                       )
-                                    : _isStarted && item.statusSpk == 'running'
+                                    : _isStarted &&
+                                            item.statusTransactionDetail ==
+                                                'RUNNING'
                                         ? IconButton(
                                             onPressed: () {
                                               int findIndex = _listItem
                                                   .indexWhere((element) =>
-                                                      element.statusSpk ==
-                                                      'running');
+                                                      element
+                                                          .statusTransactionDetail ==
+                                                      'RUNNING');
                                               if (findIndex <=
                                                   (_listItem.length - 1)) {
                                                 setState(() {
                                                   _listItem[findIndex] =
                                                       _listItem[findIndex]
                                                           .copyWith(
-                                                    statusSpk: 'done',
+                                                    statusTransactionDetail:
+                                                        'DONE',
                                                   );
                                                   if (findIndex <=
                                                       (_listItem.length - 1)) {
                                                     _listItem[findIndex + 1] =
                                                         _listItem[findIndex + 1]
                                                             .copyWith(
-                                                      statusSpk: 'running',
+                                                      statusTransactionDetail:
+                                                          'RUNNING',
                                                     );
                                                   }
                                                 });
@@ -189,7 +206,8 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                             ),
                                           )
                                         : _isStarted &&
-                                                item.statusSpk == 'pending'
+                                                item.statusTransactionDetail ==
+                                                    'PENDING'
                                             ? IconButton(
                                                 onPressed: () {},
                                                 icon: Icon(
@@ -222,17 +240,17 @@ class _ProductionScreenState extends State<ProductionScreen> {
                       child: FilledButton(
                         onPressed: () {
                           if (_isStarted) {
-                            int runningItem = _listItem.indexWhere(
-                                (element) => element.statusSpk == 'running');
+                            int runningItem = _listItem.indexWhere((element) =>
+                                element.statusTransactionDetail == 'RUNNING');
                             setState(() {
                               _listItem[runningItem] = _listItem[runningItem]
-                                  .copyWith(statusSpk: 'pending');
+                                  .copyWith(statusTransactionDetail: 'PENDING');
                               _isStarted = false;
                             });
                           } else {
                             setState(() {
-                              _listItem[0] =
-                                  _listItem[0].copyWith(statusSpk: 'running');
+                              _listItem[0] = _listItem[0]
+                                  .copyWith(statusTransactionDetail: 'RUNNING');
                               _isStarted = true;
                             });
                           }
@@ -275,14 +293,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
                         height: 8,
                       ),
                       FilledButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => const SpkScreen(),
-                            ),
-                          );
-                        },
+                        onPressed: _addSpk,
                         child: const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 24),
                           child: Text('Select Spk'),
@@ -307,11 +318,27 @@ class _ProductionScreenState extends State<ProductionScreen> {
     );
   }
 
-  bool _isLockedItem(SpkModel item) {
-    if (item.statusSpk == 'running' || item.statusSpk == 'done') {
+  bool _isLockedItem(TransactionDetailModel item) {
+    if (item.statusTransactionDetail == 'RUNNING' ||
+        item.statusTransactionDetail == 'DONE') {
       return true;
     } else {
       return false;
     }
+  }
+
+  void _addSpk() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => SpkAvailableScreen(
+          idTransaction: widget.idTransaction,
+        ),
+      ),
+    ).then(
+      (value) {
+        _getList();
+      },
+    );
   }
 }

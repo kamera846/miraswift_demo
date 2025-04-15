@@ -56,6 +56,57 @@ class SpkApi {
     }
   }
 
+  Future<List<SpkModel>?> listAvailable({
+    Function(String msg)? onSuccess,
+    Function(String msg)? onError,
+    Function(List<SpkModel>? data)? onCompleted,
+  }) async {
+    List<SpkModel>? data;
+    try {
+      final url = Uri.https(baseUrl, 'api/spk/available');
+      final response = await http.get(
+        url,
+        headers: headerSetup,
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final apiResponse = ApiResponse.fromJsonList(responseBody);
+
+        if (apiResponse.code == 200) {
+          if (apiResponse.listData != null) {
+            data = apiResponse.listData
+                ?.map((item) => SpkModel.fromJson(item))
+                .toList();
+          }
+          if (onSuccess != null) {
+            onSuccess(apiResponse.msg);
+          }
+          return data;
+        }
+
+        if (onError != null) {
+          onError(apiResponse.msg);
+        }
+        return data;
+      } else {
+        if (onError != null) {
+          onError('$failedRequestText. Status Code: ${response.statusCode}');
+        }
+        return data;
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError('$failedRequestText. Exception: $e');
+      }
+      return data;
+    } finally {
+      if (onCompleted != null) {
+        onCompleted(data);
+      }
+    }
+  }
+
   Future<List<SpkModel>?> listByDate({
     required String date,
     Function(String msg)? onSuccess,

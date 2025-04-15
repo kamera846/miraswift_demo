@@ -8,6 +8,7 @@ class SpkModel {
     required this.statusSpk,
     required this.createdAt,
     required this.updatedAt,
+    this.isChecked = false,
   });
 
   final String idSpk;
@@ -18,6 +19,7 @@ class SpkModel {
   final String statusSpk;
   final String createdAt;
   final String updatedAt;
+  final bool isChecked;
 
   SpkModel copyWith({
     String? idSpk,
@@ -28,6 +30,7 @@ class SpkModel {
     String? statusSpk,
     String? createdAt,
     String? updatedAt,
+    bool? isChecked,
   }) {
     return SpkModel(
       idSpk: idSpk ?? this.idSpk,
@@ -38,6 +41,7 @@ class SpkModel {
       statusSpk: statusSpk ?? this.statusSpk,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      isChecked: isChecked ?? this.isChecked,
     );
   }
 
