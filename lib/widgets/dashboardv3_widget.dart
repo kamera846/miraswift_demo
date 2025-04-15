@@ -21,7 +21,9 @@ import 'package:miraswift_demo/widgets/dashboard_hero_chart.dart';
 import 'package:miraswift_demo/widgets/dashboard_menu_item.dart';
 
 class Dashboardv3Widget extends StatefulWidget {
-  const Dashboardv3Widget({super.key});
+  const Dashboardv3Widget({super.key, required this.onLoaded});
+
+  final Function(bool state) onLoaded;
 
   @override
   State<Dashboardv3Widget> createState() => _Dashboardv3WidgetState();
@@ -96,7 +98,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
           opacity: _opacityValue,
           duration: const Duration(milliseconds: 500),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
               color: Colors.blue.withOpacity(0.2),
             ),
@@ -703,10 +705,12 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
           await initAnimations();
           setState(() {
             _isLoading = false;
+            widget.onLoaded(true);
           });
         } else {
           setState(() {
             _isLoading = false;
+            widget.onLoaded(true);
           });
         }
       },

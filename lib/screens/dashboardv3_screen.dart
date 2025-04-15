@@ -9,18 +9,28 @@ class DashboardV3Screen extends StatefulWidget {
 }
 
 class _DashboarV2dScreenState extends State<DashboardV3Screen> {
+  bool onLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: const Dashboardv3Widget(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        onTap: onNavTapped,
-        items: _bottomNavItem,
+      body: Dashboardv3Widget(
+        onLoaded: (bool state) {
+          setState(() {
+            onLoaded = state;
+          });
+        },
       ),
+      bottomNavigationBar: onLoaded
+          ? BottomNavigationBar(
+              currentIndex: 1,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              onTap: onNavTapped,
+              items: _bottomNavItem,
+            )
+          : null,
     );
   }
 

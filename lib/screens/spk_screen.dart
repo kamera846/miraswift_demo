@@ -523,16 +523,16 @@ class _SpkScreenState extends State<SpkScreen> {
                                   ? Colors.blue.withAlpha(50)
                                   : Colors.blue.withAlpha(100)
                               : _isLoading
-                                  ? Colors.black12
-                                  : Colors.black26,
+                                  ? Colors.grey.shade200
+                                  : Colors.black12,
                         ),
                         backgroundColor: _filterStatus == item
                             ? _isLoading
                                 ? Colors.blue.withAlpha(50)
                                 : Colors.blue.withAlpha(100)
                             : _isLoading
-                                ? Colors.black12
-                                : Colors.black26,
+                                ? Colors.grey.shade200
+                                : Colors.black12,
                         padding: const EdgeInsets.all(14),
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -543,10 +543,10 @@ class _SpkScreenState extends State<SpkScreen> {
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               color: _filterStatus == item
                                   ? _isLoading
-                                      ? Colors.blueAccent
+                                      ? Colors.blue.shade200
                                       : Colors.blue
                                   : _isLoading
-                                      ? Colors.black38
+                                      ? Colors.black26
                                       : Colors.black54,
                               fontWeight: FontWeight.bold,
                             ),
@@ -811,8 +811,8 @@ class ListSpk extends StatelessWidget {
                       )
                     : item.statusSpk == 'running'
                         ? Icon(
-                            Icons.radio_button_on_rounded,
-                            color: Colors.yellow.shade800,
+                            Icons.timelapse_rounded,
+                            color: Colors.yellow.shade900,
                           )
                         : item.statusSpk == 'done'
                             ? Icon(
