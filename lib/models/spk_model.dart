@@ -19,6 +19,28 @@ class SpkModel {
   final String createdAt;
   final String updatedAt;
 
+  SpkModel copyWith({
+    String? idSpk,
+    String? idProduct,
+    String? jmlBatch,
+    String? dateSpk,
+    String? descSpk,
+    String? statusSpk,
+    String? createdAt,
+    String? updatedAt,
+  }) {
+    return SpkModel(
+      idSpk: idSpk ?? this.idSpk,
+      idProduct: idProduct ?? this.idProduct,
+      jmlBatch: jmlBatch ?? this.jmlBatch,
+      dateSpk: dateSpk ?? this.dateSpk,
+      descSpk: descSpk ?? this.descSpk,
+      statusSpk: statusSpk ?? this.statusSpk,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
   factory SpkModel.fromJson(Map<String, dynamic> json) {
     return SpkModel(
       idSpk: json['id_spk'] ?? '',
