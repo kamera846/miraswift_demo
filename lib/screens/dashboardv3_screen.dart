@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/screens/chart_screen.dart';
+import 'package:miraswift_demo/screens/settings_screen.dart';
 import 'package:miraswift_demo/screens/transactions_sreen.dart';
 import 'package:miraswift_demo/widgets/dashboardv3_widget.dart';
 
@@ -70,6 +71,14 @@ class _DashboarV2dScreenState extends State<DashboardV3Screen> {
         context,
         MaterialPageRoute(
           builder: (ctx) => const TransactionsSreen(),
+        ),
+      );
+    }
+    if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => const SettingsScreen(),
         ),
       );
     }
