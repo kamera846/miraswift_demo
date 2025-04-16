@@ -23,17 +23,19 @@ class _ProductionScreenState extends State<ProductionScreen> {
   TransactionModel? _detailTransaction;
   List<TransactionDetailModel> _listItem = [];
   List<SpkModel> _listSpkItem = [];
-  SpkModel? _selectedItem = null;
+  SpkModel? _selectedItem;
 
   @override
   void initState() {
     super.initState();
+    _listItem = [];
+    _listSpkItem = [];
+    _detailTransaction = null;
     _getList();
   }
 
   void _getList() async {
     setState(() {
-      _listItem = [];
       _isLoading = true;
     });
     await TransactionApi().detail(
@@ -46,10 +48,12 @@ class _ProductionScreenState extends State<ProductionScreen> {
       onCompleted: (data) {
         setState(() {
           _detailTransaction = data;
+
           if (_detailTransaction != null &&
               _detailTransaction!.detail != null &&
               _detailTransaction!.detail!.isNotEmpty) {
             _listItem = _detailTransaction!.detail!;
+            _isStarted = _detailTransaction?.statusTransaction == 'RUNNING';
 
             for (var element in _listItem) {
               if (element.spk != null) {
@@ -57,7 +61,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
               }
             }
           }
-          _selectedItem = null;
+
           _isLoading = false;
         });
       },
@@ -178,7 +182,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                                     statusTransactionDetail:
                                                         'DONE',
                                                   );
-                                                  if (findIndex <=
+                                                  if (findIndex <
                                                       (_listItem.length - 1)) {
                                                     _listItem[findIndex + 1] =
                                                         _listItem[findIndex + 1]
@@ -239,28 +243,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
                       ),
                       child: FilledButton(
                         onPressed: () {
-                          if (_isStarted) {
-                            int runningItem = _listItem.indexWhere((element) =>
-                                element.statusTransactionDetail == 'RUNNING');
-                            setState(() {
-                              _listItem[runningItem] = _listItem[runningItem]
-                                  .copyWith(statusTransactionDetail: 'PENDING');
-                              _isStarted = false;
-                            });
-                          } else {
-                            setState(() {
-                              _listItem[0] = _listItem[0]
-                                  .copyWith(statusTransactionDetail: 'RUNNING');
-                              _isStarted = true;
-                            });
-                          }
-
-                          List<String> arrayItem = [];
-                          for (var i = 0; i < _listItem.length; i++) {
-                            final item = _listItem[i];
-                            arrayItem.add(item.idSpk);
-                          }
-                          showSnackBar(context, '$arrayItem');
+                          _startButtonHandler();
                         },
                         style: FilledButton.styleFrom(
                           backgroundColor: _isStarted
@@ -337,6 +320,44 @@ class _ProductionScreenState extends State<ProductionScreen> {
       ),
     ).then(
       (value) {
+        _getList();
+      },
+    );
+  }
+
+  void _startButtonHandler() async {
+    if (_isStarted) {
+      //
+    } else {
+      await _startTransaction();
+    }
+
+    List<String> arrayItem = [];
+    for (var i = 0; i < _listItem.length; i++) {
+      final item = _listItem[i];
+      arrayItem.add(item.idSpk);
+    }
+    showSnackBar(context, '$arrayItem');
+  }
+
+  Future _startTransaction() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await TransactionApi().start(
+      idTransaction: widget.idTransaction,
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onSuccess: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: () {
         _getList();
       },
     );
