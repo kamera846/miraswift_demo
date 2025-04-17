@@ -173,7 +173,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           _accordionItem(
             context,
             'Scales',
-            'Times: $totalTimesScales • Scales: $totalScales Kg',
+            'Times: $totalTimesScales • Scales: ${totalScales.toStringAsFixed(2)} Kg',
             Icons.scale_rounded,
             _dataScales,
             dataEquipmentIndex,
