@@ -49,32 +49,44 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
       },
       onCompleted: (dataEquipment, dataScales, dataProduct) {
         if (dataScales != null && dataScales.isNotEmpty) {
-          var startTime = DateTime.parse(dataScales.first.createdAt);
-          var endTime = DateTime.parse(dataScales.last.createdAt);
-          Duration duration = endTime.difference(startTime);
-          String timeFormatted = formatDuration(duration);
+          try {
+            var startTime = DateTime.parse(dataScales.first.createdAt);
+            var endTime = DateTime.parse(dataScales.last.createdAt);
+            Duration duration = endTime.difference(startTime);
+            String timeFormatted = formatDuration(duration);
 
-          setState(() {
-            totalTimesScales = timeFormatted;
-          });
-
-          for (var item in dataScales) {
             setState(() {
-              totalScales += double.parse(item.actualTimbang);
+              totalTimesScales = timeFormatted;
+            });
+
+            for (var item in dataScales) {
+              setState(() {
+                totalScales += double.parse(item.actualTimbang);
+              });
+            }
+          } catch (e) {
+            setState(() {
+              totalScales = 0.0;
             });
           }
         }
 
         if (dataEquipment != null && dataEquipment.isNotEmpty) {
           dataEquipment.sort((a, b) => a.timeOn.compareTo(b.timeOn));
-          var startTime = DateTime.parse(dataEquipment.first.timeOn);
-          var endTime = DateTime.parse(dataEquipment.last.timeOff);
-          Duration duration = endTime.difference(startTime);
-          String timeFormatted = formatDuration(duration);
 
-          setState(() {
-            totalTimesEquipment = timeFormatted;
-          });
+          try {
+            var startTime = DateTime.parse(dataEquipment.first.timeOn);
+            var endTime = DateTime.parse(dataEquipment.last.timeOff);
+            Duration duration = endTime.difference(startTime);
+            String timeFormatted = formatDuration(duration);
+            setState(() {
+              totalTimesEquipment = timeFormatted;
+            });
+          } catch (e) {
+            setState(() {
+              totalTimesEquipment = '-';
+            });
+          }
         }
 
         setState(() {
