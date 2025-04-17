@@ -7,6 +7,7 @@ class ListTileItem extends StatelessWidget {
     required this.title,
     this.isSelected = false,
     this.description,
+    this.rightDescription,
     this.badge,
     this.onTap,
     this.badgeModel,
@@ -17,6 +18,7 @@ class ListTileItem extends StatelessWidget {
 
   final String title;
   final String? description;
+  final String? rightDescription;
   final String? badge;
   final BadgeModel? badgeModel;
   final Widget? customLeadingIcon;
@@ -40,11 +42,15 @@ class ListTileItem extends StatelessWidget {
         children: [
           Text(
             title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           if (description != null)
             Text(
               description!,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     color: Colors.grey.shade600,
                   ),
@@ -55,10 +61,28 @@ class ListTileItem extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (badge != null)
-            CustomBadge(
-              badgeText: badge!,
-              badgeModel: badgeModel,
+          if (badge != null || rightDescription != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Text(
+                    rightDescription ?? '',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Colors.grey.shade600,
+                        ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: CustomBadge(
+                    badgeText: badge ?? '',
+                    badgeModel: badgeModel,
+                  ),
+                ),
+              ],
             ),
           customTrailingIcon ??
               Container(

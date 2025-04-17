@@ -802,6 +802,7 @@ class ListSpk extends StatelessWidget {
                         bottom:
                             BorderSide(width: 1, color: Colors.grey.shade300))
                     : null,
+                rightDescription: item.statusSpk.toUpperCase(),
                 description:
                     'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
                 customLeadingIcon: item.statusSpk == 'pending'

@@ -129,7 +129,7 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
             ),
             child: FilledButton(
               onPressed: _onCreateTransaction,
-              child: const Text('Add Spk to Transaction'),
+              child: const Text('Create Transaction'),
             ),
           ),
         ],

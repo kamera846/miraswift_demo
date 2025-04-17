@@ -165,10 +165,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           PopupMenuButton(
-            icon: const Icon(Icons.arrow_drop_down_circle_rounded),
+            icon: const Icon(
+              Icons.arrow_drop_down_circle_rounded,
+              color: Colors.grey,
+            ),
             itemBuilder: (ctx) => [
               const PopupMenuItem(
-                child: Text('Profile'),
+                child: Text('My Profile'),
               ),
               const PopupMenuItem(
                 child: Text('Edit'),

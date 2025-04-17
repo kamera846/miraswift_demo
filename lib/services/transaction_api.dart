@@ -264,51 +264,105 @@ class TransactionApi {
     }
   }
 
-  // Future<void> delete({
-  //   required String date,
-  //   required String status,
-  //   required String id,
-  //   Function(String msg)? onSuccess,
-  //   Function(String msg)? onError,
-  //   Function()? onCompleted,
-  // }) async {
-  //   try {
-  //     final url = Uri.https(baseUrl, 'api/transaction/$id');
-  //     final response = await http.delete(
-  //       url,
-  //       headers: headerSetup,
-  //     );
+  Future<void> stopTransaction({
+    required String idTransaction,
+    Function(String msg)? onSuccess,
+    Function(String msg)? onError,
+    Function()? onCompleted,
+  }) async {
+    try {
+      final url = Uri.https(baseUrl, 'api/transaction/stop');
+      final response = await http.post(
+        url,
+        headers: headerSetup,
+        body: jsonEncode(
+          {
+            'id_transaction': idTransaction,
+          },
+        ),
+      );
 
-  //     if (response.statusCode == 200) {
-  //       final responseBody = json.decode(response.body);
-  //       final apiResponse = ApiResponse.fromJson(responseBody);
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final apiResponse = ApiResponse.fromJson(responseBody);
 
-  //       if (apiResponse.code == 200) {
-  //         if (onSuccess != null) {
-  //           onSuccess(apiResponse.msg);
-  //         }
-  //         return;
-  //       }
+        if (apiResponse.code == 200) {
+          if (onSuccess != null) {
+            onSuccess(apiResponse.msg);
+          }
+          return;
+        }
 
-  //       if (onError != null) {
-  //         onError(apiResponse.msg);
-  //         return;
-  //       }
-  //     } else {
-  //       if (onError != null) {
-  //         onError('$failedRequestText. Status Code: ${response.statusCode}');
-  //         return;
-  //       }
-  //     }
-  //   } catch (e) {
-  //     if (onError != null) {
-  //       onError('$failedRequestText. Exception: $e');
-  //       return;
-  //     }
-  //   } finally {
-  //     if (onCompleted != null) {
-  //       onCompleted();
-  //     }
-  //   }
-  // }
+        if (onError != null) {
+          onError(apiResponse.msg);
+          return;
+        }
+      } else {
+        if (onError != null) {
+          onError('$failedRequestText. Status Code: ${response.statusCode}');
+          return;
+        }
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError('$failedRequestText. Exception: $e');
+        return;
+      }
+    } finally {
+      if (onCompleted != null) {
+        onCompleted();
+      }
+    }
+  }
+
+  Future<void> stopTransactionDetail({
+    required String idTransactionDetail,
+    Function(String msg)? onSuccess,
+    Function(String msg)? onError,
+    Function()? onCompleted,
+  }) async {
+    try {
+      final url = Uri.https(baseUrl, 'api/transaction/stop');
+      final response = await http.post(
+        url,
+        headers: headerSetup,
+        body: jsonEncode(
+          {
+            'id_transaction_detail': idTransactionDetail,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final apiResponse = ApiResponse.fromJson(responseBody);
+
+        if (apiResponse.code == 200) {
+          if (onSuccess != null) {
+            onSuccess(apiResponse.msg);
+          }
+          return;
+        }
+
+        if (onError != null) {
+          onError(apiResponse.msg);
+          return;
+        }
+      } else {
+        if (onError != null) {
+          onError('$failedRequestText. Status Code: ${response.statusCode}');
+          return;
+        }
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError('$failedRequestText. Exception: $e');
+        return;
+      }
+    } finally {
+      if (onCompleted != null) {
+        onCompleted();
+      }
+    }
+  }
 }

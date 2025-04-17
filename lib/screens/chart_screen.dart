@@ -94,24 +94,28 @@ class _ChartScreenState extends State<ChartScreen> {
               bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
             ),
           ].map((item) {
-            return AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                padding: EdgeInsets.only(
-                  left: 12,
-                  top: 12,
-                  right: 12,
-                  bottom: item.bottomTitleKey != null ? 0 : 12,
+            return Hero(
+              tag: item.title,
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: EdgeInsets.only(
+                    left: 12,
+                    top: 12,
+                    right: 12,
+                    bottom: item.bottomTitleKey != null ? 0 : 12,
+                  ),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlue.withAlpha(10),
+                    border: Border.all(
+                        width: 2, color: Colors.lightBlue.withAlpha(25)),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: item,
                 ),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.lightBlue.withAlpha(10),
-                  border: Border.all(
-                      width: 2, color: Colors.lightBlue.withAlpha(25)),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: item,
               ),
             );
           }).toList(),

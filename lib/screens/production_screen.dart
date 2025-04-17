@@ -146,6 +146,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                     : null,
                                 description:
                                     'Execution batch 0 of ${item.spk != null ? item.spk!.jmlBatch : ''}',
+                                rightDescription: item.statusTransactionDetail,
                                 customLeadingIcon: _isStarted &&
                                             _isLockedItem(item) == false ||
                                         _isStarted == false
@@ -168,41 +169,8 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                                 'RUNNING'
                                         ? IconButton(
                                             onPressed: () {
-                                              int findIndex = _listItem
-                                                  .indexWhere((element) =>
-                                                      element
-                                                          .statusTransactionDetail ==
-                                                      'RUNNING');
-                                              if (findIndex <=
-                                                  (_listItem.length - 1)) {
-                                                setState(() {
-                                                  _listItem[findIndex] =
-                                                      _listItem[findIndex]
-                                                          .copyWith(
-                                                    statusTransactionDetail:
-                                                        'DONE',
-                                                  );
-                                                  if (findIndex <
-                                                      (_listItem.length - 1)) {
-                                                    _listItem[findIndex + 1] =
-                                                        _listItem[findIndex + 1]
-                                                            .copyWith(
-                                                      statusTransactionDetail:
-                                                          'RUNNING',
-                                                    );
-                                                  }
-                                                });
-
-                                                List<String> arrayItem = [];
-                                                for (var i = 0;
-                                                    i < _listItem.length;
-                                                    i++) {
-                                                  final item = _listItem[i];
-                                                  arrayItem.add(item.idSpk);
-                                                }
-                                                showSnackBar(
-                                                    context, '$arrayItem');
-                                              }
+                                              _stopTransactionDetail(
+                                                  item.idTransactionDetail);
                                             },
                                             icon: Icon(
                                               Icons.stop_circle_rounded,
@@ -215,20 +183,24 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                             ? IconButton(
                                                 onPressed: () {},
                                                 icon: Icon(
-                                                  Icons.timelapse_rounded,
-                                                  color: Colors.yellow.shade800,
+                                                  Icons.watch_later,
+                                                  color: Colors.grey.shade700,
                                                 ),
                                               )
-                                            : IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _listItem.remove(item);
-                                                  });
-                                                },
-                                                icon: const Icon(
-                                                  Icons.delete_rounded,
-                                                ),
-                                              ),
+                                            : _isStarted
+                                                ? const SizedBox(
+                                                    width: 16,
+                                                  )
+                                                : IconButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        _listItem.remove(item);
+                                                      });
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.delete_rounded,
+                                                    ),
+                                                  ),
                               );
                             }).toList(),
                           ),
@@ -302,8 +274,7 @@ class _ProductionScreenState extends State<ProductionScreen> {
   }
 
   bool _isLockedItem(TransactionDetailModel item) {
-    if (item.statusTransactionDetail == 'RUNNING' ||
-        item.statusTransactionDetail == 'DONE') {
+    if (item.statusTransactionDetail != 'PENDING') {
       return true;
     } else {
       return false;
@@ -327,17 +298,10 @@ class _ProductionScreenState extends State<ProductionScreen> {
 
   void _startButtonHandler() async {
     if (_isStarted) {
-      //
+      await _stopTransaction();
     } else {
       await _startTransaction();
     }
-
-    List<String> arrayItem = [];
-    for (var i = 0; i < _listItem.length; i++) {
-      final item = _listItem[i];
-      arrayItem.add(item.idSpk);
-    }
-    showSnackBar(context, '$arrayItem');
   }
 
   Future _startTransaction() async {
@@ -347,6 +311,52 @@ class _ProductionScreenState extends State<ProductionScreen> {
 
     await TransactionApi().start(
       idTransaction: widget.idTransaction,
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onSuccess: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: () {
+        _getList();
+      },
+    );
+  }
+
+  Future _stopTransaction() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await TransactionApi().stopTransaction(
+      idTransaction: widget.idTransaction,
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onSuccess: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: () {
+        _getList();
+      },
+    );
+  }
+
+  Future _stopTransactionDetail(String idTransactionDetail) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await TransactionApi().stopTransactionDetail(
+      idTransactionDetail: idTransactionDetail,
       onError: (msg) {
         if (mounted) {
           showSnackBar(context, msg);

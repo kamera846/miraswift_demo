@@ -29,6 +29,7 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
     var dateNow = DateTime.now();
     _dateController.text = "${dateNow.toLocal()}".split(' ')[0];
     _filterStatus = 'all';
+    _listFiltered = null;
     _getList();
   }
 
@@ -40,7 +41,6 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
 
   void _getList() async {
     setState(() {
-      _listFiltered = null;
       _isLoading = true;
     });
     await TransactionApi().listWithFilter(
@@ -166,10 +166,15 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: ['all', 'pending', 'running', 'done', 'stopped']
-                    .map((item) {
+                children: [
+                  'all',
+                  'pending',
+                  'running',
+                  'complete',
+                  'not_complete'
+                ].map((item) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: OutlinedButton(
                       onPressed: () {
                         if (!_isLoading) {
@@ -251,6 +256,20 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
               )
             else
               ListSpk(
+                onTap: (item) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => ProductionScreen(
+                        idTransaction: item.idTransaction,
+                      ),
+                    ),
+                  ).then(
+                    (value) {
+                      _getList();
+                    },
+                  );
+                },
                 listItem: _listFiltered!,
                 selectedItem: _selectedItem,
               )
@@ -266,6 +285,7 @@ class ListSpk extends StatelessWidget {
     super.key,
     this.title,
     required this.listItem,
+    this.onTap,
     this.selectedItem,
     this.withCustomTrailing = true,
     this.onEdit,
@@ -277,6 +297,7 @@ class ListSpk extends StatelessWidget {
   final List<TransactionModel> listItem;
   final TransactionModel? selectedItem;
   final bool withCustomTrailing;
+  final Function(TransactionModel item)? onTap;
   final Function(TransactionModel item)? onEdit;
   final Function(TransactionModel item)? onDelete;
   final Function(int oldIndex, int newIndex)? onReorder;
@@ -317,14 +338,7 @@ class ListSpk extends StatelessWidget {
               return ListTileItem(
                 key: Key('$index'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => ProductionScreen(
-                        idTransaction: item.idTransaction,
-                      ),
-                    ),
-                  );
+                  onTap != null ? onTap!(item) : null;
                 },
                 isSelected: (selectedItem != null &&
                         selectedItem!.idTransaction == item.idTransaction)
@@ -337,6 +351,14 @@ class ListSpk extends StatelessWidget {
                             BorderSide(width: 1, color: Colors.grey.shade300))
                     : null,
                 description: 'Status ${item.statusTransaction}',
+                customTrailingIcon: IconButton(
+                  onPressed: () {
+                    onTap != null ? onTap!(item) : null;
+                  },
+                  icon: const Icon(
+                    Icons.keyboard_arrow_right_rounded,
+                  ),
+                ),
                 customLeadingIcon: item.statusTransaction == 'PENDING'
                     ? Icon(
                         Icons.watch_later_rounded,

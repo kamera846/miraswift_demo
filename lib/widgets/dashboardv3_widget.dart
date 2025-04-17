@@ -398,21 +398,24 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 ].map((item) {
                   return Builder(
                     builder: (BuildContext context) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        padding: EdgeInsets.only(
-                          left: 12,
-                          top: 12,
-                          right: 12,
-                          bottom: item.bottomTitleKey != null ? 0 : 12,
+                      return Hero(
+                        tag: item.title,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.only(
+                            left: 12,
+                            top: 12,
+                            right: 12,
+                            bottom: item.bottomTitleKey != null ? 0 : 12,
+                          ),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.8),
+                            border: Border.all(width: 2, color: Colors.white),
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: item,
                         ),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.8),
-                          border: Border.all(width: 2, color: Colors.white),
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        child: item,
                       );
                     },
                   );
@@ -536,7 +539,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 child: kChild,
               ),
               child: DashboardMenuItem(
-                icon: Icons.circle_notifications,
+                icon: Icons.build_circle_rounded,
                 surfaceColor: Colors.purple,
                 title: 'Monitoring',
                 description: 'Looking your equipments in realtime',
