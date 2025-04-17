@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/screens/chart_screen.dart';
-import 'package:miraswift_demo/screens/settings_screen.dart';
-import 'package:miraswift_demo/screens/transactions_sreen.dart';
+import 'package:miraswift_demo/widgets/dashboard_bottom_nav.dart';
 import 'package:miraswift_demo/widgets/dashboardv3_widget.dart';
 
 class DashboardV3Screen extends StatefulWidget {
@@ -25,62 +23,7 @@ class _DashboarV2dScreenState extends State<DashboardV3Screen> {
           });
         },
       ),
-      bottomNavigationBar: onLoaded
-          ? BottomNavigationBar(
-              currentIndex: 1,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              onTap: onNavTapped,
-              items: _bottomNavItem,
-            )
-          : null,
+      bottomNavigationBar: onLoaded ? const DashboardBottomNav() : null,
     );
-  }
-
-  List<BottomNavigationBarItem> get _bottomNavItem {
-    return [
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.bar_chart_rounded),
-        label: 'Chart',
-      ),
-      const BottomNavigationBarItem(
-        icon: Badge(
-          label: Text('2'),
-          child: Icon(Icons.play_circle_fill_rounded),
-        ),
-        label: 'Produksi',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.settings),
-        label: 'Settings',
-      ),
-    ];
-  }
-
-  void onNavTapped(int index) {
-    if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => const ChartScreen(),
-        ),
-      );
-    }
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => const TransactionsSreen(),
-        ),
-      );
-    }
-    if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => const SettingsScreen(),
-        ),
-      );
-    }
   }
 }

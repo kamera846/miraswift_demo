@@ -204,61 +204,199 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              userProfile(context),
+              runningProduction(context),
+              chartCarousel(),
+            ],
+          ),
+        ),
+      ]),
+    );
+  }
+
+  CarouselSlider chartCarousel() {
+    return CarouselSlider(
+      options: CarouselOptions(),
+      items: [
+        DashboardHeroChart(
+          barWidth: 16,
+          title: 'Total Scales 2025',
+          unit: 'kg',
+          icon: const Icon(
+            Icons.scale_rounded,
+            color: Colors.blue,
+          ),
+          listColorGradient: const [
+            Colors.blue,
+            Colors.lightBlueAccent,
+          ],
+          chartInterval: 20000,
+          maxChartValue: 80000,
+          listChartValue: chartScaleYearValues,
+          leftTitleKey: const ['0', '20k', '40k', '60k', '80k'],
+          leftTitleValue: const [0, 20000, 40000, 60000, 80000],
+          heroChartData: chartScalesYearData,
+          bottomTitleKey: chartScalesYearBottomTitle,
+        ),
+        DashboardHeroChart(
+          title: 'Best Scales',
+          unit: 'kg',
+          icon: const Icon(
+            Icons.scale_outlined,
+            color: Colors.green,
+          ),
+          listColorGradient: const [
+            Colors.green,
+            Colors.lightGreen,
+          ],
+          chartInterval: 250,
+          maxChartValue: 1000,
+          listChartValue: chartScaleValues,
+          leftTitleKey: const ['0', '250', '500', '750', '1K'],
+          leftTitleValue: const [0, 250, 500, 750, 1000],
+          heroChartData: chartScalesData,
+          bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
+        ),
+        DashboardHeroChart(
+          title: 'Best Time',
+          unit: 'minutes',
+          icon: const Icon(
+            Icons.timelapse_rounded,
+            color: Colors.red,
+          ),
+          listColorGradient: const [
+            Colors.red,
+            Colors.orange,
+          ],
+          maxChartValue: 20,
+          chartInterval: 5,
+          listChartValue: chartTimeValues,
+          leftTitleKey: const ['0', '5', '10', '15', '20'],
+          leftTitleValue: const [0, 5, 10, 15, 20],
+          heroChartData: chartTimeData,
+          bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
+        ),
+      ].map((item) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Hero(
+              tag: item.title,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                padding: EdgeInsets.only(
+                  left: 12,
+                  top: 12,
+                  right: 12,
+                  bottom: item.bottomTitleKey != null ? 0 : 12,
+                ),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  border: Border.all(width: 2, color: Colors.white),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: item,
+              ),
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+
+  InkWell runningProduction(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      splashColor: Colors.blue.withOpacity(0.1),
+      highlightColor: Colors.transparent,
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.all(16),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.8),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white, width: 2),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Hero(
-                        tag: 'username',
-                        child: Text(
-                          "Mochammad Rafli Ramadani",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black.withOpacity(0.3),
-                                offset: const Offset(2.0, 2.0),
-                                blurRadius: 6.0,
-                              ),
-                            ],
-                          ),
-                        ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.timelapse_rounded,
+                        color: Colors.yellow.shade900,
                       ),
-                    ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        'Production is running...',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      "v1.0.0",
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black.withOpacity(0.3),
-                            offset: const Offset(2.0, 2.0),
-                            blurRadius: 6.0,
-                          ),
-                        ],
-                      ),
-                    ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'EXPANDER GROUT 40KG',
+                    style: Theme.of(context).textTheme.titleSmall,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    'Execution number 5 of 10',
+                    style: Theme.of(context).textTheme.bodySmall,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
-              Padding(
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.stop_circle_rounded,
+                size: 48,
+                color: Colors.red.shade800,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Column userProfile(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              flex: 1,
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Hero(
-                  tag: 'usercompany',
+                  tag: 'username',
                   child: Text(
-                    "PT. Top Mortar Indonesia",
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    "Mochammad Rafli Ramadani",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.white,
+                      fontWeight: FontWeight.bold,
                       shadows: [
                         Shadow(
                           color: Colors.black.withOpacity(0.3),
@@ -270,161 +408,45 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.all(16),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.timelapse_rounded,
-                                color: Colors.yellow.shade900,
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                'Production is running...',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            'EXPANDER GROUT 40KG',
-                            style: Theme.of(context).textTheme.titleMedium,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            'Execution number 5 of 10 on batch 101010',
-                            style: Theme.of(context).textTheme.bodySmall,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.stop_circle_rounded,
-                        size: 48,
-                        color: Colors.red.shade800,
-                      ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "v1.0.0",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.3),
+                      offset: const Offset(2.0, 2.0),
+                      blurRadius: 6.0,
                     ),
                   ],
                 ),
               ),
-              CarouselSlider(
-                options: CarouselOptions(),
-                items: [
-                  DashboardHeroChart(
-                    barWidth: 16,
-                    title: 'Total Scales 2025',
-                    unit: 'kg',
-                    icon: const Icon(
-                      Icons.scale_rounded,
-                      color: Colors.blue,
-                    ),
-                    listColorGradient: const [
-                      Colors.blue,
-                      Colors.lightBlueAccent,
-                    ],
-                    chartInterval: 20000,
-                    maxChartValue: 80000,
-                    listChartValue: chartScaleYearValues,
-                    leftTitleKey: const ['0', '20k', '40k', '60k', '80k'],
-                    leftTitleValue: const [0, 20000, 40000, 60000, 80000],
-                    heroChartData: chartScalesYearData,
-                    bottomTitleKey: chartScalesYearBottomTitle,
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Hero(
+            tag: 'usercompany',
+            child: Text(
+              "PT. Top Mortar Indonesia",
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.3),
+                    offset: const Offset(2.0, 2.0),
+                    blurRadius: 6.0,
                   ),
-                  DashboardHeroChart(
-                    title: 'Best Scales',
-                    unit: 'kg',
-                    icon: const Icon(
-                      Icons.scale_outlined,
-                      color: Colors.green,
-                    ),
-                    listColorGradient: const [
-                      Colors.green,
-                      Colors.lightGreen,
-                    ],
-                    chartInterval: 250,
-                    maxChartValue: 1000,
-                    listChartValue: chartScaleValues,
-                    leftTitleKey: const ['0', '250', '500', '750', '1K'],
-                    leftTitleValue: const [0, 250, 500, 750, 1000],
-                    heroChartData: chartScalesData,
-                    bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
-                  ),
-                  DashboardHeroChart(
-                    title: 'Best Time',
-                    unit: 'minutes',
-                    icon: const Icon(
-                      Icons.timelapse_rounded,
-                      color: Colors.red,
-                    ),
-                    listColorGradient: const [
-                      Colors.red,
-                      Colors.orange,
-                    ],
-                    maxChartValue: 20,
-                    chartInterval: 5,
-                    listChartValue: chartTimeValues,
-                    leftTitleKey: const ['0', '5', '10', '15', '20'],
-                    leftTitleValue: const [0, 5, 10, 15, 20],
-                    heroChartData: chartTimeData,
-                    bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
-                  ),
-                ].map((item) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Hero(
-                        tag: item.title,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          padding: EdgeInsets.only(
-                            left: 12,
-                            top: 12,
-                            right: 12,
-                            bottom: item.bottomTitleKey != null ? 0 : 12,
-                          ),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.8),
-                            border: Border.all(width: 2, color: Colors.white),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: item,
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ]),
+      ],
     );
   }
 
@@ -561,38 +583,6 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       sliver: SliverList.list(children: [
-        // AnimatedBuilder(
-        //   animation: _animationControllerBody!,
-        //   builder: (ctx, kChild) => SlideTransition(
-        //     position: Tween(
-        //       begin: const Offset(0, 1),
-        //       end: const Offset(0, 0),
-        //     ).animate(
-        //       CurvedAnimation(
-        //         parent: _animationControllerBody!,
-        //         curve: Curves.ease,
-        //       ),
-        //     ),
-        //     child: kChild,
-        //   ),
-        //   child: SizedBox(
-        //     height: 150,
-        //     child: DashboardMenuItem(
-        //       icon: Icons.build_circle,
-        //       surfaceColor: Colors.purple,
-        //       title: 'Monitoring Equipments',
-        //       description: 'Looking your equipments in realtime',
-        //       onTap: () => Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //           builder: (ctx) => const PanelScreen(),
-        //         ),
-        //       ).then(
-        //         (value) => getProducts(isLoading: false),
-        //       ),
-        //     ),
-        //   ),
-        // ),
         AnimatedBuilder(
           animation: _animationControllerBody!,
           builder: (ctx, kChild) => SlideTransition(
@@ -878,18 +868,6 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
       'O',
       'N',
       'D'
-      // '1',
-      // '2',
-      // '3',
-      // '4',
-      // '5',
-      // '6',
-      // '7',
-      // '8',
-      // '9',
-      // '10',
-      // '11',
-      // '12'
     ];
 
     // ChartScales

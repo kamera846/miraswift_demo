@@ -35,37 +35,28 @@ class ListTileItem extends StatelessWidget {
       selectedTileColor: Theme.of(context).splashColor,
       splashColor: Theme.of(context).splashColor,
       shape: border,
-      contentPadding:
-          const EdgeInsets.only(top: 4, right: 0, bottom: 4, left: 12),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          if (description != null)
-            Text(
-              description!,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Colors.grey.shade600,
-                  ),
-            ),
-        ],
+      contentPadding: const EdgeInsets.only(
+        top: 4,
+        right: 0,
+        bottom: 4,
+        left: 12,
       ),
+      title: titleWidget(context),
       leading: customLeadingIcon,
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (badge != null || rightDescription != null)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+      trailing: trailingWidget(context),
+    );
+  }
+
+  Row trailingWidget(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (badge != null || rightDescription != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (rightDescription != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: Text(
@@ -75,6 +66,7 @@ class ListTileItem extends StatelessWidget {
                         ),
                   ),
                 ),
+              if (badge != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: CustomBadge(
@@ -82,14 +74,36 @@ class ListTileItem extends StatelessWidget {
                     badgeModel: badgeModel,
                   ),
                 ),
-              ],
+            ],
+          ),
+        customTrailingIcon ??
+            Container(
+              margin: const EdgeInsets.only(right: 12),
             ),
-          customTrailingIcon ??
-              Container(
-                margin: const EdgeInsets.only(right: 12),
-              ),
-        ],
-      ),
+      ],
+    );
+  }
+
+  Column titleWidget(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+        if (description != null)
+          Text(
+            description!,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Colors.grey.shade600,
+                ),
+          ),
+      ],
     );
   }
 }

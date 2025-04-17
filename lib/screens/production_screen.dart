@@ -187,11 +187,10 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                                   color: Colors.grey.shade700,
                                                 ),
                                               )
-                                            : _isStarted
-                                                ? const SizedBox(
-                                                    width: 16,
-                                                  )
-                                                : IconButton(
+                                            : _isStarted == false &&
+                                                    item.statusTransactionDetail !=
+                                                        'DONE'
+                                                ? IconButton(
                                                     onPressed: () {
                                                       setState(() {
                                                         _listItem.remove(item);
@@ -200,6 +199,9 @@ class _ProductionScreenState extends State<ProductionScreen> {
                                                     icon: const Icon(
                                                       Icons.delete_rounded,
                                                     ),
+                                                  )
+                                                : const SizedBox(
+                                                    width: 16,
                                                   ),
                               );
                             }).toList(),
