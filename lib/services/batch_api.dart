@@ -79,11 +79,15 @@ class BatchApiService {
       List<BatchModel>? dataEquipment,
       List<BatchModel>? dataScales,
       ProductModel? dataProduct,
+      String? totalEquipmentTime,
+      String? totalMaterialTime,
     )? onCompleted,
   }) async {
     List<BatchModel>? dataEquipment;
     List<BatchModel>? dataScales;
     ProductModel? dataProduct;
+    String? totalEquipmentTime;
+    String? totalMaterialTime;
     try {
       final url = Uri.https(baseUrl, 'api/batch/detail/$batchNumber');
       final response = await http.get(
@@ -109,6 +113,8 @@ class BatchApiService {
           if (apiResponse.dataProduct != null) {
             dataProduct = ProductModel.fromJson(apiResponse.dataProduct!);
           }
+          totalEquipmentTime = apiResponse.totalEquipmentTime;
+          totalMaterialTime = apiResponse.totalMaterialTime;
           if (onSuccess != null) {
             onSuccess(apiResponse.msg);
           }
@@ -132,7 +138,13 @@ class BatchApiService {
       }
     } finally {
       if (onCompleted != null) {
-        onCompleted(dataEquipment, dataScales, dataProduct);
+        onCompleted(
+          dataEquipment,
+          dataScales,
+          dataProduct,
+          totalEquipmentTime,
+          totalMaterialTime,
+        );
       }
     }
   }

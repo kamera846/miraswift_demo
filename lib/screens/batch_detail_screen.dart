@@ -5,6 +5,7 @@ import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/utils/badge.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
+import 'package:miraswift_demo/utils/formatted_time.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/batch_item.dart';
 
@@ -47,18 +48,10 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           showSnackBar(context, msg);
         }
       },
-      onCompleted: (dataEquipment, dataScales, dataProduct) {
+      onCompleted: (dataEquipment, dataScales, dataProduct, totalEquipmentTime,
+          totalMaterialTime) {
         if (dataScales != null && dataScales.isNotEmpty) {
           try {
-            var startTime = DateTime.parse(dataScales.first.createdAt);
-            var endTime = DateTime.parse(dataScales.last.createdAt);
-            Duration duration = endTime.difference(startTime);
-            String timeFormatted = formatDuration(duration);
-
-            setState(() {
-              totalTimesScales = timeFormatted;
-            });
-
             for (var item in dataScales) {
               setState(() {
                 totalScales += double.parse(item.actualTimbang);
@@ -71,25 +64,9 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           }
         }
 
-        if (dataEquipment != null && dataEquipment.isNotEmpty) {
-          dataEquipment.sort((a, b) => a.timeOn.compareTo(b.timeOn));
-
-          try {
-            var startTime = DateTime.parse(dataEquipment.first.timeOn);
-            var endTime = DateTime.parse(dataEquipment.last.timeOff);
-            Duration duration = endTime.difference(startTime);
-            String timeFormatted = formatDuration(duration);
-            setState(() {
-              totalTimesEquipment = timeFormatted;
-            });
-          } catch (e) {
-            setState(() {
-              totalTimesEquipment = '-';
-            });
-          }
-        }
-
         setState(() {
+          totalTimesEquipment = formatTime(totalEquipmentTime ?? '00:00:00');
+          totalTimesScales = formatTime(totalMaterialTime ?? '00:00:00');
           _dataEquipment = dataEquipment;
           _dataScales = dataScales;
           _dataProduct = dataProduct;
@@ -112,8 +89,12 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Batch - ${widget.batch.noBatch}',
-            style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Batch ${widget.batch.noBatch}',
+          style: Theme.of(context).textTheme.titleMedium,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         actions: [
           IconButton(
             onPressed: _getBatchDetail,

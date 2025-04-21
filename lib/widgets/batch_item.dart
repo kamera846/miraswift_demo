@@ -55,10 +55,10 @@ class BatchItem extends StatelessWidget {
           );
           actualDifferent = Text(
             different.toStringAsFixed(1),
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Colors.lightBlue),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Colors.lightBlue,
+                  fontWeight: FontWeight.w500,
+                ),
           );
         } else if (actualTimbang == targetFormula) {
           // pas
@@ -208,23 +208,30 @@ class BatchItem extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                if (scales != null)
+                  Row(
+                    children: [
+                      Text(
+                        '${scales!.actualTimbang} KG',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                      actualIcon,
+                      actualDifferent,
+                    ],
+                  ),
                 if (equipment != null && equipment!.timeElapsed != '0')
                   Text(equipment!.timeElapsed,
                       style: Theme.of(context).textTheme.bodySmall)
-                else if (equipment != null && equipment!.timeElapsed == '0')
+                else if (scales != null && scales!.materialTime != '0')
+                  Text(scales!.materialTime,
+                      style: Theme.of(context).textTheme.bodySmall)
+                else
                   Icon(
                     size: 16,
                     Icons.linear_scale,
                     color: statusColorBorderOff,
-                  )
-                else if (equipment == null)
-                  Row(
-                    children: [
-                      Text('${scales!.actualTimbang} KG',
-                          style: Theme.of(context).textTheme.bodySmall),
-                      actualIcon,
-                      actualDifferent,
-                    ],
                   ),
                 Text(
                   equipment != null

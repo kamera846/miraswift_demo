@@ -6,6 +6,8 @@ class ApiResponse {
   final int code;
   final String status;
   final String msg;
+  final String? totalEquipmentTime;
+  final String? totalMaterialTime;
   final Map<String, dynamic>? data;
   final List<dynamic>? listData;
   final Map<String, dynamic>? detail;
@@ -18,6 +20,8 @@ class ApiResponse {
     required this.code,
     required this.status,
     required this.msg,
+    this.totalEquipmentTime,
+    this.totalMaterialTime,
     this.data,
     this.listData,
     this.detail,
@@ -42,6 +46,8 @@ class ApiResponse {
       code: json['code'] ?? 0,
       status: json['status'] ?? '',
       msg: json['msg'] ?? '',
+      totalEquipmentTime: json['totalEquipmentTime'] ?? '',
+      totalMaterialTime: json['totalMaterialTime'] ?? '',
       listData: json['data'],
       listDetail: json['detail'],
       dataEquipment: json['dataEquipment'],
