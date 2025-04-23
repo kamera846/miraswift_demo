@@ -102,7 +102,8 @@ class BatchItem extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(
+            Flexible(
+              flex: 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -112,6 +113,26 @@ class BatchItem extends StatelessWidget {
                         : scales!.nameBahan,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
+                  if (equipment == null && scales != null) ...[
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Text(
+                            scales!.formula != null
+                                ? 'Target formula ${scales!.formula!.targetFormula} kg (Fine ${scales!.formula!.fineFormula} kg)'
+                                : '-',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: Colors.grey.shade600),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -186,21 +207,6 @@ class BatchItem extends StatelessWidget {
                           )
                       ],
                     ),
-                  ] else if (equipment == null && scales != null) ...[
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          scales!.formula != null
-                              ? 'Target formula ${scales!.formula!.targetFormula} kg (Fine ${scales!.formula!.fineFormula} kg)'
-                              : '-',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(color: Colors.grey.shade600),
-                        ),
-                      ],
-                    )
                   ]
                 ],
               ),
@@ -208,7 +214,7 @@ class BatchItem extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (scales != null)
+                if (scales != null) ...[
                   Row(
                     children: [
                       Text(
@@ -221,11 +227,15 @@ class BatchItem extends StatelessWidget {
                       actualDifferent,
                     ],
                   ),
+                  const SizedBox(
+                    height: 6,
+                  )
+                ],
                 if (equipment != null && equipment!.timeElapsed != '0')
-                  Text(equipment!.timeElapsed,
+                  Text(equipment!.timeElapsed.trim(),
                       style: Theme.of(context).textTheme.bodySmall)
                 else if (scales != null && scales!.materialTime != '0')
-                  Text(scales!.materialTime,
+                  Text(scales!.materialTime.trim(),
                       style: Theme.of(context).textTheme.bodySmall)
                 else
                   Icon(
