@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/transaction_model.dart';
-import 'package:miraswift_demo/screens/production_screen.dart';
+import 'package:miraswift_demo/screens/transaction_detail_screen.dart';
 import 'package:miraswift_demo/screens/spk_available_screen.dart';
 import 'package:miraswift_demo/services/transaction_api.dart';
 import 'package:miraswift_demo/utils/formatted_date.dart';
@@ -260,7 +260,7 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (ctx) => ProductionScreen(
+                      builder: (ctx) => TransactionDetailScreen(
                         idTransaction: item.idTransaction,
                       ),
                     ),

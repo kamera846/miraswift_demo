@@ -8,6 +8,8 @@ class SpkModel {
     required this.statusSpk,
     required this.createdAt,
     required this.updatedAt,
+    required this.excecutedBatch,
+    required this.currentBatch,
     this.isChecked = false,
   });
 
@@ -20,6 +22,8 @@ class SpkModel {
   final String createdAt;
   final String updatedAt;
   final bool isChecked;
+  final String excecutedBatch;
+  final String currentBatch;
 
   SpkModel copyWith({
     String? idSpk,
@@ -31,6 +35,8 @@ class SpkModel {
     String? createdAt,
     String? updatedAt,
     bool? isChecked,
+    String? excecutedBatch,
+    String? currentBatch,
   }) {
     return SpkModel(
       idSpk: idSpk ?? this.idSpk,
@@ -42,6 +48,8 @@ class SpkModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isChecked: isChecked ?? this.isChecked,
+      excecutedBatch: excecutedBatch ?? this.excecutedBatch,
+      currentBatch: currentBatch ?? this.currentBatch,
     );
   }
 
@@ -55,6 +63,8 @@ class SpkModel {
       statusSpk: json['status_spk'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
+      excecutedBatch: json['excecuted_batch'] ?? '',
+      currentBatch: json['current_batch'] ?? '',
     );
   }
 
@@ -67,5 +77,7 @@ class SpkModel {
         'status_spk': statusSpk,
         'created_at': createdAt,
         'updated_at': updatedAt,
+        'excecuted_batch': excecutedBatch,
+        'current_batch': currentBatch,
       };
 }

@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/spk_model.dart';
 import 'package:miraswift_demo/models/transaction_detail_model.dart';
 import 'package:miraswift_demo/models/transaction_model.dart';
+import 'package:miraswift_demo/screens/batch_detail_screen.dart';
 import 'package:miraswift_demo/screens/spk_available_screen.dart';
 import 'package:miraswift_demo/services/transaction_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
-class ProductionScreen extends StatefulWidget {
-  const ProductionScreen({super.key, required this.idTransaction});
+class TransactionDetailScreen extends StatefulWidget {
+  const TransactionDetailScreen({super.key, required this.idTransaction});
 
   final String idTransaction;
 
   @override
-  State<ProductionScreen> createState() => _ProductionScreenState();
+  State<TransactionDetailScreen> createState() =>
+      _TransactionDetailScreenState();
 }
 
-class _ProductionScreenState extends State<ProductionScreen> {
+class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   bool _isLoading = true;
   bool _isStarted = false;
   TransactionModel? _detailTransaction;
@@ -131,21 +133,36 @@ class _ProductionScreenState extends State<ProductionScreen> {
                               index++;
                               return ListTileItem(
                                 key: ValueKey(item),
+                                onTap: () {
+                                  // if (item.spk != null && item.spk!.currentBatch.isNotEmpty) {
+                                  //   Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (ctx) =>
+                                  //           BatchDetailScreen(batch: item.spk!.currentBatch),
+                                  //     ),
+                                  //   );
+                                  // }
+                                },
                                 isSelected: (_selectedItem != null &&
                                         _selectedItem!.idSpk == item.idSpk)
                                     ? true
                                     : false,
-                                badge: '111000222',
+                                badge: item.spk != null
+                                    ? item.spk!.currentBatch
+                                    : '',
                                 title:
                                     item.spk != null ? item.spk!.descSpk : '',
                                 border: !isLastIndex
                                     ? Border(
                                         bottom: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey.shade300))
+                                          width: 1,
+                                          color: Colors.grey.shade300,
+                                        ),
+                                      )
                                     : null,
                                 description:
-                                    'Execution batch 0 of ${item.spk != null ? item.spk!.jmlBatch : ''}',
+                                    'Execution batch ${item.spk != null ? item.spk!.excecutedBatch : ''} of ${item.spk != null ? item.spk!.jmlBatch : ''}',
                                 rightDescription: item.statusTransactionDetail,
                                 customLeadingIcon: _isStarted &&
                                             _isLockedItem(item) == false ||
