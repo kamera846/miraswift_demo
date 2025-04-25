@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:miraswift_demo/models/spk_model.dart';
 import 'package:miraswift_demo/models/transaction_detail_model.dart';
 import 'package:miraswift_demo/models/transaction_model.dart';
-import 'package:miraswift_demo/screens/batch_detail_screen.dart';
 import 'package:miraswift_demo/screens/spk_available_screen.dart';
 import 'package:miraswift_demo/services/transaction_api.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
@@ -119,13 +118,6 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                                     _listItem.removeAt(oldIndex);
                                 _listItem.insert(newIndex, item);
                               });
-
-                              List<String> arrayItem = [];
-                              for (var i = 0; i < _listItem.length; i++) {
-                                final item = _listItem[i];
-                                arrayItem.add(item.idSpk);
-                              }
-                              showSnackBar(context, '$arrayItem');
                             },
                             children: _listItem.map((item) {
                               final isLastIndex =
@@ -165,8 +157,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                                     'Execution batch ${item.spk != null ? item.spk!.excecutedBatch : ''} of ${item.spk != null ? item.spk!.jmlBatch : ''}',
                                 rightDescription: item.statusTransactionDetail,
                                 customLeadingIcon: _isStarted &&
-                                            _isLockedItem(item) == false ||
-                                        _isStarted == false
+                                        (!_isLockedItem(item) || !_isStarted)
                                     ? const Icon(
                                         Icons.drag_indicator_rounded,
                                         color: Colors.black26,
