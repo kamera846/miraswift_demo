@@ -67,6 +67,9 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
         setState(() {
           totalTimesEquipment = formatTime(totalEquipmentTime ?? '00:00:00');
           totalTimesScales = formatTime(totalMaterialTime ?? '00:00:00');
+          if (dataEquipment != null && dataEquipment.isNotEmpty) {
+            dataEquipment.sort((a, b) => a.timeOn.compareTo(b.timeOn));
+          }
           _dataEquipment = dataEquipment;
           _dataScales = dataScales;
           _dataProduct = dataProduct;
