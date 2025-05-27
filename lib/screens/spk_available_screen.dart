@@ -59,85 +59,97 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
         title: Text('Available Spk',
             style: Theme.of(context).textTheme.titleMedium),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  if (_isLoading)
-                    Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.all(12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1, color: Colors.grey.withAlpha(75)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'Loading..',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  else if (_listItem == null || _listItem!.isEmpty)
-                    Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.all(12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1, color: Colors.grey.withAlpha(75)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'Data is empty.',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  else
-                    ListSpk(
-                      listItem: _listItem!,
-                      selectedItem: _selectedItem,
-                      onCheckedChanged: (value, item) {
-                        int findIndex = _listItem!.indexWhere(
-                            (element) => element.idSpk == item.idSpk);
-                        if (findIndex != -1) {
-                          setState(() {
-                            _listItem![findIndex] = _listItem![findIndex]
-                                .copyWith(isChecked: value);
-                            if (_listItem![findIndex].isChecked) {
-                              _selectedSpk.add(_listItem![findIndex].idSpk);
-                            } else {
-                              _selectedSpk.remove(_listItem![findIndex].idSpk);
-                            }
-                          });
-                        }
-                      },
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                if (_isLoading)
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 1, color: Colors.grey.withAlpha(75)),
+                      borderRadius: BorderRadius.circular(8),
                     ),
+                    child: const Text(
+                      'Loading..',
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                else if (_listItem == null || _listItem!.isEmpty)
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 1, color: Colors.grey.withAlpha(75)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'Data is empty.',
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                else ...[
+                  ListSpk(
+                    listItem: _listItem!,
+                    selectedItem: _selectedItem,
+                    onCheckedChanged: (value, item) {
+                      int findIndex = _listItem!
+                          .indexWhere((element) => element.idSpk == item.idSpk);
+                      if (findIndex != -1) {
+                        setState(() {
+                          _listItem![findIndex] =
+                              _listItem![findIndex].copyWith(isChecked: value);
+                          if (_listItem![findIndex].isChecked) {
+                            _selectedSpk.add(_listItem![findIndex].idSpk);
+                          } else {
+                            _selectedSpk.remove(_listItem![findIndex].idSpk);
+                          }
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 84,
+                  )
                 ],
+              ],
+            ),
+          ),
+          if (!_isLoading && _listItem != null && _listItem!.isNotEmpty)
+            Positioned(
+              bottom: 24,
+              left: 24,
+              right: 24,
+              child: ElevatedButton(
+                onPressed: _onCreateTransaction,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _selectedSpk.isEmpty
+                      ? Colors.grey
+                      : Theme.of(context).colorScheme.primary,
+                ),
+                child: const Text(
+                  'Create Transaction',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-          ),
-          Container(
-            color: Colors.white,
-            width: double.infinity,
-            margin: const EdgeInsets.only(
-              left: 12,
-              right: 12,
-              bottom: 12,
-            ),
-            child: FilledButton(
-              onPressed: _onCreateTransaction,
-              child: const Text('Create Transaction'),
-            ),
-          ),
         ],
       ),
     );
   }
 
   void _onCreateTransaction() async {
+    if (_selectedSpk.isEmpty) {
+      return;
+    }
     setState(() {
       _isLoading = true;
     });

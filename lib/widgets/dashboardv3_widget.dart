@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
@@ -17,6 +18,7 @@ import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/services/logmsg_api.dart';
 import 'package:miraswift_demo/services/product_api.dart';
 import 'package:miraswift_demo/services/spk_api.dart';
+import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
 import 'package:miraswift_demo/widgets/dashboard_hero_chart.dart';
 import 'package:miraswift_demo/widgets/dashboard_menu_item.dart';
 
@@ -364,7 +366,7 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
               width: 16,
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: _stopProductionValidation,
               icon: Icon(
                 Icons.stop_circle_rounded,
                 size: 48,
@@ -535,7 +537,9 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 icon: Icons.playlist_add_check_circle,
                 surfaceColor: Colors.red,
                 title: 'Settings SPK',
-                description: '${listSpk.length} items',
+                // description: '${listSpk.length} items',
+                description:
+                    '${listSpk.isNotEmpty ? listSpk.length : 'no'} spk for today',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -699,12 +703,10 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
   }
 
   void getListSpk() async {
-    await SpkApi().list(
-      onError: (msg) {
-        if (mounted) {
-          // showSnackBar(context, msg);
-        }
-      },
+    var dateNow = DateTime.now().toLocal().toString().split(' ')[0];
+    await SpkApi().listWithFilter(
+      date: dateNow,
+      status: 'all',
       onCompleted: (data) {
         setState(() {
           if (data != null) listSpk = data;
@@ -979,5 +981,26 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
     for (var item in chartTimeData) {
       chartTimeValues.add(item.value);
     }
+  }
+
+  void _stopProductionValidation() {
+    showPlatformAlertDialog(
+      context: context,
+      title: 'Warning!!',
+      content:
+          'Are you sure you want to stop EXPANDER GROUT 40KG production proccess?',
+      positiveButtonText: 'Stop Now',
+      onPositivePressed: _stopProduction,
+      positiveButtonTextColor: CupertinoColors.systemRed,
+      negativeButtonText: 'Cancel',
+      onNegativePressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  void _stopProduction() {
+    // Do Something
+    Navigator.of(context).pop();
   }
 }

@@ -5,6 +5,7 @@ import 'package:miraswift_demo/models/transaction_detail_model.dart';
 import 'package:miraswift_demo/models/transaction_model.dart';
 import 'package:miraswift_demo/screens/spk_available_screen.dart';
 import 'package:miraswift_demo/services/transaction_api.dart';
+import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
 import 'package:miraswift_demo/utils/snackbar.dart';
 import 'package:miraswift_demo/widgets/list_tile_item.dart';
 
@@ -177,8 +178,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                                                 'RUNNING'
                                         ? IconButton(
                                             onPressed: () {
-                                              _stopTransactionDetail(
-                                                  item.idTransactionDetail);
+                                              _stopTransactionDetailValidation(
+                                                  item);
                                             },
                                             icon: Icon(
                                               Icons.stop_circle_rounded,
@@ -219,27 +220,22 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 12,
-                        right: 12,
-                        bottom: 12,
+                        left: 24,
+                        right: 24,
+                        bottom: 24,
                       ),
-                      child: FilledButton(
-                        onPressed: () {
-                          _startButtonHandler();
-                        },
-                        style: FilledButton.styleFrom(
+                      child: ElevatedButton(
+                        onPressed: _startStopValidation,
+                        style: ElevatedButton.styleFrom(
                           backgroundColor: _isStarted
                               ? Colors.red.shade800
                               : Colors.green.shade800,
                         ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            _isStarted
-                                ? 'Stop All Production'
-                                : 'Start Production',
-                            textAlign: TextAlign.center,
-                          ),
+                        child: Text(
+                          _isStarted
+                              ? 'Stop All Production'
+                              : 'Start Production',
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -306,6 +302,33 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     );
   }
 
+  void _startStopValidation() async {
+    var title = 'Confirmation!';
+    var content = 'Do you want to start production now?';
+    var positiveButtonText = 'Start Now';
+    var positiveButtonTextColor = CupertinoColors.systemBlue;
+
+    if (_isStarted) {
+      title = 'Warning!!';
+      content = 'Are you sure you want to stop all production proccess?';
+      positiveButtonText = 'Stop Now';
+      positiveButtonTextColor = CupertinoColors.systemRed;
+    }
+
+    showPlatformAlertDialog(
+      context: context,
+      title: title,
+      content: content,
+      positiveButtonText: positiveButtonText,
+      positiveButtonTextColor: positiveButtonTextColor,
+      onPositivePressed: _startButtonHandler,
+      negativeButtonText: 'Cancel',
+      onNegativePressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
   void _startButtonHandler() async {
     if (_isStarted) {
       await _stopTransaction();
@@ -360,7 +383,23 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     );
   }
 
-  Future _stopTransactionDetail(String idTransactionDetail) async {
+  void _stopTransactionDetailValidation(TransactionDetailModel item) {
+    showPlatformAlertDialog(
+      context: context,
+      title: 'Warning!!',
+      content:
+          'Are you sure you want to stop ${item.spk != null ? item.spk!.descSpk : ''} production proccess?',
+      positiveButtonText: 'Stop Now',
+      positiveButtonTextColor: CupertinoColors.systemRed,
+      onPositivePressed: () => _stopTransactionDetail(item.idTransactionDetail),
+      negativeButtonText: 'Cancel',
+      onNegativePressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  void _stopTransactionDetail(String idTransactionDetail) async {
     setState(() {
       _isLoading = true;
     });
