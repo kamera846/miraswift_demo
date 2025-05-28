@@ -28,7 +28,7 @@ class Dashboardv3Widget extends StatefulWidget {
   final Function(bool state) onLoaded;
 
   @override
-  State<Dashboardv3Widget> createState() => _Dashboardv3WidgetState();
+  State<Dashboardv3Widget> createState() => Dashboardv3WidgetState();
 }
 
 final List<DropdownMenuItem<String>> planDropdownItem = List.of([
@@ -46,7 +46,7 @@ final List<DropdownMenuItem<String>> planDropdownItem = List.of([
   ),
 ]);
 
-class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
+class Dashboardv3WidgetState extends State<Dashboardv3Widget>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   AnimationController? _animationControllerHeader;
   AnimationController? _animationControllerBody;
@@ -672,11 +672,6 @@ class _Dashboardv3WidgetState extends State<Dashboardv3Widget>
       _isLoading = isLoading;
     });
     await ProductApi().list(
-      onError: (msg) {
-        if (mounted) {
-          // showSnackBar(context, msg);
-        }
-      },
       onCompleted: (data) {
         setState(() {
           if (data != null) products = data;

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:miraswift_demo/screens/chart_screen.dart';
 import 'package:miraswift_demo/screens/settings_screen.dart';
 import 'package:miraswift_demo/screens/transactions_sreen.dart';
+import 'package:miraswift_demo/widgets/dashboardv3_widget.dart';
 
 class DashboardBottomNav extends StatelessWidget {
-  const DashboardBottomNav({super.key});
+  const DashboardBottomNav({super.key, required this.dashboardKey});
+
+  final GlobalKey<Dashboardv3WidgetState> dashboardKey;
 
   @override
   Widget build(BuildContext context) {
@@ -40,29 +43,23 @@ class DashboardBottomNav extends StatelessWidget {
   }
 
   void onNavTapped(int index, BuildContext context) {
+    Widget nextPage;
+
     if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => const ChartScreen(),
-        ),
-      );
+      nextPage = const ChartScreen();
+    } else if (index == 1) {
+      nextPage = const TransactionsSreen();
+    } else if (index == 2) {
+      nextPage = const SettingsScreen();
+    } else {
+      return;
     }
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => const TransactionsSreen(),
-        ),
-      );
-    }
-    if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => const SettingsScreen(),
-        ),
-      );
-    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (ctx) => nextPage),
+    ).then((_) {
+      dashboardKey.currentState?.getProducts(isLoading: false);
+    });
   }
 }
