@@ -173,108 +173,119 @@ class _BatchScreenState extends State<BatchScreen> {
     );
   }
 
-  Expanded _sectionItems(BuildContext context, int index) {
-    return Expanded(
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          _onScroll(notification); // Menangani scroll
-          return true;
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.lightbulb_circle,
-                      color: Colors.grey,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text('List Batch (${_batchs?.length})',
-                        style: Theme.of(context).textTheme.titleSmall),
-                  ],
+  Widget _sectionItems(BuildContext context, int index) {
+    return (!isLoading && _batchs != null && _batchs!.isNotEmpty)
+        ? Expanded(
+            // child: NotificationListener<ScrollNotification>(
+            //   onNotification: (notification) {
+            //     _onScroll(notification); // Menangani scroll
+            //     return true;
+            //   },
+            // child: Column(
+            //   children: [
+            //     Padding(
+            //       padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
+            //       child: Row(
+            //         children: [
+            //           const Icon(
+            //             Icons.lightbulb_circle,
+            //             color: Colors.grey,
+            //             size: 20,
+            //           ),
+            //           const SizedBox(width: 8),
+            //           Text('List Batch (${_batchs?.length})',
+            //               style: Theme.of(context).textTheme.titleSmall),
+            //         ],
+            //       ),
+            //     ),
+            //     Expanded(
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(
+                  left: 12, top: 12, right: 12, bottom: 0),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  topRight: Radius.circular(8.0),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border:
-                      Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: (!isLoading && _batchs != null && _batchs!.isNotEmpty)
-                    ? Column(
-                        children: _batchs!.map((item) {
-                          final isLastIndex = (index == (_batchs!.length - 1));
-                          index++;
-                          return Column(
-                            children: [
-                              ListTileItem(
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .push(
-                                        MaterialPageRoute(
-                                          builder: (ctx) =>
-                                              BatchDetailScreen(batch: item),
-                                        ),
-                                      )
-                                      .then((value) => _getBatchs());
-                                },
-                                badge: item.product?.nameProduct,
-                                customTrailingIcon: IconButton(
-                                  onPressed: () {
-                                    FocusScope.of(context).unfocus();
-                                    Navigator.of(context)
-                                        .push(
-                                          MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                BatchDetailScreen(batch: item),
-                                          ),
-                                        )
-                                        .then((value) => _getBatchs());
-                                  },
-                                  icon: const Icon(
-                                    Icons.chevron_right_rounded,
-                                    color: Colors.grey,
+              child: ListView.builder(
+                itemCount: _batchs?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final item = _batchs![index];
+                  final isLastIndex = (index == (_batchs!.length - 1));
+                  index++;
+                  return Column(
+                    children: [
+                      ListTileItem(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(
+                                MaterialPageRoute(
+                                  builder: (ctx) =>
+                                      BatchDetailScreen(batch: item),
+                                ),
+                              )
+                              .then((value) => _getBatchs());
+                        },
+                        badge: item.product?.nameProduct,
+                        customTrailingIcon: IconButton(
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                            Navigator.of(context)
+                                .push(
+                                  MaterialPageRoute(
+                                    builder: (ctx) =>
+                                        BatchDetailScreen(batch: item),
                                   ),
-                                ),
-                                title: item.noBatch,
-                                description:
-                                    formattedDate(dateStr: item.dateEquipment),
-                              ),
-                              if (!isLastIndex)
-                                Divider(
-                                  height: 0,
-                                  color: Colors.grey.shade300,
-                                ),
-                            ],
-                          );
-                        }).toList(),
-                      )
-                    : Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            isLoading
-                                ? 'Loading..'
-                                : !isLoading &&
-                                        (_batchs == null || _batchs!.isEmpty)
-                                    ? _emptyMessage
-                                    : '',
-                            textAlign: TextAlign.center,
+                                )
+                                .then((value) => _getBatchs());
+                          },
+                          icon: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: Colors.grey,
                           ),
                         ),
+                        title: item.noBatch,
+                        description: formattedDate(dateStr: item.dateEquipment),
                       ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+                      if (!isLastIndex)
+                        Divider(
+                          height: 0,
+                          color: Colors.grey.shade300,
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            //     ),
+            //   ],
+            // ),
+            // ),
+          )
+        : Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  isLoading
+                      ? 'Loading..'
+                      : !isLoading && (_batchs == null || _batchs!.isEmpty)
+                          ? _emptyMessage
+                          : '',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          );
   }
 
   Container _sectionFilter(BuildContext context) {
@@ -283,12 +294,12 @@ class _BatchScreenState extends State<BatchScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          if (isScrolled || isFilterShowed)
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 1,
-            ),
+          // if (isScrolled || isFilterShowed)
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 1,
+          ),
         ],
       ),
       child: Column(
