@@ -215,7 +215,6 @@ class _BatchScreenState extends State<BatchScreen> {
                 itemBuilder: (context, index) {
                   final item = _batchs![index];
                   final isLastIndex = (index == (_batchs!.length - 1));
-                  index++;
                   return Column(
                     children: [
                       ListTileItem(
