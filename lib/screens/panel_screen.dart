@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miraswift_demo/widgets/form_settings_equipment.dart';
 
 class PanelScreen extends StatefulWidget {
   const PanelScreen({super.key});
@@ -23,6 +24,14 @@ class _PanelScreenState extends State<PanelScreen> {
     super.dispose();
   }
 
+  void _settingsEquipment() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const FormSettingsEquipment(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +44,12 @@ class _PanelScreenState extends State<PanelScreen> {
           'Monitoring Equipments',
           style: Theme.of(context).textTheme.titleMedium,
         ),
+        actions: [
+          IconButton(
+            onPressed: _settingsEquipment,
+            icon: const Icon(Icons.settings),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.transparent,
