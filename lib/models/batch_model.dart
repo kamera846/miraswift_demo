@@ -19,6 +19,7 @@ class BatchModel {
     required this.createdAt,
     required this.dateEquipment,
     required this.materialTime,
+    required this.totalEquipmentTime,
     this.formula,
     this.product,
   });
@@ -39,6 +40,7 @@ class BatchModel {
   final String createdAt;
   final String dateEquipment;
   final String materialTime;
+  final String totalEquipmentTime;
   final FormulaModel? formula;
   final ProductModel? product;
 
@@ -60,6 +62,7 @@ class BatchModel {
       createdAt: json['created_at'] ?? '',
       dateEquipment: json['date_equipment'] ?? '',
       materialTime: json['materialTime'] ?? '',
+      totalEquipmentTime: json['totalEquipmentTime'] ?? '',
       formula: json['formula'] != null
           ? FormulaModel.fromJson(json['formula'])
           : null,
@@ -86,6 +89,7 @@ class BatchModel {
         'created_at': createdAt,
         'date_equipment': dateEquipment,
         'materialTime': materialTime,
+        'totalEquipmentTime': totalEquipmentTime,
         'formula': formula,
         'product': product,
       };

@@ -24,7 +24,11 @@ class _BatchScreenState extends State<BatchScreen> {
   final TextEditingController _dateController = TextEditingController();
   bool _searchFocus = false;
   List<BatchModel>? _batchs;
+  List<BatchModel>? _batchFastest;
   bool isLoading = true;
+  bool isLoadMore = false;
+  bool isBatchFastestLoading = true;
+  bool isShowedFastestBatch = false;
   bool isScrolled = false;
   bool isFilterShowed = false;
   String _filteredDate = '';
@@ -32,6 +36,12 @@ class _BatchScreenState extends State<BatchScreen> {
   ProductModel? _selectedProduct;
   List<ProductModel>? _listProduct;
   String _emptyMessage = "Data is empty.";
+
+  int totalItems = 0;
+  int _itemCount = 0;
+  final int _increment = 15;
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -43,19 +53,48 @@ class _BatchScreenState extends State<BatchScreen> {
         });
       },
     );
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        _loadMoreItems();
+      }
+    });
     _getBatchs();
+  }
+
+  void _loadMoreItems() {
+    if (_itemCount < totalItems && !isLoadMore) {
+      setState(() {
+        isLoadMore = true;
+      });
+      Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          setState(() {
+            isLoadMore = false;
+            _itemCount = (_itemCount + _increment).clamp(0, totalItems);
+          });
+        },
+      );
+    }
   }
 
   @override
   void dispose() {
     _focusNode.dispose();
+    _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
-  void _getBatchs() async {
+  void _getBatchs({bool? isSilentRefresh = false}) async {
     setState(() {
-      isLoading = true;
+      isShowedFastestBatch = false;
+      if (isSilentRefresh != true) {
+        isLoading = true;
+        totalItems = 0;
+        _itemCount = 0;
+      }
     });
 
     String? batchNumber;
@@ -76,6 +115,8 @@ class _BatchScreenState extends State<BatchScreen> {
 
     if (_filteredProduct != null) {
       product = _filteredProduct!.kodeProduct;
+      _getFastestBatch(_filteredProduct!.idProduct,
+          isSilentRefresh: isSilentRefresh);
     } else {
       product = null;
     }
@@ -90,12 +131,18 @@ class _BatchScreenState extends State<BatchScreen> {
         }
       },
       onCompleted: (data) {
+        final dataLength = data?.length ?? 0;
         setState(() {
           _batchs = data;
+          totalItems = dataLength;
+          if (dataLength > 15) {
+            _itemCount = 15;
+          } else {
+            _itemCount = dataLength;
+          }
           if (_batchs == null || _batchs!.isEmpty) {
             if (batchNumber != null || date != null || product != null) {
-              _emptyMessage =
-                  'Data is empty. Try to changes your filter settings.';
+              _emptyMessage = 'Data is empty. Try to change your filter.';
             }
           }
         });
@@ -124,19 +171,30 @@ class _BatchScreenState extends State<BatchScreen> {
     );
   }
 
-  void _onScroll(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification) {
-      if (notification.metrics.pixels > 10) {
-        // Jika sudah scroll lebih dari 10
-        setState(() {
-          isScrolled = true;
-        });
-      } else {
-        setState(() {
-          isScrolled = false;
-        });
+  void _getFastestBatch(String idProduct,
+      {bool? isSilentRefresh = false}) async {
+    setState(() {
+      if (isSilentRefresh != true) {
+        isBatchFastestLoading = true;
       }
-    }
+      isShowedFastestBatch = true;
+    });
+    await BatchApiService().batchFastest(
+      idProduct: idProduct,
+      onError: (msg) {
+        if (mounted) {
+          if (isSilentRefresh != true) {
+            showSnackBar(context, msg);
+          }
+        }
+      },
+      onCompleted: (data) {
+        setState(() {
+          _batchFastest = data;
+          isBatchFastestLoading = false;
+        });
+      },
+    );
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -157,8 +215,6 @@ class _BatchScreenState extends State<BatchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int index = 0;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Batch', style: Theme.of(context).textTheme.titleMedium),
@@ -167,58 +223,99 @@ class _BatchScreenState extends State<BatchScreen> {
       body: Column(
         children: [
           _sectionFilter(context),
-          _sectionItems(context, index),
+          Expanded(
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                if (isShowedFastestBatch == true) ...[
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(top: 12, left: 12, right: 12),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.star_rate_rounded,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                              'Best Batch on ${_filteredProduct?.nameProduct} (${_batchFastest?.length ?? 0})',
+                              style: Theme.of(context).textTheme.titleSmall),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _sectionFastest(context),
+                  )
+                ],
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 12, left: 12, right: 12),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.lightbulb_circle,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text('List Batch (${_batchs?.length ?? 0})',
+                            style: Theme.of(context).textTheme.titleSmall),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: _sectionItems(context),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _sectionItems(BuildContext context, int index) {
-    return (!isLoading && _batchs != null && _batchs!.isNotEmpty)
-        ? Expanded(
-            // child: NotificationListener<ScrollNotification>(
-            //   onNotification: (notification) {
-            //     _onScroll(notification); // Menangani scroll
-            //     return true;
-            //   },
-            // child: Column(
-            //   children: [
-            //     Padding(
-            //       padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-            //       child: Row(
-            //         children: [
-            //           const Icon(
-            //             Icons.lightbulb_circle,
-            //             color: Colors.grey,
-            //             size: 20,
-            //           ),
-            //           const SizedBox(width: 8),
-            //           Text('List Batch (${_batchs?.length})',
-            //               style: Theme.of(context).textTheme.titleSmall),
-            //         ],
-            //       ),
-            //     ),
-            //     Expanded(
-            child: Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(
-                  left: 12, top: 12, right: 12, bottom: 0),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  topRight: Radius.circular(8.0),
-                ),
-              ),
-              child: ListView.builder(
-                itemCount: _batchs?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final item = _batchs![index];
-                  final isLastIndex = (index == (_batchs!.length - 1));
-                  return Column(
-                    children: [
-                      ListTileItem(
-                        onTap: () {
+  Container _sectionFastest(BuildContext context) {
+    return (!isBatchFastestLoading &&
+            _batchFastest != null &&
+            _batchFastest!.isNotEmpty)
+        ? Container(
+            width: double.infinity,
+            margin:
+                const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 12),
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListView.builder(
+              itemCount: _batchFastest?.length ?? 0,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final item = _batchFastest![index];
+                final isLastIndex = (index == (_batchFastest!.length - 1));
+                return Column(
+                  children: [
+                    ListTileItem(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (ctx) =>
+                                    BatchDetailScreen(batch: item),
+                              ),
+                            )
+                            .then((value) => _getBatchs(isSilentRefresh: true));
+                      },
+                      badge: _filteredProduct?.kodeProduct ?? '',
+                      customTrailingIcon: IconButton(
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
                           Navigator.of(context)
                               .push(
                                 MaterialPageRoute(
@@ -226,43 +323,116 @@ class _BatchScreenState extends State<BatchScreen> {
                                       BatchDetailScreen(batch: item),
                                 ),
                               )
-                              .then((value) => _getBatchs());
+                              .then(
+                                  (value) => _getBatchs(isSilentRefresh: true));
                         },
-                        badge: item.product?.nameProduct,
-                        customTrailingIcon: IconButton(
-                          onPressed: () {
-                            FocusScope.of(context).unfocus();
-                            Navigator.of(context)
-                                .push(
-                                  MaterialPageRoute(
-                                    builder: (ctx) =>
-                                        BatchDetailScreen(batch: item),
-                                  ),
-                                )
-                                .then((value) => _getBatchs());
-                          },
-                          icon: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: Colors.grey,
-                          ),
+                        icon: const Icon(
+                          Icons.chevron_right_rounded,
+                          color: Colors.grey,
                         ),
-                        title: item.noBatch,
-                        description: formattedDate(dateStr: item.dateEquipment),
                       ),
-                      if (!isLastIndex)
-                        Divider(
-                          height: 0,
-                          color: Colors.grey.shade300,
-                        ),
-                    ],
-                  );
-                },
+                      title: item.noBatch,
+                      description: item.totalEquipmentTime,
+                    ),
+                    if (!isLastIndex)
+                      Divider(
+                        height: 0,
+                        color: Colors.grey.shade300,
+                      ),
+                  ],
+                );
+              },
+            ),
+          )
+        : Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  isBatchFastestLoading
+                      ? 'Loading..'
+                      : !isBatchFastestLoading &&
+                              (_batchFastest == null || _batchFastest!.isEmpty)
+                          ? 'Data is empty.'
+                          : '',
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-            //     ),
-            //   ],
-            // ),
-            // ),
+          );
+  }
+
+  Container _sectionItems(BuildContext context) {
+    return (!isLoading && _batchs != null && _batchs!.isNotEmpty)
+        ? Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListView.builder(
+              itemCount: _itemCount,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final item = _batchs![index];
+                final isLastIndex = (index == (_batchs!.length - 1));
+                return Column(
+                  children: [
+                    ListTileItem(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (ctx) =>
+                                    BatchDetailScreen(batch: item),
+                              ),
+                            )
+                            .then((value) => _getBatchs(isSilentRefresh: true));
+                      },
+                      badge: item.product?.nameProduct,
+                      customTrailingIcon: IconButton(
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          Navigator.of(context)
+                              .push(
+                                MaterialPageRoute(
+                                  builder: (ctx) =>
+                                      BatchDetailScreen(batch: item),
+                                ),
+                              )
+                              .then(
+                                  (value) => _getBatchs(isSilentRefresh: true));
+                        },
+                        icon: const Icon(
+                          Icons.chevron_right_rounded,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      title: item.noBatch,
+                      description: formattedDate(dateStr: item.dateEquipment),
+                    ),
+                    if (!isLastIndex)
+                      Divider(
+                        height: 0,
+                        color: Colors.grey.shade300,
+                      ),
+                    if ((index + 1) == _itemCount && !isLastIndex)
+                      const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text('Loading...'),
+                      ),
+                  ],
+                );
+              },
+            ),
           )
         : Container(
             width: double.infinity,
@@ -293,7 +463,6 @@ class _BatchScreenState extends State<BatchScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          // if (isScrolled || isFilterShowed)
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             spreadRadius: 1,
@@ -639,8 +808,7 @@ class _BatchScreenState extends State<BatchScreen> {
                       ],
                     ),
                   )
-                : const SizedBox
-                    .shrink(), // An empty widget when the filter is hidden
+                : const SizedBox.shrink(),
           ),
         ],
       ),

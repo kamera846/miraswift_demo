@@ -71,6 +71,58 @@ class BatchApiService {
     }
   }
 
+  Future<List<BatchModel>?> batchFastest({
+    String? idProduct,
+    Function(String msg)? onSuccess,
+    Function(String msg)? onError,
+    Function(List<BatchModel>? data)? onCompleted,
+  }) async {
+    List<BatchModel>? data;
+    try {
+      var url = Uri.https(baseUrl, 'api/batch/fastest/$idProduct');
+      final response = await http.get(
+        url,
+        headers: headerSetup,
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final apiResponse = ApiResponse.fromJsonList(responseBody);
+
+        if (apiResponse.code == 200) {
+          if (apiResponse.listData != null) {
+            data = apiResponse.listData
+                ?.map((item) => BatchModel.fromJson(item))
+                .toList();
+          }
+          if (onSuccess != null) {
+            onSuccess(apiResponse.msg);
+          }
+          return data;
+        }
+
+        if (onError != null) {
+          onError(apiResponse.msg);
+        }
+        return data;
+      } else {
+        if (onError != null) {
+          onError('$failedRequestText. Status Code: ${response.statusCode}');
+        }
+        return data;
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError('$failedRequestText. Exception: $e');
+      }
+      return data;
+    } finally {
+      if (onCompleted != null) {
+        onCompleted(data);
+      }
+    }
+  }
+
   Future<void> detail({
     required String batchNumber,
     Function(String msg)? onSuccess,
