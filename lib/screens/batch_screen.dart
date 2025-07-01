@@ -235,7 +235,7 @@ class _BatchScreenState extends State<BatchScreen> {
                       child: Row(
                         children: [
                           const Icon(
-                            Icons.star_rate_rounded,
+                            Icons.leaderboard_rounded,
                             color: Colors.grey,
                             size: 20,
                           ),
@@ -299,6 +299,49 @@ class _BatchScreenState extends State<BatchScreen> {
               itemBuilder: (context, index) {
                 final item = _batchFastest![index];
                 final isLastIndex = (index == (_batchFastest!.length - 1));
+                Badge? leadingIcon;
+
+                if (index == 0) {
+                  leadingIcon = const Badge(
+                    alignment: Alignment(-0.3, -0.45),
+                    backgroundColor: Colors.transparent,
+                    label: Text('1'),
+                    child: Icon(
+                      Icons.emoji_events_rounded,
+                      color: Colors.amber,
+                      size: 40,
+                    ),
+                  );
+                } else if (index == 1) {
+                  leadingIcon = const Badge(
+                    alignment: Alignment(-0.35, -0.35),
+                    backgroundColor: Colors.white,
+                    label: Text(
+                      '2',
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                    child: Icon(
+                      Icons.workspace_premium_rounded,
+                      color: Colors.brown,
+                      size: 40,
+                    ),
+                  );
+                } else if (index == 2) {
+                  leadingIcon = const Badge(
+                    alignment: Alignment(-0.33, -0.13),
+                    backgroundColor: Colors.transparent,
+                    label: Text(
+                      '3',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    child: Icon(
+                      Icons.star_rate_rounded,
+                      color: Colors.grey,
+                      size: 40,
+                    ),
+                  );
+                }
+
                 return Column(
                   children: [
                     ListTileItem(
@@ -312,7 +355,10 @@ class _BatchScreenState extends State<BatchScreen> {
                             )
                             .then((value) => _getBatchs(isSilentRefresh: true));
                       },
-                      badge: _filteredProduct?.kodeProduct ?? '',
+                      title: item.noBatch,
+                      description: 'Total time ${item.totalEquipmentTime}',
+                      badge: _filteredProduct?.nameProduct ?? '',
+                      customLeadingIcon: leadingIcon,
                       customTrailingIcon: IconButton(
                         onPressed: () {
                           FocusScope.of(context).unfocus();
@@ -331,8 +377,6 @@ class _BatchScreenState extends State<BatchScreen> {
                           color: Colors.grey,
                         ),
                       ),
-                      title: item.noBatch,
-                      description: item.totalEquipmentTime,
                     ),
                     if (!isLastIndex)
                       Divider(
@@ -397,6 +441,9 @@ class _BatchScreenState extends State<BatchScreen> {
                             )
                             .then((value) => _getBatchs(isSilentRefresh: true));
                       },
+                      title: item.noBatch,
+                      description:
+                          'SPK GM-380 \u2022 ${formattedDate(dateStr: item.dateEquipment)}',
                       badge: item.product?.nameProduct,
                       customTrailingIcon: IconButton(
                         onPressed: () {
@@ -416,8 +463,6 @@ class _BatchScreenState extends State<BatchScreen> {
                           color: Colors.grey,
                         ),
                       ),
-                      title: item.noBatch,
-                      description: formattedDate(dateStr: item.dateEquipment),
                     ),
                     if (!isLastIndex)
                       Divider(
