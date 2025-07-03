@@ -19,54 +19,44 @@ Future<void> showPlatformAlertDialog({
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
-        return CupertinoPopupSurface(
-          isSurfacePainted: surfacePainted,
-          child: Container(
-            height: surfacePainted ? 240 : double.infinity,
-            padding: const EdgeInsets.all(8),
-            child: CupertinoActionSheet(
-              message: Column(
-                children: [
-                  Text(
-                    title,
-                    style:
-                        CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    content,
-                    style: CupertinoTheme.of(context).textTheme.textStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              actions: [
-                if (negativeButtonText != null && onNegativePressed != null)
-                  CupertinoActionSheetAction(
-                    onPressed: onNegativePressed,
-                    child: Text(
-                      negativeButtonText,
-                      style: TextStyle(
-                        color: negativeButtonTextColor ??
-                            CupertinoColors.systemBlue,
-                      ),
-                    ),
-                  ),
-                CupertinoActionSheetAction(
-                  onPressed: onPositivePressed,
-                  child: Text(
-                    positiveButtonText,
-                    style: TextStyle(
-                      color:
-                          positiveButtonTextColor ?? CupertinoColors.systemBlue,
-                    ),
-                  ),
+        return CupertinoActionSheet(
+          title: Text(
+            title,
+            style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
           ),
+          message: Text(
+            content,
+            style: CupertinoTheme.of(context).textTheme.textStyle,
+          ),
+          actions: [
+            if (negativeButtonText != null && onNegativePressed != null)
+              CupertinoActionSheetAction(
+                onPressed: onNegativePressed,
+                child: Text(
+                  negativeButtonText,
+                  style: CupertinoTheme.of(context)
+                      .textTheme
+                      .actionTextStyle
+                      .copyWith(
+                          color: negativeButtonTextColor ??
+                              CupertinoColors.systemBlue),
+                ),
+              ),
+            CupertinoActionSheetAction(
+              onPressed: onPositivePressed,
+              child: Text(
+                positiveButtonText,
+                style: CupertinoTheme.of(context)
+                    .textTheme
+                    .actionTextStyle
+                    .copyWith(
+                        color: positiveButtonTextColor ??
+                            CupertinoColors.systemBlue),
+              ),
+            ),
+          ],
         );
       },
     );

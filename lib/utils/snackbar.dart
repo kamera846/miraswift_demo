@@ -25,10 +25,17 @@ void showSnackBar(BuildContext context, String message) {
   //     },
   //   );
   // } else {
+  Duration duration = Duration(seconds: 3);
+  if (message.length > 25) {
+    duration = Duration(seconds: 4);
+  } else if (message.length > 50) {
+    duration = Duration(seconds: 5);
+  }
   ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(message),
+      duration: duration,
     ),
   );
   // }

@@ -39,8 +39,8 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
     showPlatformAlertDialog(
       context: context,
       title: 'Warning!',
-      content: 'Apakah anda yakin ingin merubah settingan equipment?',
-      negativeButtonText: 'Batal',
+      content: 'Are you sure you want to change the equipment settings?',
+      negativeButtonText: 'Cancel',
       onNegativePressed: () {
         Navigator.of(context).pop();
       },

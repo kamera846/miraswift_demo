@@ -79,65 +79,65 @@ class _SpkScreenState extends State<SpkScreen> {
     // }
   }
 
-  void _getListNow() async {
-    setState(() {
-      _isLoading = true;
-    });
-    await SpkApi().listByPeriod(
-      period: 'now',
-      onError: (msg) {
-        if (mounted) {
-          showSnackBar(context, msg);
-        }
-      },
-      onCompleted: (data) {
-        setState(() {
-          // _listNow = data;
-        });
-        _getListUpcoming();
-      },
-    );
-  }
+  // void _getListNow() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   await SpkApi().listByPeriod(
+  //     period: 'now',
+  //     onError: (msg) {
+  //       if (mounted) {
+  //         showSnackBar(context, msg);
+  //       }
+  //     },
+  //     onCompleted: (data) {
+  //       setState(() {
+  //         // _listNow = data;
+  //       });
+  //       _getListUpcoming();
+  //     },
+  //   );
+  // }
 
-  void _getListUpcoming() async {
-    setState(() {
-      _isLoading = true;
-    });
-    await SpkApi().listByPeriod(
-      period: 'upcoming',
-      onError: (msg) {
-        if (mounted) {
-          showSnackBar(context, msg);
-        }
-      },
-      onCompleted: (data) {
-        setState(() {
-          // _listUpcoming = data;
-        });
-        _getListPast();
-      },
-    );
-  }
+  // void _getListUpcoming() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   await SpkApi().listByPeriod(
+  //     period: 'upcoming',
+  //     onError: (msg) {
+  //       if (mounted) {
+  //         showSnackBar(context, msg);
+  //       }
+  //     },
+  //     onCompleted: (data) {
+  //       setState(() {
+  //         // _listUpcoming = data;
+  //       });
+  //       _getListPast();
+  //     },
+  //   );
+  // }
 
-  void _getListPast() async {
-    setState(() {
-      _isLoading = true;
-    });
-    await SpkApi().listByPeriod(
-      period: 'past',
-      onError: (msg) {
-        if (mounted) {
-          showSnackBar(context, msg);
-        }
-      },
-      onCompleted: (data) {
-        setState(() {
-          // _listPast = data;
-        });
-        _getListProduct();
-      },
-    );
-  }
+  // void _getListPast() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   await SpkApi().listByPeriod(
+  //     period: 'past',
+  //     onError: (msg) {
+  //       if (mounted) {
+  //         showSnackBar(context, msg);
+  //       }
+  //     },
+  //     onCompleted: (data) {
+  //       setState(() {
+  //         // _listPast = data;
+  //       });
+  //       _getListProduct();
+  //     },
+  //   );
+  // }
 
   void _getListProduct() async {
     await ProductApi().list(
