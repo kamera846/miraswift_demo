@@ -48,7 +48,7 @@ class _MainAppState extends State<MainApp> {
         popupMenuTheme: const PopupMenuThemeData(
           color: Colors.white,
         ),
-        dialogTheme: const DialogThemeData(
+        dialogTheme: const DialogTheme(
           backgroundColor: Colors.white,
         ),
         splashColor: Colors.blue.withOpacity(0.1),
