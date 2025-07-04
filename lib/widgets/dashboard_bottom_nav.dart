@@ -59,7 +59,7 @@ class DashboardBottomNav extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (ctx) => nextPage),
     ).then((_) {
-      dashboardKey.currentState?.getProducts(isLoading: false);
+      dashboardKey.currentState?.getSpkToday(isLoading: false);
     });
   }
 }

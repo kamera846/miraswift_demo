@@ -51,6 +51,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
   AnimationController? _animationControllerHeader;
   AnimationController? _animationControllerBody;
   bool _isLoading = true;
+  SpkModel? spkToday;
   List<ProductModel> products = [];
   List<BatchModel> batchs = [];
   List<SpkModel> listSpk = [];
@@ -162,7 +163,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                         builder: (ctx) => const NotificationsScreen(),
                       ),
                     ).then(
-                      (value) => getProducts(isLoading: false),
+                      (value) => getSpkToday(isLoading: false),
                     );
                   },
                   icon: const Badge(
@@ -332,14 +333,20 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   Row(
                     children: [
                       Icon(
-                        Icons.timelapse_rounded,
-                        color: Colors.yellow.shade900,
+                        spkToday != null
+                            ? Icons.timelapse_rounded
+                            : Icons.watch_later_outlined,
+                        color: spkToday != null
+                            ? Colors.yellow.shade900
+                            : Colors.blueGrey,
                       ),
                       const SizedBox(
                         width: 8,
                       ),
                       Text(
-                        'Production is running...',
+                        spkToday != null
+                            ? 'Production is running...'
+                            : 'No production',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -348,13 +355,17 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     height: 4,
                   ),
                   Text(
-                    'EXPANDER GROUT 40KG',
+                    spkToday != null
+                        ? 'EXPANDER GROUT 40KG'
+                        : 'No Spk Executed!',
                     style: Theme.of(context).textTheme.titleSmall,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    'Execution number 5 of 10',
+                    spkToday != null
+                        ? 'Execution number 5 of 10'
+                        : "Let's get back to production",
                     style: Theme.of(context).textTheme.bodySmall,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -368,9 +379,11 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
             IconButton(
               onPressed: _stopProductionValidation,
               icon: Icon(
-                Icons.stop_circle_rounded,
+                spkToday != null
+                    ? Icons.stop_circle_rounded
+                    : Icons.play_circle_fill_rounded,
                 size: 48,
-                color: Colors.red.shade800,
+                color: spkToday != null ? Colors.red.shade800 : Colors.blueGrey,
               ),
             ),
           ],
@@ -486,7 +499,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     builder: (ctx) => const ProductScreen(),
                   ),
                 ).then(
-                  (value) => getProducts(isLoading: false),
+                  (value) => getSpkToday(isLoading: false),
                 ),
               ),
             ),
@@ -515,7 +528,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     builder: (ctx) => const BatchScreen(),
                   ),
                 ).then(
-                  (value) => getProducts(isLoading: false),
+                  (value) => getSpkToday(isLoading: false),
                 ),
               ),
             ),
@@ -546,7 +559,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     builder: (ctx) => const SpkScreen(),
                   ),
                 ).then(
-                  (value) => getProducts(isLoading: false),
+                  (value) => getSpkToday(isLoading: false),
                 ),
               ),
             ),
@@ -575,7 +588,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     builder: (ctx) => const PanelScreen(),
                   ),
                 ).then(
-                  (value) => getProducts(isLoading: false),
+                  (value) => getSpkToday(isLoading: false),
                 ),
               ),
             ),
@@ -630,7 +643,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
 
     generateChartData();
     iniScrollController();
-    getProducts();
+    getSpkToday();
   }
 
   @override
@@ -646,7 +659,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      getProducts(isLoading: false);
+      getSpkToday(isLoading: false);
     }
   }
 
@@ -667,10 +680,21 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
     _animationControllerBody!.forward();
   }
 
-  void getProducts({bool isLoading = true}) async {
+  void getSpkToday({bool isLoading = true}) async {
     setState(() {
       _isLoading = isLoading;
     });
+    await SpkApi().today(
+      onCompleted: (data) {
+        setState(() {
+          spkToday = data;
+        });
+        getProducts();
+      },
+    );
+  }
+
+  void getProducts() async {
     await ProductApi().list(
       onCompleted: (data) {
         setState(() {
@@ -744,7 +768,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
     if (value is String) {
       setState(() {
         _selectedPlan = value;
-        getProducts();
+        getSpkToday();
       });
     }
   }
