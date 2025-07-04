@@ -17,6 +17,13 @@ class BatchItem extends StatelessWidget {
   final BatchModel? scales;
   final bool isLastIndex;
 
+  String _filterQuipmentName(String name) {
+    if (name.trim().toLowerCase() == 'mixer') {
+      return 'DISCHARGE TIME';
+    }
+    return name;
+  }
+
   @override
   Widget build(BuildContext context) {
     Color statusColorOn = Colors.green.shade900.withAlpha(75);
@@ -109,7 +116,7 @@ class BatchItem extends StatelessWidget {
                 children: [
                   Text(
                     equipment != null
-                        ? equipment!.nameEquipment
+                        ? _filterQuipmentName(equipment!.nameEquipment)
                         : scales!.nameBahan,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
