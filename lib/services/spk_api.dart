@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:miraswift_demo/models/formula_model.dart';
+import 'package:miraswift_demo/models/product_model.dart';
 import 'package:miraswift_demo/models/spk_model.dart';
 import 'package:miraswift_demo/services/api.dart';
 
@@ -56,12 +58,15 @@ class SpkApi {
     }
   }
 
-  Future<SpkModel?> today({
+  Future<void> today({
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
-    Function(SpkModel? data)? onCompleted,
+    Function(SpkModel? spk, ProductModel? product, FormulaModel? formula)?
+        onCompleted,
   }) async {
-    SpkModel? data;
+    SpkModel? spk;
+    ProductModel? product;
+    FormulaModel? formula;
     try {
       final url = Uri.https(baseUrl, 'api/spk/today');
       final response = await http.get(
@@ -74,33 +79,39 @@ class SpkApi {
         final apiResponse = ApiResponse.fromJsonList(responseBody);
 
         if (apiResponse.code == 200) {
-          if (apiResponse.data != null) {
-            data = SpkModel.fromJson(apiResponse.data!);
+          if (apiResponse.spk != null) {
+            spk = SpkModel.fromJson(apiResponse.spk!);
+          }
+          if (apiResponse.product != null) {
+            product = ProductModel.fromJson(apiResponse.product!);
+          }
+          if (apiResponse.formula != null) {
+            formula = FormulaModel.fromJson(apiResponse.formula!);
           }
           if (onSuccess != null) {
             onSuccess(apiResponse.msg);
           }
-          return data;
+          return;
         }
 
         if (onError != null) {
           onError(apiResponse.msg);
         }
-        return data;
+        return;
       } else {
         if (onError != null) {
           onError('$failedRequestText. Status Code: ${response.statusCode}');
         }
-        return data;
+        return;
       }
     } catch (e) {
       if (onError != null) {
         onError('$failedRequestText. Exception: $e');
       }
-      return data;
+      return;
     } finally {
       if (onCompleted != null) {
-        onCompleted(data);
+        onCompleted(spk, product, formula);
       }
     }
   }

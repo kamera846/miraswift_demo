@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswift_demo/models/formula_model.dart';
 import 'package:miraswift_demo/models/hero_chart_model.dart';
 import 'package:miraswift_demo/models/logmsg_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
@@ -14,6 +15,7 @@ import 'package:miraswift_demo/screens/notifications_screen.dart';
 import 'package:miraswift_demo/screens/panel_screen.dart';
 import 'package:miraswift_demo/screens/product_screen.dart';
 import 'package:miraswift_demo/screens/spk_screen.dart';
+import 'package:miraswift_demo/screens/transactions_sreen.dart';
 import 'package:miraswift_demo/services/batch_api.dart';
 import 'package:miraswift_demo/services/logmsg_api.dart';
 import 'package:miraswift_demo/services/product_api.dart';
@@ -52,6 +54,8 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
   AnimationController? _animationControllerBody;
   bool _isLoading = true;
   SpkModel? spkToday;
+  ProductModel? productToday;
+  FormulaModel? formulaToday;
   List<ProductModel> products = [];
   List<BatchModel> batchs = [];
   List<SpkModel> listSpk = [];
@@ -309,7 +313,13 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
 
   InkWell runningProduction(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const TransactionsSreen(),
+          ),
+        );
+      },
       splashColor: Colors.blue.withOpacity(0.1),
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(24),
@@ -333,10 +343,10 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   Row(
                     children: [
                       Icon(
-                        spkToday != null
+                        productToday != null
                             ? Icons.timelapse_rounded
                             : Icons.watch_later_outlined,
-                        color: spkToday != null
+                        color: productToday != null
                             ? Colors.yellow.shade900
                             : Colors.blueGrey,
                       ),
@@ -344,7 +354,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                         width: 8,
                       ),
                       Text(
-                        spkToday != null
+                        productToday != null
                             ? 'Production is running...'
                             : 'No production',
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -355,8 +365,8 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                     height: 4,
                   ),
                   Text(
-                    spkToday != null
-                        ? 'EXPANDER GROUT 40KG'
+                    productToday != null
+                        ? productToday?.nameProduct ?? ''
                         : 'No Spk Executed!',
                     style: Theme.of(context).textTheme.titleSmall,
                     maxLines: 1,
@@ -364,7 +374,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   ),
                   Text(
                     spkToday != null
-                        ? 'Execution number 5 of 10'
+                        ? '${spkToday?.jmlBatch ?? ''} batch will be executed'
                         : "Let's get back to production",
                     style: Theme.of(context).textTheme.bodySmall,
                     maxLines: 2,
@@ -377,13 +387,25 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
               width: 16,
             ),
             IconButton(
-              onPressed: _stopProductionValidation,
+              onPressed: () {
+                if (productToday != null) {
+                  _stopProductionValidation(productToday);
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TransactionsSreen(),
+                    ),
+                  );
+                }
+              },
               icon: Icon(
-                spkToday != null
+                productToday != null
                     ? Icons.stop_circle_rounded
                     : Icons.play_circle_fill_rounded,
                 size: 48,
-                color: spkToday != null ? Colors.red.shade800 : Colors.blueGrey,
+                color: productToday != null
+                    ? Colors.red.shade800
+                    : Colors.blueGrey,
               ),
             ),
           ],
@@ -685,9 +707,11 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
       _isLoading = isLoading;
     });
     await SpkApi().today(
-      onCompleted: (data) {
+      onCompleted: (spk, product, formula) {
         setState(() {
-          spkToday = data;
+          spkToday = spk;
+          productToday = product;
+          formulaToday = formula;
         });
         getProducts();
       },
@@ -1002,12 +1026,12 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
     }
   }
 
-  void _stopProductionValidation() {
+  void _stopProductionValidation(ProductModel? product) {
     showPlatformAlertDialog(
       context: context,
       title: 'Warning!!',
       content:
-          'Are you sure you want to stop EXPANDER GROUT 40KG production proccess?',
+          'Are you sure you want to stop ${product?.nameProduct ?? ''} production proccess?',
       positiveButtonText: 'Stop Now',
       onPositivePressed: _stopProduction,
       positiveButtonTextColor: CupertinoColors.systemRed,

@@ -22,6 +22,7 @@ class TransactionDetailScreen extends StatefulWidget {
 class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   bool _isLoading = true;
   bool _isStarted = false;
+  bool _isCompleted = false;
   TransactionModel? _detailTransaction;
   List<TransactionDetailModel> _listItem = [];
   List<SpkModel> _listSpkItem = [];
@@ -56,6 +57,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               _detailTransaction!.detail!.isNotEmpty) {
             _listItem = _detailTransaction!.detail!;
             _isStarted = _detailTransaction?.statusTransaction == 'RUNNING';
+            _isCompleted = _detailTransaction?.statusTransaction == 'COMPLETE';
 
             for (var element in _listItem) {
               if (element.spk != null) {
@@ -225,7 +227,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                         bottom: 24,
                       ),
                       child: ElevatedButton(
-                        onPressed: _startStopValidation,
+                        onPressed: _isCompleted ? null : _startStopValidation,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _isStarted
                               ? Colors.red.shade800
