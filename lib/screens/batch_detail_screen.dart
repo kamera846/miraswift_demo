@@ -270,7 +270,7 @@ class BatchDetailHeader extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall!,
                     ),
                     Text(
-                      'Tanggal Produksi ${formattedDate(dateStr: batch.dateEquipment)}',
+                      'SPK ${batch.spk?.descSpk} \u2022 ${formattedDate(dateStr: batch.dateEquipment)}',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],

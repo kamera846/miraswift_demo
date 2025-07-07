@@ -281,6 +281,10 @@ class _BatchScreenState extends State<BatchScreen> {
   }
 
   Container _sectionFastest(BuildContext context) {
+    int itemCount = _batchFastest?.length ?? 0;
+
+    if (itemCount > 3) itemCount = 3;
+
     return (!isBatchFastestLoading &&
             _batchFastest != null &&
             _batchFastest!.isNotEmpty)
@@ -293,13 +297,20 @@ class _BatchScreenState extends State<BatchScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: ListView.builder(
-              itemCount: _batchFastest?.length ?? 0,
+              itemCount: itemCount,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 final item = _batchFastest![index];
                 final isLastIndex = (index == (_batchFastest!.length - 1));
-                Badge? leadingIcon;
+                Badge leadingIcon = const Badge(
+                  isLabelVisible: false,
+                  child: Icon(
+                    Icons.leaderboard_rounded,
+                    color: Colors.grey,
+                    size: 40,
+                  ),
+                );
 
                 if (index == 0) {
                   leadingIcon = const Badge(
@@ -336,7 +347,7 @@ class _BatchScreenState extends State<BatchScreen> {
                     ),
                     child: Icon(
                       Icons.star_rate_rounded,
-                      color: Colors.grey,
+                      color: Colors.blueGrey,
                       size: 40,
                     ),
                   );
@@ -443,7 +454,7 @@ class _BatchScreenState extends State<BatchScreen> {
                       },
                       title: item.noBatch,
                       description:
-                          'SPK GM-380 \u2022 ${formattedDate(dateStr: item.dateEquipment)}',
+                          'SPK ${item.spk?.descSpk} \u2022 ${formattedDate(dateStr: item.dateEquipment)}',
                       badge: item.product?.nameProduct,
                       customTrailingIcon: IconButton(
                         onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:miraswift_demo/models/formula_model.dart';
 import 'package:miraswift_demo/models/product_model.dart';
+import 'package:miraswift_demo/models/spk_model.dart';
 
 class BatchModel {
   const BatchModel({
@@ -22,6 +23,7 @@ class BatchModel {
     required this.totalEquipmentTime,
     this.formula,
     this.product,
+    this.spk,
   });
 
   final String noBatch;
@@ -43,6 +45,7 @@ class BatchModel {
   final String totalEquipmentTime;
   final FormulaModel? formula;
   final ProductModel? product;
+  final SpkModel? spk;
 
   factory BatchModel.fromJson(Map<String, dynamic> json) {
     return BatchModel(
@@ -69,6 +72,9 @@ class BatchModel {
       product: json['product'] != null
           ? ProductModel.fromJson(json['product'])
           : null,
+      spk: json['spk'] != null && json['spk'] is Map && json['spk'] is! List
+          ? SpkModel.fromJson(json['spk'])
+          : null,
     );
   }
 
@@ -92,5 +98,6 @@ class BatchModel {
         'totalEquipmentTime': totalEquipmentTime,
         'formula': formula,
         'product': product,
+        'spk': spk,
       };
 }
