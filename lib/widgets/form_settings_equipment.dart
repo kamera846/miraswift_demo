@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
+import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
 
 class FormSettingsEquipment extends StatefulWidget {
-  const FormSettingsEquipment({
-    super.key,
-  });
+  const FormSettingsEquipment({super.key});
 
   @override
   FormSettingsEquipmentState createState() => FormSettingsEquipmentState();
@@ -55,8 +53,10 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings Equipment',
-            style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Settings Equipment',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -121,21 +121,20 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
     );
   }
 
-  Widget _buildFormInput(String label, int highValue, int lowValue,
-      Function(int high) onHighChanged, Function(int low) onLowChanged) {
+  Widget _buildFormInput(
+    String label,
+    int highValue,
+    int lowValue,
+    Function(int high) onHighChanged,
+    Function(int low) onLowChanged,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text(label, style: Theme.of(context).textTheme.titleMedium),
         Row(
           children: [
-            Text(
-              'High',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text('High', style: Theme.of(context).textTheme.bodySmall),
             Expanded(
               child: Slider.adaptive(
                 label: highValue.toString(),
@@ -153,10 +152,7 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
         ),
         Row(
           children: [
-            Text(
-              'Low',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text('Low', style: Theme.of(context).textTheme.bodySmall),
             Expanded(
               child: Slider.adaptive(
                 label: lowValue.toString(),
@@ -166,10 +162,7 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
                 onChanged: (value) => onLowChanged(value.toInt()),
               ),
             ),
-            Text(
-              '($lowValue)Hz',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text('($lowValue)Hz', style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ],

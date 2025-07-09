@@ -1,6 +1,6 @@
-import 'package:miraswift_demo/models/formula_model.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/models/spk_model.dart';
+import 'package:miraswiftdemo/models/formula_model.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/models/spk_model.dart';
 
 class BatchModel {
   const BatchModel({
@@ -79,25 +79,25 @@ class BatchModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'no_batch': noBatch,
-        'name_equipment': nameEquipment,
-        'time_on': timeOn,
-        'time_off': timeOff,
-        'time_elapsed': timeElapsed,
-        'desc': desc,
-        'id_timbang': idTimbang,
-        'kode_bahan': kodeBahan,
-        'name_bahan': nameBahan,
-        'actual_timbang': actualTimbang,
-        'status_timbang': statusTimbang,
-        'date_timbang': dateTimbang,
-        'time_timbang': timeTimbang,
-        'created_at': createdAt,
-        'date_equipment': dateEquipment,
-        'materialTime': materialTime,
-        'totalEquipmentTime': totalEquipmentTime,
-        'formula': formula,
-        'product': product,
-        'spk': spk,
-      };
+    'no_batch': noBatch,
+    'name_equipment': nameEquipment,
+    'time_on': timeOn,
+    'time_off': timeOff,
+    'time_elapsed': timeElapsed,
+    'desc': desc,
+    'id_timbang': idTimbang,
+    'kode_bahan': kodeBahan,
+    'name_bahan': nameBahan,
+    'actual_timbang': actualTimbang,
+    'status_timbang': statusTimbang,
+    'date_timbang': dateTimbang,
+    'time_timbang': timeTimbang,
+    'created_at': createdAt,
+    'date_equipment': dateEquipment,
+    'materialTime': materialTime,
+    'totalEquipmentTime': totalEquipmentTime,
+    'formula': formula,
+    'product': product,
+    'spk': spk,
+  };
 }

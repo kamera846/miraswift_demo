@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/models/spk_model.dart';
-import 'package:miraswift_demo/widgets/date_picker_form_field.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/models/spk_model.dart';
+import 'package:miraswiftdemo/widgets/date_picker_form_field.dart';
 
 class FormNewSpk extends StatefulWidget {
   const FormNewSpk({
     super.key,
     required this.onSubmitted,
     required this.listProduct,
-  })  : isEdit = false,
-        item = null;
+  }) : isEdit = false,
+       item = null;
   const FormNewSpk.edit({
     super.key,
     required this.item,
@@ -25,7 +25,8 @@ class FormNewSpk extends StatefulWidget {
     String jmlBatch,
     String dateSpk,
     String descSpk,
-  ) onSubmitted;
+  )
+  onSubmitted;
 
   @override
   FormNewSpkState createState() => FormNewSpkState();
@@ -82,8 +83,9 @@ class FormNewSpkState extends State<FormNewSpk> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                items: widget.listProduct
-                    .map<DropdownMenuItem<ProductModel>>((ProductModel value) {
+                items: widget.listProduct.map<DropdownMenuItem<ProductModel>>((
+                  ProductModel value,
+                ) {
                   return DropdownMenuItem<ProductModel>(
                     value: value,
                     child: Text(
@@ -119,9 +121,9 @@ class FormNewSpkState extends State<FormNewSpk> {
                   labelText: 'Description',
                   labelStyle: Theme.of(context).textTheme.bodySmall,
                   hintText: 'e.g XPANDER GROUT',
-                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.grey,
-                      ),
+                  hintStyle: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -165,10 +167,9 @@ class FormNewSpkState extends State<FormNewSpk> {
                         labelText: 'Total batch',
                         labelStyle: Theme.of(context).textTheme.bodySmall,
                         hintText: 'e.g 15',
-                        hintStyle:
-                            Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  color: Colors.grey,
-                                ),
+                        hintStyle: Theme.of(
+                          context,
+                        ).textTheme.bodySmall!.copyWith(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

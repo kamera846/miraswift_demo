@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/product_model.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
 
 class FormNewProduct extends StatefulWidget {
   const FormNewProduct({
     super.key,
     required this.onSubmitted,
     required this.listProduct,
-  })  : isEdit = false,
-        item = null;
+  }) : isEdit = false,
+       item = null;
   const FormNewProduct.edit({
     super.key,
     required this.item,
@@ -67,8 +67,9 @@ class FormNewProductState extends State<FormNewProduct> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                items: widget.listProduct
-                    .map<DropdownMenuItem<ProductModel>>((ProductModel value) {
+                items: widget.listProduct.map<DropdownMenuItem<ProductModel>>((
+                  ProductModel value,
+                ) {
                   return DropdownMenuItem<ProductModel>(
                     value: value,
                     child: Text(
@@ -103,7 +104,9 @@ class FormNewProductState extends State<FormNewProduct> {
                     _formKey.currentState?.save();
 
                     widget.onSubmitted(
-                        _selectedProduct!.no, _selectedProduct!.name);
+                      _selectedProduct!.no,
+                      _selectedProduct!.name,
+                    );
                     Navigator.pop(context);
                   }
                 },

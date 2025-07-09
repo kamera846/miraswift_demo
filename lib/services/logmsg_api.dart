@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:miraswift_demo/models/logmsg_model.dart';
-import 'package:miraswift_demo/services/api.dart';
+import 'package:miraswiftdemo/models/logmsg_model.dart';
+import 'package:miraswiftdemo/services/api.dart';
 
 class LogMessageApi {
   Future<List<LogMessageModel>?> list({
@@ -13,10 +13,7 @@ class LogMessageApi {
     List<LogMessageModel>? data;
     try {
       final url = Uri.https(baseUrl, 'api/log-msg');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

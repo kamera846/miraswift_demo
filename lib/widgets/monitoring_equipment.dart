@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/equipment_monitoring_model.dart';
-import 'package:miraswift_demo/services/api.dart';
-import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
+import 'package:miraswiftdemo/models/equipment_monitoring_model.dart';
+import 'package:miraswiftdemo/services/api.dart';
+import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
 
 FirebaseDatabase database = FirebaseDatabase.instance;
 
@@ -37,33 +37,37 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
   void getFirebaseData() {
     try {
       var starCountRef = FirebaseDatabase.instance.ref('bizlink/equipment');
-      starCountRef.onValue.listen((DatabaseEvent event) {
-        var jsonString = jsonEncode(event.snapshot.value);
-        var mapData = EquipmentModelMonitoring.fromJson(jsonDecode(jsonString));
-        if (mapData.all == null || mapData.all == 'off') {
-          setState(() {
-            data = EquipmentModelMonitoring(
-              all: mapData.all,
-              valve: null,
-              jetflo: null,
-              mixer: null,
-              screw: null,
-              scales: null,
+      starCountRef.onValue
+          .listen((DatabaseEvent event) {
+            var jsonString = jsonEncode(event.snapshot.value);
+            var mapData = EquipmentModelMonitoring.fromJson(
+              jsonDecode(jsonString),
             );
-            isLoading = true;
+            if (mapData.all == null || mapData.all == 'off') {
+              setState(() {
+                data = EquipmentModelMonitoring(
+                  all: mapData.all,
+                  valve: null,
+                  jetflo: null,
+                  mixer: null,
+                  screw: null,
+                  scales: null,
+                );
+                isLoading = true;
+              });
+            } else {
+              setState(() {
+                data = mapData;
+                isLoading = false;
+              });
+            }
+            setState(() {
+              isToggleEquipment = false;
+            });
+          })
+          .onError((e) {
+            if (mounted) showSnackBar(context, e.message);
           });
-        } else {
-          setState(() {
-            data = mapData;
-            isLoading = false;
-          });
-        }
-        setState(() {
-          isToggleEquipment = false;
-        });
-      }).onError((e) {
-        if (mounted) showSnackBar(context, e.message);
-      });
     } catch (e) {
       if (mounted) showSnackBar(context, '$failedRequestText. Exception: $e');
     }
@@ -102,9 +106,7 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
     });
     DatabaseReference ref = FirebaseDatabase.instance.ref("bizlink/equipment");
 
-    await ref.update({
-      "all": status,
-    });
+    await ref.update({"all": status});
 
     await Future.delayed(Duration(milliseconds: delayed));
 
@@ -135,11 +137,12 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
               Text(
                 !isLoading ? data!.valve ?? 'not found' : '...',
                 style: TextStyle(
-                    color: data!.valve == null
-                        ? Colors.black
-                        : data!.valve == 'on'
-                            ? Colors.green
-                            : Colors.red),
+                  color: data!.valve == null
+                      ? Colors.black
+                      : data!.valve == 'on'
+                      ? Colors.green
+                      : Colors.red,
+                ),
               ),
             ],
           ),
@@ -149,11 +152,12 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
               Text(
                 !isLoading ? data!.jetflo ?? 'not found' : '...',
                 style: TextStyle(
-                    color: data!.jetflo == null
-                        ? Colors.black
-                        : data!.jetflo == 'on'
-                            ? Colors.green
-                            : Colors.red),
+                  color: data!.jetflo == null
+                      ? Colors.black
+                      : data!.jetflo == 'on'
+                      ? Colors.green
+                      : Colors.red,
+                ),
               ),
             ],
           ),
@@ -163,11 +167,12 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
               Text(
                 !isLoading ? data!.mixer ?? 'not found' : '...',
                 style: TextStyle(
-                    color: data!.mixer == null
-                        ? Colors.black
-                        : data!.mixer == 'on'
-                            ? Colors.green
-                            : Colors.red),
+                  color: data!.mixer == null
+                      ? Colors.black
+                      : data!.mixer == 'on'
+                      ? Colors.green
+                      : Colors.red,
+                ),
               ),
             ],
           ),
@@ -177,20 +182,19 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
               Text(
                 !isLoading ? data!.screw ?? 'not found' : '...',
                 style: TextStyle(
-                    color: data!.screw == null
-                        ? Colors.black
-                        : data!.screw == 'on'
-                            ? Colors.green
-                            : Colors.red),
+                  color: data!.screw == null
+                      ? Colors.black
+                      : data!.screw == 'on'
+                      ? Colors.green
+                      : Colors.red,
+                ),
               ),
             ],
           ),
           Row(
             children: [
               const Text('Scales: '),
-              Text(
-                !isLoading ? data!.scales ?? 'not found' : '...',
-              ),
+              Text(!isLoading ? data!.scales ?? 'not found' : '...'),
             ],
           ),
           const SizedBox(height: 12),
@@ -200,19 +204,19 @@ class _MonitoringEquipmentState extends State<MonitoringEquipment> {
               backgroundColor: isToggleEquipment
                   ? Colors.grey
                   : data!.all == 'on'
-                      ? Colors.red
-                      : Colors.green,
+                  ? Colors.red
+                  : Colors.green,
             ),
             child: Text(
               isToggleEquipment
                   ? 'Load Equipment ...'
                   : data!.all == 'on'
-                      ? 'Turn Off All Equipment'
-                      : 'Turn On All Equipment',
+                  ? 'Turn Off All Equipment'
+                  : 'Turn On All Equipment',
               style: const TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
-          )
+          ),
         ],
       ),
     );

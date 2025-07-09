@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/screens/batch_screen.dart';
-// import 'package:miraswift_demo/screens/equipment_screen.dart';
-import 'package:miraswift_demo/screens/notifications_screen.dart';
-import 'package:miraswift_demo/screens/product_screen.dart';
-import 'package:miraswift_demo/screens/spk_screen.dart';
-import 'package:miraswift_demo/widgets/monitoring_equipment.dart';
+import 'package:miraswiftdemo/screens/batch_screen.dart';
+// import 'package:miraswiftdemo/screens/equipment_screen.dart';
+import 'package:miraswiftdemo/screens/notifications_screen.dart';
+import 'package:miraswiftdemo/screens/product_screen.dart';
+import 'package:miraswiftdemo/screens/spk_screen.dart';
+import 'package:miraswiftdemo/widgets/monitoring_equipment.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,8 +20,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('Dashboard', style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Dashboard',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: [
           Stack(
             clipBehavior: Clip.none,
@@ -110,14 +112,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer,
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => const BatchScreen(),
-                      ),
+                      MaterialPageRoute(builder: (ctx) => const BatchScreen()),
                     );
                   },
                   child: const Text('Open Batch'),
@@ -125,8 +126,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer,
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
@@ -140,14 +142,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer,
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => const SpkScreen(),
-                      ),
+                      MaterialPageRoute(builder: (ctx) => const SpkScreen()),
                     );
                   },
                   child: const Text('Setting SPK'),

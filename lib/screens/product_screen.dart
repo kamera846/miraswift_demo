@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/screens/formula_screen.dart';
-import 'package:miraswift_demo/services/product_api.dart';
-import 'package:miraswift_demo/utils/formatted_date.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/form_new_product.dart';
-import 'package:miraswift_demo/widgets/list_tile_item.dart';
-import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/screens/formula_screen.dart';
+import 'package:miraswiftdemo/services/product_api.dart';
+import 'package:miraswiftdemo/utils/formatted_date.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
+import 'package:miraswiftdemo/widgets/form_new_product.dart';
+import 'package:miraswiftdemo/widgets/list_tile_item.dart';
+import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -295,14 +295,14 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Setting Recipe',
-            style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Setting Recipe',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: [
           IconButton(
             onPressed: _isLoading ? null : _newItem,
-            icon: const Icon(
-              CupertinoIcons.add_circled_solid,
-            ),
+            icon: const Icon(CupertinoIcons.add_circled_solid),
           ),
         ],
       ),
@@ -319,8 +319,10 @@ class _ProductScreenState extends State<ProductScreen> {
                     size: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text('List Product',
-                      style: Theme.of(context).textTheme.titleSmall),
+                  Text(
+                    'List Product',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 ],
               ),
             ),
@@ -348,92 +350,91 @@ class _ProductScreenState extends State<ProductScreen> {
                                   ),
                                 ).then((value) => _getList());
                               },
-                              isSelected: (_selectedItem != null &&
+                              isSelected:
+                                  (_selectedItem != null &&
                                       _selectedItem!.idProduct ==
                                           item.idProduct)
                                   ? true
                                   : false,
                               badge: item.kodeProduct,
                               title: item.nameProduct,
-                              description:
-                                  formattedDate(dateStr: item.createdAt),
+                              description: formattedDate(
+                                dateStr: item.createdAt,
+                              ),
                               customTrailingIcon: PopupMenuButton<ProductModel>(
-                                  icon: const Icon(
-                                    Icons.more_vert_rounded,
-                                    color: Colors.grey,
-                                  ),
-                                  itemBuilder: (ctx) {
-                                    return [
-                                      PopupMenuItem<ProductModel>(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  FormulaScreen(product: item),
-                                            ),
-                                          ).then((value) => _getList());
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons
-                                                  .arrow_up_right_circle_fill,
-                                              color: Colors.blue.withAlpha(220),
-                                              size: 20,
-                                            ),
-                                            const SizedBox(width: 12),
-                                            const Text('Open')
-                                          ],
-                                        ),
+                                icon: const Icon(
+                                  Icons.more_vert_rounded,
+                                  color: Colors.grey,
+                                ),
+                                itemBuilder: (ctx) {
+                                  return [
+                                    PopupMenuItem<ProductModel>(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                FormulaScreen(product: item),
+                                          ),
+                                        ).then((value) => _getList());
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons
+                                                .arrow_up_right_circle_fill,
+                                            color: Colors.blue.withAlpha(220),
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          const Text('Open'),
+                                        ],
                                       ),
-                                      PopupMenuItem<ProductModel>(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedItem = item;
-                                          });
-                                          _editItem();
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons.pencil_circle_fill,
-                                              color:
-                                                  Colors.orange.withAlpha(150),
-                                              size: 20,
-                                            ),
-                                            const SizedBox(width: 12),
-                                            const Text('Edit')
-                                          ],
-                                        ),
+                                    ),
+                                    PopupMenuItem<ProductModel>(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedItem = item;
+                                        });
+                                        _editItem();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.pencil_circle_fill,
+                                            color: Colors.orange.withAlpha(150),
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          const Text('Edit'),
+                                        ],
                                       ),
-                                      PopupMenuItem<ProductModel>(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedItem = item;
-                                          });
-                                          _deleteItem();
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons.trash_circle_fill,
-                                              color: Colors.red.withAlpha(220),
-                                              size: 20,
-                                            ),
-                                            const SizedBox(width: 12),
-                                            const Text('Delete')
-                                          ],
-                                        ),
+                                    ),
+                                    PopupMenuItem<ProductModel>(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedItem = item;
+                                        });
+                                        _deleteItem();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.trash_circle_fill,
+                                            color: Colors.red.withAlpha(220),
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          const Text('Delete'),
+                                        ],
                                       ),
-                                    ];
-                                  }),
+                                    ),
+                                  ];
+                                },
+                              ),
                             ),
                             if (!isLastIndex)
-                              Divider(
-                                height: 0,
-                                color: Colors.grey.shade300,
-                              ),
+                              Divider(height: 0, color: Colors.grey.shade300),
                           ],
                         );
                       }).toList(),
@@ -445,8 +446,8 @@ class _ProductScreenState extends State<ProductScreen> {
                           _isLoading
                               ? 'Loading..'
                               : !_isLoading && (_list == null || _list!.isEmpty)
-                                  ? 'Data is empty.'
-                                  : '',
+                              ? 'Data is empty.'
+                              : '',
                         ),
                       ),
                     ),

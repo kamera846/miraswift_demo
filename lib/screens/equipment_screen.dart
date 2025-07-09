@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/equipment_model.dart';
-import 'package:miraswift_demo/services/equipment_api.dart';
-import 'package:miraswift_demo/widgets/equipment_status.dart';
+import 'package:miraswiftdemo/models/equipment_model.dart';
+import 'package:miraswiftdemo/services/equipment_api.dart';
+import 'package:miraswiftdemo/widgets/equipment_status.dart';
 
 class EquipmentScreen extends StatefulWidget {
   const EquipmentScreen({super.key});
@@ -45,11 +45,9 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
 
   void _showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _showFilterDialog(BuildContext context) {
@@ -57,8 +55,10 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Filter Equipment',
-              style: Theme.of(context).textTheme.titleMedium),
+          title: Text(
+            'Filter Equipment',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -68,8 +68,10 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                 items: categories.map((String category) {
                   return DropdownMenuItem<String>(
                     value: category,
-                    child: Text(category,
-                        style: Theme.of(context).textTheme.bodySmall),
+                    child: Text(
+                      category,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
@@ -95,8 +97,10 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('Equipment', style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Equipment',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -126,16 +130,13 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
               padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.manage_history,
-                    color: Colors.grey,
-                  ),
+                  const Icon(Icons.manage_history, color: Colors.grey),
                   const SizedBox(width: 16),
                   Text(
                     'History Equipment',
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -150,35 +151,41 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
               ),
               child:
                   (!isLoading && _equipments != null && _equipments!.isNotEmpty)
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _equipments!.length,
-                          itemBuilder: (ctx, index) {
-                            final equipment = _equipments![index];
-                            final isLastIndex =
-                                (index == (_equipments!.length - 1));
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  top: 16, bottom: isLastIndex ? 12 : 0),
-                              child: EquipmentStatus(
-                                  equipment: equipment,
-                                  isLastIndex: isLastIndex),
-                            );
-                          })
-                      : Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Text(isLoading
-                                ? 'Loading..'
-                                : !isLoading &&
-                                        (_equipments == null ||
-                                            _equipments!.isEmpty)
-                                    ? 'Data is empty.'
-                                    : ''),
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _equipments!.length,
+                      itemBuilder: (ctx, index) {
+                        final equipment = _equipments![index];
+                        final isLastIndex =
+                            (index == (_equipments!.length - 1));
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            top: 16,
+                            bottom: isLastIndex ? 12 : 0,
                           ),
+                          child: EquipmentStatus(
+                            equipment: equipment,
+                            isLastIndex: isLastIndex,
+                          ),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(
+                          isLoading
+                              ? 'Loading..'
+                              : !isLoading &&
+                                    (_equipments == null ||
+                                        _equipments!.isEmpty)
+                              ? 'Data is empty.'
+                              : '',
                         ),
-            )
+                      ),
+                    ),
+            ),
           ],
         ),
       ),

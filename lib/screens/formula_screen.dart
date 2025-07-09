@@ -2,15 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/formula_model.dart';
-import 'package:miraswift_demo/models/material_model.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/services/formula_api.dart';
-import 'package:miraswift_demo/services/material_api.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/form_new_formula.dart';
-import 'package:miraswift_demo/widgets/list_tile_item.dart';
-import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
+import 'package:miraswiftdemo/models/formula_model.dart';
+import 'package:miraswiftdemo/models/material_model.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/services/formula_api.dart';
+import 'package:miraswiftdemo/services/material_api.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
+import 'package:miraswiftdemo/widgets/form_new_formula.dart';
+import 'package:miraswiftdemo/widgets/list_tile_item.dart';
+import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
 
 class FormulaScreen extends StatefulWidget {
   const FormulaScreen({super.key, required this.product});
@@ -330,15 +330,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
             Text(
               widget.product.kodeProduct,
               style: Theme.of(context).textTheme.bodySmall,
-            )
+            ),
           ],
         ),
         actions: [
           IconButton(
             onPressed: _isLoading ? null : _newItem,
-            icon: const Icon(
-              CupertinoIcons.add_circled_solid,
-            ),
+            icon: const Icon(CupertinoIcons.add_circled_solid),
           ),
         ],
       ),
@@ -355,8 +353,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
                     size: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text('List Formula',
-                      style: Theme.of(context).textTheme.titleSmall),
+                  Text(
+                    'List Formula',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 ],
               ),
             ),
@@ -376,7 +376,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
                           children: [
                             ListTileItem(
                               // onTap: () {},
-                              isSelected: (_selectedItem != null &&
+                              isSelected:
+                                  (_selectedItem != null &&
                                       _selectedItem!.idFormula ==
                                           item.idFormula)
                                   ? true
@@ -427,7 +428,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                                             size: 20,
                                           ),
                                           const SizedBox(width: 12),
-                                          const Text('Edit')
+                                          const Text('Edit'),
                                         ],
                                       ),
                                     ),
@@ -446,7 +447,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                                             size: 20,
                                           ),
                                           const SizedBox(width: 12),
-                                          const Text('Delete')
+                                          const Text('Delete'),
                                         ],
                                       ),
                                     ),
@@ -455,10 +456,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                               ),
                             ),
                             if (!isLastIndex)
-                              Divider(
-                                height: 0,
-                                color: Colors.grey.shade300,
-                              ),
+                              Divider(height: 0, color: Colors.grey.shade300),
                           ],
                         );
                       }).toList(),
@@ -470,8 +468,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
                           _isLoading
                               ? 'Loading..'
                               : !_isLoading && (_list == null || _list!.isEmpty)
-                                  ? 'Data is empty.'
-                                  : '',
+                              ? 'Data is empty.'
+                              : '',
                         ),
                       ),
                     ),

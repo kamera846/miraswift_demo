@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/transaction_model.dart';
-import 'package:miraswift_demo/screens/transaction_detail_screen.dart';
-import 'package:miraswift_demo/screens/spk_available_screen.dart';
-import 'package:miraswift_demo/services/transaction_api.dart';
-import 'package:miraswift_demo/utils/formatted_date.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/list_tile_item.dart';
+import 'package:miraswiftdemo/models/transaction_model.dart';
+import 'package:miraswiftdemo/screens/transaction_detail_screen.dart';
+import 'package:miraswiftdemo/screens/spk_available_screen.dart';
+import 'package:miraswiftdemo/services/transaction_api.dart';
+import 'package:miraswiftdemo/utils/formatted_date.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
+import 'package:miraswiftdemo/widgets/list_tile_item.dart';
 
 class TransactionsSreen extends StatefulWidget {
   const TransactionsSreen({super.key});
@@ -72,8 +72,9 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
     if (pickedDate != null && pickedDate != DateTime.now()) {
       setState(() {
         _filterStatus = 'all';
-        _dateController.text =
-            "${pickedDate.toLocal()}".split(' ')[0]; // Format to yyyy-mm-dd
+        _dateController.text = "${pickedDate.toLocal()}".split(
+          ' ',
+        )[0]; // Format to yyyy-mm-dd
       });
       _getList();
     }
@@ -83,8 +84,10 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transactions',
-            style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Transactions',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: [
           IconButton(
             onPressed: _isLoading
@@ -95,15 +98,11 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
                       MaterialPageRoute(
                         builder: (ctx) => const SpkAvailableScreen(),
                       ),
-                    ).then(
-                      (value) {
-                        _getList();
-                      },
-                    );
+                    ).then((value) {
+                      _getList();
+                    });
                   },
-            icon: const Icon(
-              CupertinoIcons.add_circled_solid,
-            ),
+            icon: const Icon(CupertinoIcons.add_circled_solid),
           ),
         ],
       ),
@@ -121,16 +120,18 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
                 },
                 controller: _dateController,
                 readOnly: true,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Colors.blue,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall!.copyWith(color: Colors.blue),
                 decoration: InputDecoration(
                   hintText: 'Click date icon to filter',
-                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.grey,
-                      ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                  hintStyle: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 12,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -144,9 +145,7 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Colors.blue,
-                    ),
+                    borderSide: const BorderSide(color: Colors.blue),
                   ),
                   prefixIcon: InkWell(
                     onTap: () {
@@ -155,9 +154,7 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
                         _selectDate(context);
                       }
                     },
-                    child: const Icon(
-                      CupertinoIcons.calendar,
-                    ),
+                    child: const Icon(CupertinoIcons.calendar),
                   ),
                 ),
               ),
@@ -166,62 +163,64 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  'all',
-                  'pending',
-                  'running',
-                  'complete',
-                  'not_complete'
-                ].map((item) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: OutlinedButton(
-                      onPressed: () {
-                        if (!_isLoading) {
-                          setState(() {
-                            _filterStatus = item;
-                          });
-                          _getList();
-                        }
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: _filterStatus == item
-                              ? _isLoading
-                                  ? Colors.blue.withAlpha(50)
-                                  : Colors.blue.withAlpha(100)
-                              : _isLoading
-                                  ? Colors.grey.shade200
-                                  : Colors.black12,
-                        ),
-                        backgroundColor: _filterStatus == item
-                            ? _isLoading
-                                ? Colors.blue.withAlpha(50)
-                                : Colors.blue.withAlpha(100)
-                            : _isLoading
-                                ? Colors.grey.shade200
-                                : Colors.black12,
-                        padding: const EdgeInsets.all(14),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      child: Text(
-                        item.toUpperCase(),
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                children:
+                    [
+                      'all',
+                      'pending',
+                      'running',
+                      'complete',
+                      'not_complete',
+                    ].map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            if (!_isLoading) {
+                              setState(() {
+                                _filterStatus = item;
+                              });
+                              _getList();
+                            }
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
                               color: _filterStatus == item
                                   ? _isLoading
-                                      ? Colors.blue.shade200
-                                      : Colors.blue
+                                        ? Colors.blue.withAlpha(50)
+                                        : Colors.blue.withAlpha(100)
                                   : _isLoading
+                                  ? Colors.grey.shade200
+                                  : Colors.black12,
+                            ),
+                            backgroundColor: _filterStatus == item
+                                ? _isLoading
+                                      ? Colors.blue.withAlpha(50)
+                                      : Colors.blue.withAlpha(100)
+                                : _isLoading
+                                ? Colors.grey.shade200
+                                : Colors.black12,
+                            padding: const EdgeInsets.all(14),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity.compact,
+                          ),
+                          child: Text(
+                            item.toUpperCase(),
+                            style: Theme.of(context).textTheme.bodySmall!
+                                .copyWith(
+                                  color: _filterStatus == item
+                                      ? _isLoading
+                                            ? Colors.blue.shade200
+                                            : Colors.blue
+                                      : _isLoading
                                       ? Colors.black26
                                       : Colors.black54,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
               ),
             ),
             if (_isLoading)
@@ -230,14 +229,13 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
                 margin: const EdgeInsets.all(12),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  border:
-                      Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.withAlpha(75),
+                  ),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'Loading..',
-                  textAlign: TextAlign.center,
-                ),
+                child: const Text('Loading..', textAlign: TextAlign.center),
               )
             else if (_listFiltered == null || _listFiltered!.isEmpty)
               Container(
@@ -245,8 +243,10 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
                 margin: const EdgeInsets.all(12),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  border:
-                      Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.withAlpha(75),
+                  ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(
@@ -264,15 +264,13 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
                         idTransaction: item.idTransaction,
                       ),
                     ),
-                  ).then(
-                    (value) {
-                      _getList();
-                    },
-                  );
+                  ).then((value) {
+                    _getList();
+                  });
                 },
                 listItem: _listFiltered!,
                 selectedItem: _selectedItem,
-              )
+              ),
           ],
         ),
       ),
@@ -318,8 +316,10 @@ class ListSpk extends StatelessWidget {
                       size: 20,
                     ),
                     const SizedBox(width: 8),
-                    Text(title ?? '',
-                        style: Theme.of(context).textTheme.titleSmall),
+                    Text(
+                      title ?? '',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ],
                 ),
               )
@@ -340,24 +340,26 @@ class ListSpk extends StatelessWidget {
                 onTap: () {
                   onTap != null ? onTap!(item) : null;
                 },
-                isSelected: (selectedItem != null &&
+                isSelected:
+                    (selectedItem != null &&
                         selectedItem!.idTransaction == item.idTransaction)
                     ? true
                     : false,
                 title: formattedDate(dateStr: item.dateTransaction),
                 border: !isLastIndex
                     ? Border(
-                        bottom:
-                            BorderSide(width: 1, color: Colors.grey.shade300))
+                        bottom: BorderSide(
+                          width: 1,
+                          color: Colors.grey.shade300,
+                        ),
+                      )
                     : null,
                 description: 'Status ${item.statusTransaction}',
                 customTrailingIcon: IconButton(
                   onPressed: () {
                     onTap != null ? onTap!(item) : null;
                   },
-                  icon: const Icon(
-                    Icons.keyboard_arrow_right_rounded,
-                  ),
+                  icon: const Icon(Icons.keyboard_arrow_right_rounded),
                 ),
                 customLeadingIcon: item.statusTransaction == 'PENDING'
                     ? Icon(
@@ -365,19 +367,19 @@ class ListSpk extends StatelessWidget {
                         color: Colors.grey.shade700,
                       )
                     : item.statusTransaction == 'RUNNING'
-                        ? Icon(
-                            Icons.timelapse_rounded,
-                            color: Colors.yellow.shade900,
-                          )
-                        : item.statusTransaction == 'COMPLETE'
-                            ? Icon(
-                                Icons.check_circle_rounded,
-                                color: Colors.green.shade700,
-                              )
-                            : Icon(
-                                Icons.stop_circle_rounded,
-                                color: Colors.red.shade700,
-                              ),
+                    ? Icon(
+                        Icons.timelapse_rounded,
+                        color: Colors.yellow.shade900,
+                      )
+                    : item.statusTransaction == 'COMPLETE'
+                    ? Icon(
+                        Icons.check_circle_rounded,
+                        color: Colors.green.shade700,
+                      )
+                    : Icon(
+                        Icons.stop_circle_rounded,
+                        color: Colors.red.shade700,
+                      ),
               );
             }).toList(),
           ),

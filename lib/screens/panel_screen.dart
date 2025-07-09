@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/widgets/form_settings_equipment.dart';
+import 'package:miraswiftdemo/widgets/form_settings_equipment.dart';
 
 class PanelScreen extends StatefulWidget {
   const PanelScreen({super.key});
@@ -26,9 +26,7 @@ class _PanelScreenState extends State<PanelScreen> {
 
   void _settingsEquipment() {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const FormSettingsEquipment(),
-      ),
+      MaterialPageRoute(builder: (context) => const FormSettingsEquipment()),
     );
   }
 
@@ -83,7 +81,7 @@ class _PanelScreenState extends State<PanelScreen> {
               offset: Offset(1, 1),
               blurRadius: 8,
               spreadRadius: 1,
-            )
+            ),
           ],
         ),
         child: indicatorView(item),
@@ -98,9 +96,9 @@ class _PanelScreenState extends State<PanelScreen> {
         children: [
           Text(
             'PANEL $item',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 32),
           // Green Indicator
@@ -136,9 +134,7 @@ class _PanelScreenState extends State<PanelScreen> {
         label: 'Panel 1',
       ),
       BottomNavigationBarItem(
-        icon: Badge(
-          child: Icon(Icons.curtains_closed_rounded),
-        ),
+        icon: Badge(child: Icon(Icons.curtains_closed_rounded)),
         label: 'Panel 2',
       ),
       BottomNavigationBarItem(
@@ -171,29 +167,29 @@ class _PanelScreenState extends State<PanelScreen> {
 
 class IndicatorWidget extends StatelessWidget {
   IndicatorWidget.greenOff({super.key, required this.title})
-      : listColor = [
-          Colors.green.shade600,
-          Colors.green.shade800,
-          Colors.black38
-        ];
+    : listColor = [
+        Colors.green.shade600,
+        Colors.green.shade800,
+        Colors.black38,
+      ];
   IndicatorWidget.greenOn({super.key, required this.title})
-      : listColor = [
-          Colors.lightGreenAccent.shade400,
-          Colors.lightGreenAccent.shade700,
-          Colors.lightGreenAccent
-        ];
+    : listColor = [
+        Colors.lightGreenAccent.shade400,
+        Colors.lightGreenAccent.shade700,
+        Colors.lightGreenAccent,
+      ];
   IndicatorWidget.redOff({super.key, required this.title})
-      : listColor = [
-          Colors.red.shade600.withAlpha(150),
-          Colors.red.shade900,
-          Colors.black38
-        ];
+    : listColor = [
+        Colors.red.shade600.withAlpha(150),
+        Colors.red.shade900,
+        Colors.black38,
+      ];
   IndicatorWidget.redOn({super.key, required this.title})
-      : listColor = [
-          Colors.redAccent,
-          Colors.redAccent.shade700.withAlpha(120),
-          Colors.redAccent.shade400,
-        ];
+    : listColor = [
+        Colors.redAccent,
+        Colors.redAccent.shade700.withAlpha(120),
+        Colors.redAccent.shade400,
+      ];
 
   final String title;
   final List<Color> listColor;
@@ -210,16 +206,8 @@ class IndicatorWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: listColor[0],
             borderRadius: BorderRadius.circular(indicatorSize),
-            border: Border.all(
-              width: 4,
-              color: listColor[1],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: listColor[2],
-                blurRadius: 12,
-              ),
-            ],
+            border: Border.all(width: 4, color: listColor[1]),
+            boxShadow: [BoxShadow(color: listColor[2], blurRadius: 12)],
           ),
         ),
         const SizedBox(height: 8),
@@ -232,7 +220,7 @@ class IndicatorWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall,
           ),
-        )
+        ),
       ],
     );
   }

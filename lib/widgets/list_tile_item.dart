@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/utils/badge.dart';
+import 'package:miraswiftdemo/utils/badge.dart';
 
 class ListTileItem extends StatelessWidget {
   const ListTileItem({
@@ -62,8 +62,8 @@ class ListTileItem extends StatelessWidget {
                   child: Text(
                     rightDescription ?? '',
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Colors.grey.shade600,
-                        ),
+                      color: Colors.grey.shade600,
+                    ),
                   ),
                 ),
               if (badge != null)
@@ -77,9 +77,7 @@ class ListTileItem extends StatelessWidget {
             ],
           ),
         customTrailingIcon ??
-            Container(
-              margin: const EdgeInsets.only(right: 12),
-            ),
+            Container(margin: const EdgeInsets.only(right: 12)),
       ],
     );
   }
@@ -99,9 +97,9 @@ class ListTileItem extends StatelessWidget {
             description!,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.grey.shade600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall!.copyWith(color: Colors.grey.shade600),
           ),
       ],
     );

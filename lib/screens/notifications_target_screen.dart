@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/user_model.dart';
-import 'package:miraswift_demo/services/user_api.dart';
-import 'package:miraswift_demo/utils/badge.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/form_new_notification_target.dart';
-import 'package:miraswift_demo/widgets/list_tile_item.dart';
-import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
+import 'package:miraswiftdemo/models/user_model.dart';
+import 'package:miraswiftdemo/services/user_api.dart';
+import 'package:miraswiftdemo/utils/badge.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
+import 'package:miraswiftdemo/widgets/form_new_notification_target.dart';
+import 'package:miraswiftdemo/widgets/list_tile_item.dart';
+import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
 
 class NotificationsTargetScreen extends StatefulWidget {
   const NotificationsTargetScreen({super.key});
@@ -103,9 +103,7 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
               right: 12,
               bottom: 12 + _keyboardHeight,
             ),
-            child: FormNewNotificationTarget(
-              onSubmitted: _submitNewItem,
-            ),
+            child: FormNewNotificationTarget(onSubmitted: _submitNewItem),
           ),
         );
       },
@@ -262,14 +260,14 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notification Target',
-            style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Notification Target',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: [
           IconButton(
             onPressed: _isLoading ? null : _newItem,
-            icon: const Icon(
-              CupertinoIcons.add_circled_solid,
-            ),
+            icon: const Icon(CupertinoIcons.add_circled_solid),
           ),
         ],
       ),
@@ -280,11 +278,7 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
               padding: const EdgeInsets.only(left: 12, right: 12),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.person,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
+                  const Icon(Icons.person, color: Colors.grey, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     'List User',
@@ -318,7 +312,8 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
                                 //   ),
                                 // );
                               },
-                              isSelected: (_selectedItem != null &&
+                              isSelected:
+                                  (_selectedItem != null &&
                                       _selectedItem!.idUser == item.idUser)
                                   ? true
                                   : false,
@@ -334,81 +329,78 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
                               title: item.nameUser,
                               description: item.phoneUser,
                               customTrailingIcon: PopupMenuButton<String>(
-                                  icon: const Icon(
-                                    Icons.more_vert_rounded,
-                                    color: Colors.grey,
-                                  ),
-                                  itemBuilder: (ctx) {
-                                    return [
-                                      // PopupMenuItem<String>(
-                                      //   onTap: () {
-                                      //     // Navigator.push(
-                                      //     //   context,
-                                      //     //   MaterialPageRoute(
-                                      //     //     builder: (ctx) =>
-                                      //     //         FormulaScreen(product: item),
-                                      //     //   ),
-                                      //     // );
-                                      //   },
-                                      //   child: const Row(
-                                      //     children: [
-                                      //       Icon(
-                                      //         CupertinoIcons
-                                      //             .arrow_up_right_circle_fill,
-                                      //         size: 20,
-                                      //       ),
-                                      //       SizedBox(width: 12),
-                                      //       Text('Open')
-                                      //     ],
-                                      //   ),
-                                      // ),
-                                      PopupMenuItem<String>(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedItem = item;
-                                          });
-                                          _editItem();
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons.pencil_circle_fill,
-                                              color:
-                                                  Colors.orange.withAlpha(150),
-                                              size: 20,
-                                            ),
-                                            const SizedBox(width: 12),
-                                            const Text('Edit')
-                                          ],
-                                        ),
+                                icon: const Icon(
+                                  Icons.more_vert_rounded,
+                                  color: Colors.grey,
+                                ),
+                                itemBuilder: (ctx) {
+                                  return [
+                                    // PopupMenuItem<String>(
+                                    //   onTap: () {
+                                    //     // Navigator.push(
+                                    //     //   context,
+                                    //     //   MaterialPageRoute(
+                                    //     //     builder: (ctx) =>
+                                    //     //         FormulaScreen(product: item),
+                                    //     //   ),
+                                    //     // );
+                                    //   },
+                                    //   child: const Row(
+                                    //     children: [
+                                    //       Icon(
+                                    //         CupertinoIcons
+                                    //             .arrow_up_right_circle_fill,
+                                    //         size: 20,
+                                    //       ),
+                                    //       SizedBox(width: 12),
+                                    //       Text('Open')
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    PopupMenuItem<String>(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedItem = item;
+                                        });
+                                        _editItem();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.pencil_circle_fill,
+                                            color: Colors.orange.withAlpha(150),
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          const Text('Edit'),
+                                        ],
                                       ),
-                                      PopupMenuItem<String>(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedItem = item;
-                                          });
-                                          _deleteItem();
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons.trash_circle_fill,
-                                              color: Colors.red.withAlpha(220),
-                                              size: 20,
-                                            ),
-                                            const SizedBox(width: 12),
-                                            const Text('Delete')
-                                          ],
-                                        ),
+                                    ),
+                                    PopupMenuItem<String>(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedItem = item;
+                                        });
+                                        _deleteItem();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.trash_circle_fill,
+                                            color: Colors.red.withAlpha(220),
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          const Text('Delete'),
+                                        ],
                                       ),
-                                    ];
-                                  }),
+                                    ),
+                                  ];
+                                },
+                              ),
                             ),
                             if (!isLastIndex)
-                              Divider(
-                                height: 0,
-                                color: Colors.grey.shade300,
-                              ),
+                              Divider(height: 0, color: Colors.grey.shade300),
                           ],
                         );
                       }).toList(),
@@ -420,8 +412,8 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
                           _isLoading
                               ? 'Loading..'
                               : !_isLoading && (_list == null || _list!.isEmpty)
-                                  ? 'Data is empty.'
-                                  : '',
+                              ? 'Data is empty.'
+                              : '',
                         ),
                       ),
                     ),

@@ -1,4 +1,4 @@
-import 'package:miraswift_demo/models/spk_model.dart';
+import 'package:miraswiftdemo/models/spk_model.dart';
 
 class TransactionDetailModel {
   const TransactionDetailModel({
@@ -53,11 +53,11 @@ class TransactionDetailModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'id_transaction': idTransaction,
-        'id_spk': idSpk,
-        'status_transaction_detail': statusTransactionDetail,
-        'created_at': createdAt,
-        'updated_at': updatedAt,
-        'spk': spk,
-      };
+    'id_transaction': idTransaction,
+    'id_spk': idSpk,
+    'status_transaction_detail': statusTransactionDetail,
+    'created_at': createdAt,
+    'updated_at': updatedAt,
+    'spk': spk,
+  };
 }

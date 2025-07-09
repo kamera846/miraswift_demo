@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/batch_model.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/screens/batch_detail_screen.dart';
-import 'package:miraswift_demo/services/batch_api.dart';
-import 'package:miraswift_demo/services/product_api.dart';
-import 'package:miraswift_demo/utils/formatted_date.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/fullwidth_button.dart';
-import 'package:miraswift_demo/widgets/list_tile_item.dart';
+import 'package:miraswiftdemo/models/batch_model.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/screens/batch_detail_screen.dart';
+import 'package:miraswiftdemo/services/batch_api.dart';
+import 'package:miraswiftdemo/services/product_api.dart';
+import 'package:miraswiftdemo/utils/formatted_date.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
+import 'package:miraswiftdemo/widgets/fullwidth_button.dart';
+import 'package:miraswiftdemo/widgets/list_tile_item.dart';
 
 class BatchScreen extends StatefulWidget {
   const BatchScreen({super.key});
@@ -46,13 +46,11 @@ class _BatchScreenState extends State<BatchScreen> {
   @override
   void initState() {
     super.initState();
-    _focusNode.addListener(
-      () {
-        setState(() {
-          _searchFocus = _focusNode.hasFocus;
-        });
-      },
-    );
+    _focusNode.addListener(() {
+      setState(() {
+        _searchFocus = _focusNode.hasFocus;
+      });
+    });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
@@ -67,15 +65,12 @@ class _BatchScreenState extends State<BatchScreen> {
       setState(() {
         isLoadMore = true;
       });
-      Future.delayed(
-        const Duration(seconds: 1),
-        () {
-          setState(() {
-            isLoadMore = false;
-            _itemCount = (_itemCount + _increment).clamp(0, totalItems);
-          });
-        },
-      );
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isLoadMore = false;
+          _itemCount = (_itemCount + _increment).clamp(0, totalItems);
+        });
+      });
     }
   }
 
@@ -115,8 +110,10 @@ class _BatchScreenState extends State<BatchScreen> {
 
     if (_filteredProduct != null) {
       product = _filteredProduct!.kodeProduct;
-      _getFastestBatch(_filteredProduct!.idProduct,
-          isSilentRefresh: isSilentRefresh);
+      _getFastestBatch(
+        _filteredProduct!.idProduct,
+        isSilentRefresh: isSilentRefresh,
+      );
     } else {
       product = null;
     }
@@ -171,8 +168,10 @@ class _BatchScreenState extends State<BatchScreen> {
     );
   }
 
-  void _getFastestBatch(String idProduct,
-      {bool? isSilentRefresh = false}) async {
+  void _getFastestBatch(
+    String idProduct, {
+    bool? isSilentRefresh = false,
+  }) async {
     setState(() {
       if (isSilentRefresh != true) {
         isBatchFastestLoading = true;
@@ -207,8 +206,9 @@ class _BatchScreenState extends State<BatchScreen> {
 
     if (pickedDate != null && pickedDate != DateTime.now()) {
       setState(() {
-        _dateController.text =
-            "${pickedDate.toLocal()}".split(' ')[0]; // Format to yyyy-mm-dd
+        _dateController.text = "${pickedDate.toLocal()}".split(
+          ' ',
+        )[0]; // Format to yyyy-mm-dd
       });
     }
   }
@@ -230,8 +230,11 @@ class _BatchScreenState extends State<BatchScreen> {
                 if (isShowedFastestBatch == true) ...[
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 12, left: 12, right: 12),
+                      padding: const EdgeInsets.only(
+                        top: 12,
+                        left: 12,
+                        right: 12,
+                      ),
                       child: Row(
                         children: [
                           const Icon(
@@ -241,20 +244,22 @@ class _BatchScreenState extends State<BatchScreen> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                              'Best Batch on ${_filteredProduct?.nameProduct} (${_batchFastest?.length ?? 0})',
-                              style: Theme.of(context).textTheme.titleSmall),
+                            'Best Batch on ${_filteredProduct?.nameProduct} (${_batchFastest?.length ?? 0})',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: _sectionFastest(context),
-                  )
+                  SliverToBoxAdapter(child: _sectionFastest(context)),
                 ],
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 12, left: 12, right: 12),
+                    padding: const EdgeInsets.only(
+                      top: 12,
+                      left: 12,
+                      right: 12,
+                    ),
                     child: Row(
                       children: [
                         const Icon(
@@ -263,15 +268,15 @@ class _BatchScreenState extends State<BatchScreen> {
                           size: 20,
                         ),
                         const SizedBox(width: 8),
-                        Text('List Batch (${_batchs?.length ?? 0})',
-                            style: Theme.of(context).textTheme.titleSmall),
+                        Text(
+                          'List Batch (${_batchs?.length ?? 0})',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
                       ],
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: _sectionItems(context),
-                )
+                SliverToBoxAdapter(child: _sectionItems(context)),
               ],
             ),
           ),
@@ -290,8 +295,12 @@ class _BatchScreenState extends State<BatchScreen> {
             _batchFastest!.isNotEmpty)
         ? Container(
             width: double.infinity,
-            margin:
-                const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 12),
+            margin: const EdgeInsets.only(
+              left: 12,
+              top: 12,
+              right: 12,
+              bottom: 12,
+            ),
             decoration: BoxDecoration(
               border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
               borderRadius: BorderRadius.circular(8),
@@ -327,10 +336,7 @@ class _BatchScreenState extends State<BatchScreen> {
                   leadingIcon = const Badge(
                     alignment: Alignment(-0.35, -0.35),
                     backgroundColor: Colors.white,
-                    label: Text(
-                      '2',
-                      style: TextStyle(color: Colors.brown),
-                    ),
+                    label: Text('2', style: TextStyle(color: Colors.brown)),
                     child: Icon(
                       Icons.workspace_premium_rounded,
                       color: Colors.brown,
@@ -341,10 +347,7 @@ class _BatchScreenState extends State<BatchScreen> {
                   leadingIcon = const Badge(
                     alignment: Alignment(-0.33, -0.13),
                     backgroundColor: Colors.transparent,
-                    label: Text(
-                      '3',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    label: Text('3', style: TextStyle(color: Colors.white)),
                     child: Icon(
                       Icons.star_rate_rounded,
                       color: Colors.blueGrey,
@@ -381,7 +384,8 @@ class _BatchScreenState extends State<BatchScreen> {
                                 ),
                               )
                               .then(
-                                  (value) => _getBatchs(isSilentRefresh: true));
+                                (value) => _getBatchs(isSilentRefresh: true),
+                              );
                         },
                         icon: const Icon(
                           Icons.chevron_right_rounded,
@@ -390,10 +394,7 @@ class _BatchScreenState extends State<BatchScreen> {
                       ),
                     ),
                     if (!isLastIndex)
-                      Divider(
-                        height: 0,
-                        color: Colors.grey.shade300,
-                      ),
+                      Divider(height: 0, color: Colors.grey.shade300),
                   ],
                 );
               },
@@ -413,9 +414,9 @@ class _BatchScreenState extends State<BatchScreen> {
                   isBatchFastestLoading
                       ? 'Loading..'
                       : !isBatchFastestLoading &&
-                              (_batchFastest == null || _batchFastest!.isEmpty)
-                          ? 'Data is empty.'
-                          : '',
+                            (_batchFastest == null || _batchFastest!.isEmpty)
+                      ? 'Data is empty.'
+                      : '',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -467,7 +468,8 @@ class _BatchScreenState extends State<BatchScreen> {
                                 ),
                               )
                               .then(
-                                  (value) => _getBatchs(isSilentRefresh: true));
+                                (value) => _getBatchs(isSilentRefresh: true),
+                              );
                         },
                         icon: const Icon(
                           Icons.chevron_right_rounded,
@@ -476,10 +478,7 @@ class _BatchScreenState extends State<BatchScreen> {
                       ),
                     ),
                     if (!isLastIndex)
-                      Divider(
-                        height: 0,
-                        color: Colors.grey.shade300,
-                      ),
+                      Divider(height: 0, color: Colors.grey.shade300),
                     if ((index + 1) == _itemCount && !isLastIndex)
                       const Padding(
                         padding: EdgeInsets.all(16),
@@ -504,8 +503,8 @@ class _BatchScreenState extends State<BatchScreen> {
                   isLoading
                       ? 'Loading..'
                       : !isLoading && (_batchs == null || _batchs!.isEmpty)
-                          ? _emptyMessage
-                          : '',
+                      ? _emptyMessage
+                      : '',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -545,16 +544,16 @@ class _BatchScreenState extends State<BatchScreen> {
                       onFieldSubmitted: (value) => _getBatchs(),
                       decoration: InputDecoration(
                         hintText: 'Search batch number..',
-                        hintStyle:
-                            Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  color: Colors.grey,
-                                ),
+                        hintStyle: Theme.of(
+                          context,
+                        ).textTheme.bodySmall!.copyWith(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.grey)),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: Colors.blue),
@@ -625,14 +624,10 @@ class _BatchScreenState extends State<BatchScreen> {
                             children: [
                               Text(
                                 _filteredDate,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
+                                style: Theme.of(context).textTheme.bodySmall!
                                     .copyWith(color: Colors.white),
                               ),
-                              const SizedBox(
-                                width: 6,
-                              ),
+                              const SizedBox(width: 6),
                               Material(
                                 color: Colors.transparent,
                                 child: InkWell(
@@ -645,7 +640,10 @@ class _BatchScreenState extends State<BatchScreen> {
                                   },
                                   child: const Padding(
                                     padding: EdgeInsets.only(
-                                        top: 4, bottom: 4, right: 12),
+                                      top: 4,
+                                      bottom: 4,
+                                      right: 12,
+                                    ),
                                     child: Icon(
                                       Icons.close,
                                       color: Colors.white,
@@ -653,7 +651,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -669,14 +667,10 @@ class _BatchScreenState extends State<BatchScreen> {
                             children: [
                               Text(
                                 _filteredProduct!.nameProduct,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
+                                style: Theme.of(context).textTheme.bodySmall!
                                     .copyWith(color: Colors.white),
                               ),
-                              const SizedBox(
-                                width: 6,
-                              ),
+                              const SizedBox(width: 6),
                               Material(
                                 color: Colors.transparent,
                                 child: InkWell(
@@ -689,7 +683,10 @@ class _BatchScreenState extends State<BatchScreen> {
                                   },
                                   child: const Padding(
                                     padding: EdgeInsets.only(
-                                        top: 4, bottom: 4, right: 12),
+                                      top: 4,
+                                      bottom: 4,
+                                      right: 12,
+                                    ),
                                     child: Icon(
                                       Icons.close,
                                       color: Colors.white,
@@ -697,7 +694,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -725,22 +722,18 @@ class _BatchScreenState extends State<BatchScreen> {
                             child: TextFormField(
                               controller: _dateController,
                               readOnly: true,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    color: Colors.blue,
-                                  ),
+                              style: Theme.of(context).textTheme.bodySmall!
+                                  .copyWith(color: Colors.blue),
                               decoration: InputDecoration(
                                 hintText: 'Click date icon to select',
                                 hintStyle: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
-                                    .copyWith(
-                                      color: Colors.grey,
-                                    ),
+                                    .copyWith(color: Colors.grey),
                                 contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 12),
+                                  vertical: 0,
+                                  horizontal: 12,
+                                ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -763,9 +756,7 @@ class _BatchScreenState extends State<BatchScreen> {
                                     FocusScope.of(context).unfocus();
                                     _selectDate(context);
                                   },
-                                  child: const Icon(
-                                    CupertinoIcons.calendar,
-                                  ),
+                                  child: const Icon(CupertinoIcons.calendar),
                                 ),
                               ),
                             ),
@@ -783,8 +774,10 @@ class _BatchScreenState extends State<BatchScreen> {
                             child: Row(
                               children: _listProduct!.map((item) {
                                 return Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 6, right: 6),
+                                  padding: const EdgeInsets.only(
+                                    top: 6,
+                                    right: 6,
+                                  ),
                                   child: OutlinedButton.icon(
                                     onPressed: () {
                                       setState(() {
@@ -797,28 +790,31 @@ class _BatchScreenState extends State<BatchScreen> {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                              color: _selectedProduct
-                                                          ?.idProduct ==
-                                                      item.idProduct
-                                                  ? Colors.blue.withAlpha(200)
-                                                  : Colors.black87),
+                                            color:
+                                                _selectedProduct?.idProduct ==
+                                                    item.idProduct
+                                                ? Colors.blue.withAlpha(200)
+                                                : Colors.black87,
+                                          ),
                                     ),
                                     style: OutlinedButton.styleFrom(
                                       side: BorderSide(
-                                        color: _selectedProduct?.idProduct ==
+                                        color:
+                                            _selectedProduct?.idProduct ==
                                                 item.idProduct
                                             ? Colors.blue.withAlpha(200)
                                             : Colors.black54,
                                       ),
-                                      iconColor: _selectedProduct?.idProduct ==
+                                      iconColor:
+                                          _selectedProduct?.idProduct ==
                                               item.idProduct
                                           ? Colors.blue.withAlpha(200)
                                           : Colors.black54,
                                       surfaceTintColor:
                                           _selectedProduct?.idProduct ==
-                                                  item.idProduct
-                                              ? Colors.blue.withAlpha(200)
-                                              : Colors.black54,
+                                              item.idProduct
+                                          ? Colors.blue.withAlpha(200)
+                                          : Colors.black54,
                                     ),
                                     icon: const Icon(
                                       CupertinoIcons.checkmark_alt_circle_fill,
@@ -836,9 +832,9 @@ class _BatchScreenState extends State<BatchScreen> {
                               isLoading
                                   ? 'Loading..'
                                   : !isLoading &&
-                                          (_batchs == null || _batchs!.isEmpty)
-                                      ? _emptyMessage
-                                      : '',
+                                        (_batchs == null || _batchs!.isEmpty)
+                                  ? _emptyMessage
+                                  : '',
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -856,9 +852,7 @@ class _BatchScreenState extends State<BatchScreen> {
                           backgroundColor: Colors.blue.withAlpha(200),
                           child: const Text(
                             "Apply Filter",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ],

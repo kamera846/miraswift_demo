@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:miraswift_demo/models/formula_model.dart';
-import 'package:miraswift_demo/services/api.dart';
+import 'package:miraswiftdemo/models/formula_model.dart';
+import 'package:miraswiftdemo/services/api.dart';
 
 class FormulaApi {
   Future<List<FormulaModel>?> list({
@@ -14,10 +14,7 @@ class FormulaApi {
     List<FormulaModel>? data;
     try {
       final url = Uri.https(baseUrl, 'api/formula', {'id_product': idProduct});
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -66,10 +63,7 @@ class FormulaApi {
     FormulaModel? data;
     try {
       final url = Uri.https(baseUrl, 'api/formula/$id');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -123,16 +117,14 @@ class FormulaApi {
       final response = await http.post(
         url,
         headers: headerSetup,
-        body: jsonEncode(
-          {
-            'id_product': productId,
-            'target_formula': target,
-            'fine_formula': fine,
-            'kode_material': code,
-            'name_material': name,
-            'time_target': time,
-          },
-        ),
+        body: jsonEncode({
+          'id_product': productId,
+          'target_formula': target,
+          'fine_formula': fine,
+          'kode_material': code,
+          'name_material': name,
+          'time_target': time,
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -185,16 +177,14 @@ class FormulaApi {
       final response = await http.post(
         url,
         headers: headerSetup,
-        body: jsonEncode(
-          {
-            'id_product': productId,
-            'target_formula': target,
-            'fine_formula': fine,
-            'kode_material': code,
-            'name_material': name,
-            'time_target': time,
-          },
-        ),
+        body: jsonEncode({
+          'id_product': productId,
+          'target_formula': target,
+          'fine_formula': fine,
+          'kode_material': code,
+          'name_material': name,
+          'time_target': time,
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -238,10 +228,7 @@ class FormulaApi {
   }) async {
     try {
       final url = Uri.https(baseUrl, 'api/formula/$id');
-      final response = await http.delete(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.delete(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/screens/chart_screen.dart';
-import 'package:miraswift_demo/screens/settings_screen.dart';
-import 'package:miraswift_demo/screens/transactions_sreen.dart';
-import 'package:miraswift_demo/widgets/dashboardv3_widget.dart';
+import 'package:miraswiftdemo/screens/chart_screen.dart';
+import 'package:miraswiftdemo/screens/settings_screen.dart';
+import 'package:miraswiftdemo/screens/transactions_sreen.dart';
+import 'package:miraswiftdemo/widgets/dashboardv3_widget.dart';
 
 class DashboardBottomNav extends StatelessWidget {
   const DashboardBottomNav({super.key, required this.dashboardKey});
@@ -55,11 +55,10 @@ class DashboardBottomNav extends StatelessWidget {
       return;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (ctx) => nextPage),
-    ).then((_) {
-      dashboardKey.currentState?.getSpkToday(isLoading: false);
-    });
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) => nextPage)).then(
+      (_) {
+        dashboardKey.currentState?.getSpkToday(isLoading: false);
+      },
+    );
   }
 }

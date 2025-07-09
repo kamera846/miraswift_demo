@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/batch_model.dart';
+import 'package:miraswiftdemo/models/batch_model.dart';
 
 class BatchItem extends StatelessWidget {
   const BatchItem.equipment({
@@ -63,9 +63,9 @@ class BatchItem extends StatelessWidget {
           actualDifferent = Text(
             different.toStringAsFixed(1),
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.lightBlue,
-                  fontWeight: FontWeight.w500,
-                ),
+              color: Colors.lightBlue,
+              fontWeight: FontWeight.w500,
+            ),
           );
         } else if (actualTimbang == targetFormula) {
           // pas
@@ -81,10 +81,9 @@ class BatchItem extends StatelessWidget {
           );
           actualDifferent = Text(
             different.toStringAsFixed(1),
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Colors.green),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall!.copyWith(color: Colors.green),
           );
         } else {
           // melebihi range
@@ -96,10 +95,9 @@ class BatchItem extends StatelessWidget {
           );
           actualDifferent = Text(
             different.toStringAsFixed(1),
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Colors.red),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall!.copyWith(color: Colors.red),
           );
         }
       }
@@ -131,14 +129,12 @@ class BatchItem extends StatelessWidget {
                                 : '-',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
+                            style: Theme.of(context).textTheme.bodySmall!
                                 .copyWith(color: Colors.grey.shade600),
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                   const SizedBox(height: 8),
                   Row(
@@ -152,10 +148,11 @@ class BatchItem extends StatelessWidget {
                               ? statusColorOn
                               : statusColorOff,
                           border: Border.all(
-                              width: 2,
-                              color: equipment != null
-                                  ? statusColorBorderOn
-                                  : statusColorBorderOff),
+                            width: 2,
+                            color: equipment != null
+                                ? statusColorBorderOn
+                                : statusColorBorderOff,
+                          ),
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
@@ -164,10 +161,9 @@ class BatchItem extends StatelessWidget {
                         equipment != null
                             ? equipment!.timeOn
                             : '${scales!.dateTimbang} ${scales!.timeTimbang}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: Colors.grey.shade600),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ],
                   ),
@@ -193,7 +189,9 @@ class BatchItem extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: statusColorOff,
                             border: Border.all(
-                                width: 2, color: statusColorBorderOff),
+                              width: 2,
+                              color: statusColorBorderOff,
+                            ),
                             borderRadius: BorderRadius.circular(100),
                           ),
                         ),
@@ -201,9 +199,7 @@ class BatchItem extends StatelessWidget {
                         if (equipment!.timeOff != '0')
                           Text(
                             equipment!.timeOff,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
+                            style: Theme.of(context).textTheme.bodySmall!
                                 .copyWith(color: Colors.grey.shade600),
                           )
                         else
@@ -211,10 +207,10 @@ class BatchItem extends StatelessWidget {
                             size: 16,
                             Icons.linear_scale,
                             color: statusColorBorderOff,
-                          )
+                          ),
                       ],
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),
@@ -227,23 +223,25 @@ class BatchItem extends StatelessWidget {
                       Text(
                         '${scales!.actualTimbang} KG',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       actualIcon,
                       actualDifferent,
                     ],
                   ),
-                  const SizedBox(
-                    height: 6,
-                  )
+                  const SizedBox(height: 6),
                 ],
                 if (equipment != null && equipment!.timeElapsed != '0')
-                  Text(equipment!.timeElapsed.trim(),
-                      style: Theme.of(context).textTheme.bodySmall)
+                  Text(
+                    equipment!.timeElapsed.trim(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  )
                 else if (scales != null && scales!.materialTime != '0')
-                  Text(scales!.materialTime.trim(),
-                      style: Theme.of(context).textTheme.bodySmall)
+                  Text(
+                    scales!.materialTime.trim(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  )
                 else
                   Icon(
                     size: 16,
@@ -254,25 +252,21 @@ class BatchItem extends StatelessWidget {
                   equipment != null
                       ? equipment!.desc.toUpperCase()
                       : scales!.statusTimbang.toUpperCase(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.grey.shade600),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.grey.shade600),
                 ),
               ],
-            )
+            ),
           ],
         ),
         if (!isLastIndex) ...[
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 0),
-            child: Divider(
-              height: 0,
-              color: Colors.grey.shade300,
-            ),
+            child: Divider(height: 0, color: Colors.grey.shade300),
           ),
-        ]
+        ],
       ],
     );
   }

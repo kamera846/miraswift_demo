@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:miraswift_demo/models/batch_model.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/services/api.dart';
+import 'package:miraswiftdemo/models/batch_model.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/services/api.dart';
 
 class BatchApiService {
   Future<List<BatchModel>?> batchs({
@@ -28,10 +28,7 @@ class BatchApiService {
       if (params.isNotEmpty) {
         url = Uri.https(baseUrl, 'api/batch', params);
       }
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -80,10 +77,7 @@ class BatchApiService {
     List<BatchModel>? data;
     try {
       var url = Uri.https(baseUrl, 'api/batch/fastest/$idProduct');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -133,7 +127,8 @@ class BatchApiService {
       ProductModel? dataProduct,
       String? totalEquipmentTime,
       String? totalMaterialTime,
-    )? onCompleted,
+    )?
+    onCompleted,
   }) async {
     List<BatchModel>? dataEquipment;
     List<BatchModel>? dataScales;
@@ -142,10 +137,7 @@ class BatchApiService {
     String? totalMaterialTime;
     try {
       final url = Uri.https(baseUrl, 'api/batch/detail/$batchNumber');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

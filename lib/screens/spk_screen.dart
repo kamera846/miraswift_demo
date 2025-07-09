@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/models/spk_model.dart';
-import 'package:miraswift_demo/services/product_api.dart';
-import 'package:miraswift_demo/services/spk_api.dart';
-import 'package:miraswift_demo/utils/formatted_date.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/form_new_spk.dart';
-import 'package:miraswift_demo/widgets/list_tile_item.dart';
-import 'package:miraswift_demo/utils/platform_alert_dialog.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/models/spk_model.dart';
+import 'package:miraswiftdemo/services/product_api.dart';
+import 'package:miraswiftdemo/services/spk_api.dart';
+import 'package:miraswiftdemo/utils/formatted_date.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
+import 'package:miraswiftdemo/widgets/form_new_spk.dart';
+import 'package:miraswiftdemo/widgets/list_tile_item.dart';
+import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
 
 class SpkScreen extends StatefulWidget {
   const SpkScreen({super.key});
@@ -221,7 +221,9 @@ class _SpkScreenState extends State<SpkScreen> {
               bottom: 12 + _keyboardHeight,
             ),
             child: FormNewSpk(
-                onSubmitted: _submitNewItem, listProduct: _listProduct),
+              onSubmitted: _submitNewItem,
+              listProduct: _listProduct,
+            ),
           ),
         );
       },
@@ -312,9 +314,10 @@ class _SpkScreenState extends State<SpkScreen> {
               bottom: 12 + _keyboardHeight,
             ),
             child: FormNewSpk.edit(
-                item: _selectedItem,
-                onSubmitted: _submitEditItem,
-                listProduct: _listProduct),
+              item: _selectedItem,
+              onSubmitted: _submitEditItem,
+              listProduct: _listProduct,
+            ),
           ),
         );
       },
@@ -398,8 +401,9 @@ class _SpkScreenState extends State<SpkScreen> {
     if (pickedDate != null && pickedDate != DateTime.now()) {
       setState(() {
         _filterStatus = 'all';
-        _dateController.text =
-            "${pickedDate.toLocal()}".split(' ')[0]; // Format to yyyy-mm-dd
+        _dateController.text = "${pickedDate.toLocal()}".split(
+          ' ',
+        )[0]; // Format to yyyy-mm-dd
       });
       _getList();
     }
@@ -415,9 +419,7 @@ class _SpkScreenState extends State<SpkScreen> {
         actions: [
           IconButton(
             onPressed: _isLoading ? null : _newItem,
-            icon: const Icon(
-              CupertinoIcons.add_circled_solid,
-            ),
+            icon: const Icon(CupertinoIcons.add_circled_solid),
           ),
         ],
       ),
@@ -435,16 +437,18 @@ class _SpkScreenState extends State<SpkScreen> {
                 },
                 controller: _dateController,
                 readOnly: true,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Colors.blue,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall!.copyWith(color: Colors.blue),
                 decoration: InputDecoration(
                   hintText: 'Click date icon to filter',
-                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.grey,
-                      ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                  hintStyle: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 12,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -458,9 +462,7 @@ class _SpkScreenState extends State<SpkScreen> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Colors.blue,
-                    ),
+                    borderSide: const BorderSide(color: Colors.blue),
                   ),
                   prefixIcon: InkWell(
                     onTap: () {
@@ -469,9 +471,7 @@ class _SpkScreenState extends State<SpkScreen> {
                         _selectDate(context);
                       }
                     },
-                    child: const Icon(
-                      CupertinoIcons.calendar,
-                    ),
+                    child: const Icon(CupertinoIcons.calendar),
                   ),
                   // suffixIcon: _dateController.text.isNotEmpty
                   //     ? InkWell(
@@ -503,8 +503,9 @@ class _SpkScreenState extends State<SpkScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: ['all', 'pending', 'running', 'done', 'stopped']
-                    .map((item) {
+                children: ['all', 'pending', 'running', 'done', 'stopped'].map((
+                  item,
+                ) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: OutlinedButton(
@@ -520,19 +521,19 @@ class _SpkScreenState extends State<SpkScreen> {
                         side: BorderSide(
                           color: _filterStatus == item
                               ? _isLoading
-                                  ? Colors.blue.withAlpha(50)
-                                  : Colors.blue.withAlpha(100)
+                                    ? Colors.blue.withAlpha(50)
+                                    : Colors.blue.withAlpha(100)
                               : _isLoading
-                                  ? Colors.grey.shade200
-                                  : Colors.black12,
+                              ? Colors.grey.shade200
+                              : Colors.black12,
                         ),
                         backgroundColor: _filterStatus == item
                             ? _isLoading
-                                ? Colors.blue.withAlpha(50)
-                                : Colors.blue.withAlpha(100)
+                                  ? Colors.blue.withAlpha(50)
+                                  : Colors.blue.withAlpha(100)
                             : _isLoading
-                                ? Colors.grey.shade200
-                                : Colors.black12,
+                            ? Colors.grey.shade200
+                            : Colors.black12,
                         padding: const EdgeInsets.all(14),
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -541,15 +542,15 @@ class _SpkScreenState extends State<SpkScreen> {
                       child: Text(
                         item.toUpperCase(),
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              color: _filterStatus == item
-                                  ? _isLoading
-                                      ? Colors.blue.shade200
-                                      : Colors.blue
-                                  : _isLoading
-                                      ? Colors.black26
-                                      : Colors.black54,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          color: _filterStatus == item
+                              ? _isLoading
+                                    ? Colors.blue.shade200
+                                    : Colors.blue
+                              : _isLoading
+                              ? Colors.black26
+                              : Colors.black54,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   );
@@ -562,14 +563,13 @@ class _SpkScreenState extends State<SpkScreen> {
                 margin: const EdgeInsets.all(12),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  border:
-                      Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.withAlpha(75),
+                  ),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'Loading..',
-                  textAlign: TextAlign.center,
-                ),
+                child: const Text('Loading..', textAlign: TextAlign.center),
               )
             else if (_listFiltered == null || _listFiltered!.isEmpty)
               Container(
@@ -577,8 +577,10 @@ class _SpkScreenState extends State<SpkScreen> {
                 margin: const EdgeInsets.all(12),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  border:
-                      Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.withAlpha(75),
+                  ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(
@@ -602,7 +604,7 @@ class _SpkScreenState extends State<SpkScreen> {
                   });
                   _deleteItem();
                 },
-              )
+              ),
             // else ...[
             // if ((_listNow == null || _listNow!.isEmpty) &&
             //     (_listPast == null || _listPast!.isEmpty) &&
@@ -769,8 +771,10 @@ class ListSpk extends StatelessWidget {
                       size: 20,
                     ),
                     const SizedBox(width: 8),
-                    Text(title ?? '',
-                        style: Theme.of(context).textTheme.titleSmall),
+                    Text(
+                      title ?? '',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ],
                 ),
               )
@@ -793,14 +797,17 @@ class ListSpk extends StatelessWidget {
                 key: Key('$index'),
                 isSelected:
                     (selectedItem != null && selectedItem!.idSpk == item.idSpk)
-                        ? true
-                        : false,
+                    ? true
+                    : false,
                 badge: '${item.jmlBatch} Batch',
                 title: item.descSpk,
                 border: !isLastIndex
                     ? Border(
-                        bottom:
-                            BorderSide(width: 1, color: Colors.grey.shade300))
+                        bottom: BorderSide(
+                          width: 1,
+                          color: Colors.grey.shade300,
+                        ),
+                      )
                     : null,
                 rightDescription: item.statusSpk.toUpperCase(),
                 description:
@@ -811,62 +818,63 @@ class ListSpk extends StatelessWidget {
                         color: Colors.grey.shade700,
                       )
                     : item.statusSpk == 'running'
-                        ? Icon(
-                            Icons.timelapse_rounded,
-                            color: Colors.yellow.shade900,
-                          )
-                        : item.statusSpk == 'done'
-                            ? Icon(
-                                Icons.check_circle_rounded,
-                                color: Colors.green.shade700,
-                              )
-                            : Icon(
-                                Icons.stop_circle_rounded,
-                                color: Colors.red.shade700,
-                              ),
+                    ? Icon(
+                        Icons.timelapse_rounded,
+                        color: Colors.yellow.shade900,
+                      )
+                    : item.statusSpk == 'done'
+                    ? Icon(
+                        Icons.check_circle_rounded,
+                        color: Colors.green.shade700,
+                      )
+                    : Icon(
+                        Icons.stop_circle_rounded,
+                        color: Colors.red.shade700,
+                      ),
                 customTrailingIcon:
                     withCustomTrailing && item.statusSpk != 'done'
-                        ? PopupMenuButton<SpkModel>(
-                            icon: const Icon(
-                              Icons.more_vert_rounded,
-                              color: Colors.grey,
-                            ),
-                            itemBuilder: (ctx) {
-                              return [
-                                PopupMenuItem<SpkModel>(
-                                  onTap: () {
-                                    onEdit!(item);
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        CupertinoIcons.pencil_circle_fill,
-                                        color: Colors.orange.withAlpha(150),
-                                        size: 20,
-                                      ),
-                                      const SizedBox(width: 12),
-                                      const Text('Edit')
-                                    ],
+                    ? PopupMenuButton<SpkModel>(
+                        icon: const Icon(
+                          Icons.more_vert_rounded,
+                          color: Colors.grey,
+                        ),
+                        itemBuilder: (ctx) {
+                          return [
+                            PopupMenuItem<SpkModel>(
+                              onTap: () {
+                                onEdit!(item);
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.pencil_circle_fill,
+                                    color: Colors.orange.withAlpha(150),
+                                    size: 20,
                                   ),
-                                ),
-                                // PopupMenuItem<SpkModel>(
-                                //   onTap: () {
-                                //     onDelete!(item);
-                                //   },
-                                //   child: const Row(
-                                //     children: [
-                                //       Icon(
-                                //         CupertinoIcons.trash_circle_fill,
-                                //         size: 20,
-                                //       ),
-                                //       SizedBox(width: 12),
-                                //       Text('Delete')
-                                //     ],
-                                //   ),
-                                // ),
-                              ];
-                            })
-                        : null,
+                                  const SizedBox(width: 12),
+                                  const Text('Edit'),
+                                ],
+                              ),
+                            ),
+                            // PopupMenuItem<SpkModel>(
+                            //   onTap: () {
+                            //     onDelete!(item);
+                            //   },
+                            //   child: const Row(
+                            //     children: [
+                            //       Icon(
+                            //         CupertinoIcons.trash_circle_fill,
+                            //         size: 20,
+                            //       ),
+                            //       SizedBox(width: 12),
+                            //       Text('Delete')
+                            //     ],
+                            //   ),
+                            // ),
+                          ];
+                        },
+                      )
+                    : null,
               );
             }).toList(),
           ),

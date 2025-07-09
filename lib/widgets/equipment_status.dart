@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/equipment_model.dart';
+import 'package:miraswiftdemo/models/equipment_model.dart';
 
 class EquipmentStatus extends StatelessWidget {
   const EquipmentStatus({
@@ -48,14 +48,15 @@ class EquipmentStatus extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(equipment.nameEquipment,
-                      style: Theme.of(context).textTheme.titleSmall),
+                  Text(
+                    equipment.nameEquipment,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                   Text(
                     '${equipment.dateEquipment} ${equipment.timeEquipment}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.grey.shade600),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Colors.grey.shade600,
+                    ),
                   ),
                 ],
               ),
@@ -66,25 +67,21 @@ class EquipmentStatus extends StatelessWidget {
                 Text('BATCH', style: Theme.of(context).textTheme.bodySmall),
                 Text(
                   equipment.noBatch,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.grey.shade600),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.grey.shade600),
                 ),
               ],
-            )
+            ),
           ],
         ),
         if (!isLastIndex) ...[
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Divider(
-              height: 1,
-              color: Colors.grey.shade300,
-            ),
+            child: Divider(height: 1, color: Colors.grey.shade300),
           ),
-        ]
+        ],
       ],
     );
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/logmsg_model.dart';
-import 'package:miraswift_demo/screens/notifications_target_screen.dart';
-import 'package:miraswift_demo/services/logmsg_api.dart';
-import 'package:miraswift_demo/utils/formatted_date.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
+import 'package:miraswiftdemo/models/logmsg_model.dart';
+import 'package:miraswiftdemo/screens/notifications_target_screen.dart';
+import 'package:miraswiftdemo/services/logmsg_api.dart';
+import 'package:miraswiftdemo/utils/formatted_date.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -54,9 +54,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
         ),
         actions: [
           PopupMenuButton(
-            icon: const Icon(
-              Icons.settings_applications,
-            ),
+            icon: const Icon(Icons.settings_applications),
             itemBuilder: (ctx) {
               return [
                 PopupMenuItem(
@@ -72,22 +70,21 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                     children: [
                       Icon(Icons.person),
                       SizedBox(width: 12),
-                      Text('Manage Target Users')
+                      Text('Manage Target Users'),
                     ],
                   ),
                 ),
               ];
             },
-          )
+          ),
         ],
-        bottom: TabBar(controller: _tabController, tabs: const [
-          Tab(
-            child: Text('General'),
-          ),
-          Tab(
-            child: Text('Problem'),
-          ),
-        ]),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(child: Text('General')),
+            Tab(child: Text('Problem')),
+          ],
+        ),
       ),
       body: TabBarView(
         controller: _tabController,
@@ -128,13 +125,8 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                             children: [
                               Text(
                                 'To number ${item.toNumber}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      color: Colors.grey,
-                                      fontSize: 10,
-                                    ),
+                                style: Theme.of(context).textTheme.bodySmall!
+                                    .copyWith(color: Colors.grey, fontSize: 10),
                               ),
                               Text(
                                 formattedDate(
@@ -142,30 +134,27 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                                   inputFormat: 'yyyy-MM-dd HH:mm:ss',
                                   outputFormat: 'dd MMM yyyy, HH:mm',
                                 ),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      color: Colors.grey,
-                                      fontSize: 10,
-                                    ),
-                              )
+                                style: Theme.of(context).textTheme.bodySmall!
+                                    .copyWith(color: Colors.grey, fontSize: 10),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text(item.toName,
-                              style: Theme.of(context).textTheme.titleSmall),
+                          Text(
+                            item.toName,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
                           Text(
                             item.message,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
+                            style: Theme.of(context).textTheme.bodySmall!
                                 .copyWith(color: Colors.grey.shade600),
-                            maxLines: _selectedItem != null &&
+                            maxLines:
+                                _selectedItem != null &&
                                     _selectedItem!.idLogMsg == item.idLogMsg
                                 ? null
                                 : 3,
-                            overflow: _selectedItem != null &&
+                            overflow:
+                                _selectedItem != null &&
                                     _selectedItem!.idLogMsg == item.idLogMsg
                                 ? TextOverflow.visible
                                 : TextOverflow.ellipsis,
@@ -176,10 +165,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                     ),
                   ),
                   if (!isLastIndex)
-                    Divider(
-                      height: 0,
-                      color: Colors.grey.shade300,
-                    ),
+                    Divider(height: 0, color: Colors.grey.shade300),
                 ],
               );
             },
@@ -187,11 +173,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
         : Center(
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: Text(isLoading
-                  ? 'Loading..'
-                  : !isLoading && (messages == null || messages.isEmpty)
-                      ? 'Data is empty.'
-                      : ''),
+              child: Text(
+                isLoading
+                    ? 'Loading..'
+                    : !isLoading && (messages == null || messages.isEmpty)
+                    ? 'Data is empty.'
+                    : '',
+              ),
             ),
           );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/spk_model.dart';
-import 'package:miraswift_demo/services/spk_api.dart';
-import 'package:miraswift_demo/services/transaction_api.dart';
-import 'package:miraswift_demo/utils/formatted_date.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/list_tile_item.dart';
+import 'package:miraswiftdemo/models/spk_model.dart';
+import 'package:miraswiftdemo/services/spk_api.dart';
+import 'package:miraswiftdemo/services/transaction_api.dart';
+import 'package:miraswiftdemo/utils/formatted_date.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
+import 'package:miraswiftdemo/widgets/list_tile_item.dart';
 
 class SpkAvailableScreen extends StatefulWidget {
   const SpkAvailableScreen({super.key, this.idTransaction});
@@ -56,8 +56,10 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Available Spk',
-            style: Theme.of(context).textTheme.titleMedium),
+        title: Text(
+          'Available Spk',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       body: Stack(
         children: [
@@ -71,13 +73,12 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       border: Border.all(
-                          width: 1, color: Colors.grey.withAlpha(75)),
+                        width: 1,
+                        color: Colors.grey.withAlpha(75),
+                      ),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Text(
-                      'Loading..',
-                      textAlign: TextAlign.center,
-                    ),
+                    child: const Text('Loading..', textAlign: TextAlign.center),
                   )
                 else if (_listItem == null || _listItem!.isEmpty)
                   Container(
@@ -86,7 +87,9 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       border: Border.all(
-                          width: 1, color: Colors.grey.withAlpha(75)),
+                        width: 1,
+                        color: Colors.grey.withAlpha(75),
+                      ),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Text(
@@ -99,12 +102,13 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
                     listItem: _listItem!,
                     selectedItem: _selectedItem,
                     onCheckedChanged: (value, item) {
-                      int findIndex = _listItem!
-                          .indexWhere((element) => element.idSpk == item.idSpk);
+                      int findIndex = _listItem!.indexWhere(
+                        (element) => element.idSpk == item.idSpk,
+                      );
                       if (findIndex != -1) {
                         setState(() {
-                          _listItem![findIndex] =
-                              _listItem![findIndex].copyWith(isChecked: value);
+                          _listItem![findIndex] = _listItem![findIndex]
+                              .copyWith(isChecked: value);
                           if (_listItem![findIndex].isChecked) {
                             _selectedSpk.add(_listItem![findIndex].idSpk);
                           } else {
@@ -114,9 +118,7 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
                       }
                     },
                   ),
-                  const SizedBox(
-                    height: 84,
-                  )
+                  const SizedBox(height: 84),
                 ],
               ],
             ),
@@ -135,9 +137,7 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
                 ),
                 child: const Text(
                   'Create Transaction',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
@@ -224,8 +224,10 @@ class ListSpk extends StatelessWidget {
                       size: 20,
                     ),
                     const SizedBox(width: 8),
-                    Text(title ?? '',
-                        style: Theme.of(context).textTheme.titleSmall),
+                    Text(
+                      title ?? '',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ],
                 ),
               )
@@ -242,50 +244,54 @@ class ListSpk extends StatelessWidget {
               final isLastIndex = (index == (listItem.length - 1));
               index++;
               return ListTileItem(
-                  key: Key('$index'),
-                  onTap: () {
-                    onCheckedChanged!(!item.isChecked, item);
+                key: Key('$index'),
+                onTap: () {
+                  onCheckedChanged!(!item.isChecked, item);
+                },
+                isSelected:
+                    (selectedItem != null && selectedItem!.idSpk == item.idSpk)
+                    ? true
+                    : false,
+                badge: '${item.jmlBatch} Batch',
+                title: item.descSpk,
+                border: !isLastIndex
+                    ? Border(
+                        bottom: BorderSide(
+                          width: 1,
+                          color: Colors.grey.shade300,
+                        ),
+                      )
+                    : null,
+                description:
+                    'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
+                customLeadingIcon: item.statusSpk == 'pending'
+                    ? Icon(
+                        Icons.watch_later_rounded,
+                        color: Colors.grey.shade700,
+                      )
+                    : item.statusSpk == 'running'
+                    ? Icon(
+                        Icons.timelapse_rounded,
+                        color: Colors.yellow.shade900,
+                      )
+                    : item.statusSpk == 'done'
+                    ? Icon(
+                        Icons.check_circle_rounded,
+                        color: Colors.green.shade700,
+                      )
+                    : Icon(
+                        Icons.stop_circle_rounded,
+                        color: Colors.red.shade700,
+                      ),
+                customTrailingIcon: Checkbox(
+                  value: item.isChecked,
+                  onChanged: (value) {
+                    if (onCheckedChanged != null) {
+                      onCheckedChanged!(value, item);
+                    }
                   },
-                  isSelected: (selectedItem != null &&
-                          selectedItem!.idSpk == item.idSpk)
-                      ? true
-                      : false,
-                  badge: '${item.jmlBatch} Batch',
-                  title: item.descSpk,
-                  border: !isLastIndex
-                      ? Border(
-                          bottom:
-                              BorderSide(width: 1, color: Colors.grey.shade300))
-                      : null,
-                  description:
-                      'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
-                  customLeadingIcon: item.statusSpk == 'pending'
-                      ? Icon(
-                          Icons.watch_later_rounded,
-                          color: Colors.grey.shade700,
-                        )
-                      : item.statusSpk == 'running'
-                          ? Icon(
-                              Icons.timelapse_rounded,
-                              color: Colors.yellow.shade900,
-                            )
-                          : item.statusSpk == 'done'
-                              ? Icon(
-                                  Icons.check_circle_rounded,
-                                  color: Colors.green.shade700,
-                                )
-                              : Icon(
-                                  Icons.stop_circle_rounded,
-                                  color: Colors.red.shade700,
-                                ),
-                  customTrailingIcon: Checkbox(
-                    value: item.isChecked,
-                    onChanged: (value) {
-                      if (onCheckedChanged != null) {
-                        onCheckedChanged!(value, item);
-                      }
-                    },
-                  ));
+                ),
+              );
             }).toList(),
           ),
         ),

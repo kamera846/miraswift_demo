@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/user_model.dart';
+import 'package:miraswiftdemo/models/user_model.dart';
 
 class FormNewNotificationTarget extends StatefulWidget {
-  const FormNewNotificationTarget({
-    super.key,
-    required this.onSubmitted,
-  })  : isEdit = false,
-        item = null;
+  const FormNewNotificationTarget({super.key, required this.onSubmitted})
+    : isEdit = false,
+      item = null;
   const FormNewNotificationTarget.edit({
     super.key,
     required this.item,
@@ -98,16 +96,17 @@ class FormNewNotificationTargetState extends State<FormNewNotificationTarget> {
                   labelText: 'Phone Number',
                   labelStyle: Theme.of(context).textTheme.bodySmall,
                   hintText: 'ex: 6281XXXXXX',
-                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.grey,
-                      ),
+                  hintStyle: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 validator: (value) {
-                  final RegExp phoneRegExp =
-                      RegExp(r'^\+?[1-9]\d{1,14}$'); // E.164 format
+                  final RegExp phoneRegExp = RegExp(
+                    r'^\+?[1-9]\d{1,14}$',
+                  ); // E.164 format
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
                   }
@@ -134,7 +133,7 @@ class FormNewNotificationTargetState extends State<FormNewNotificationTarget> {
                         _status = value;
                       });
                     },
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 12.0),

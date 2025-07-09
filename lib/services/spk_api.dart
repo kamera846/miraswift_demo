@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:miraswift_demo/models/formula_model.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/models/spk_model.dart';
-import 'package:miraswift_demo/services/api.dart';
+import 'package:miraswiftdemo/models/formula_model.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/models/spk_model.dart';
+import 'package:miraswiftdemo/services/api.dart';
 
 class SpkApi {
   Future<List<SpkModel>?> list({
@@ -15,10 +15,7 @@ class SpkApi {
     List<SpkModel>? data;
     try {
       final url = Uri.https(baseUrl, 'api/spk');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -62,17 +59,14 @@ class SpkApi {
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
     Function(SpkModel? spk, ProductModel? product, FormulaModel? formula)?
-        onCompleted,
+    onCompleted,
   }) async {
     SpkModel? spk;
     ProductModel? product;
     FormulaModel? formula;
     try {
       final url = Uri.https(baseUrl, 'api/spk/today');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -124,10 +118,7 @@ class SpkApi {
     List<SpkModel>? data;
     try {
       final url = Uri.https(baseUrl, 'api/spk/available');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -176,10 +167,7 @@ class SpkApi {
     List<SpkModel>? data;
     try {
       final url = Uri.https(baseUrl, 'api/spk', {'date': date});
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -228,10 +216,7 @@ class SpkApi {
     List<SpkModel>? data;
     try {
       final url = Uri.https(baseUrl, 'api/spk', {'period': period});
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -280,12 +265,11 @@ class SpkApi {
   }) async {
     List<SpkModel>? data;
     try {
-      final url =
-          Uri.https(baseUrl, 'api/spk', {'date': date, 'status': status});
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final url = Uri.https(baseUrl, 'api/spk', {
+        'date': date,
+        'status': status,
+      });
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -334,10 +318,7 @@ class SpkApi {
     SpkModel? data;
     try {
       final url = Uri.https(baseUrl, 'api/spk/$id');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -389,14 +370,12 @@ class SpkApi {
       final response = await http.post(
         url,
         headers: headerSetup,
-        body: jsonEncode(
-          {
-            'id_product': idProduct,
-            'jml_batch': jmlBatch,
-            'date_spk': dateSpk,
-            'desc_spk': descSpk,
-          },
-        ),
+        body: jsonEncode({
+          'id_product': idProduct,
+          'jml_batch': jmlBatch,
+          'date_spk': dateSpk,
+          'desc_spk': descSpk,
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -447,14 +426,12 @@ class SpkApi {
       final response = await http.post(
         url,
         headers: headerSetup,
-        body: jsonEncode(
-          {
-            'id_product': idProduct,
-            'jml_batch': jmlBatch,
-            'date_spk': dateSpk,
-            'desc_spk': descSpk,
-          },
-        ),
+        body: jsonEncode({
+          'id_product': idProduct,
+          'jml_batch': jmlBatch,
+          'date_spk': dateSpk,
+          'desc_spk': descSpk,
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -498,10 +475,7 @@ class SpkApi {
   }) async {
     try {
       final url = Uri.https(baseUrl, 'api/spk/$id');
-      final response = await http.delete(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.delete(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

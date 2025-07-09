@@ -1,4 +1,4 @@
-import 'package:miraswift_demo/models/transaction_detail_model.dart';
+import 'package:miraswiftdemo/models/transaction_detail_model.dart';
 
 class TransactionModel {
   const TransactionModel({
@@ -44,18 +44,18 @@ class TransactionModel {
       updatedAt: json['updated_at'] ?? '',
       detail: json['detail'] != null
           ? (json['detail'] as List)
-              .map((e) => TransactionDetailModel.fromJson(e))
-              .toList()
+                .map((e) => TransactionDetailModel.fromJson(e))
+                .toList()
           : null,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id_transaction': idTransaction,
-        'date_transaction': dateTransaction,
-        'status_transaction': statusTransaction,
-        'created_at': createdAt,
-        'updated_at': updatedAt,
-        'detail': detail,
-      };
+    'id_transaction': idTransaction,
+    'date_transaction': dateTransaction,
+    'status_transaction': statusTransaction,
+    'created_at': createdAt,
+    'updated_at': updatedAt,
+    'detail': detail,
+  };
 }

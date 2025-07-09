@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/widgets/list_tile_item.dart';
+import 'package:miraswiftdemo/widgets/list_tile_item.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -23,10 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            settingsHeader(context),
-            settingsMenu(),
-          ],
+          children: [settingsHeader(context), settingsMenu()],
         ),
       ),
     );
@@ -40,9 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTileItem(
             title: 'Manage User',
             onTap: () {},
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade300),
-            ),
+            border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
             customTrailingIcon: Icon(
               Icons.arrow_right_rounded,
               color: Colors.grey.shade500,
@@ -54,9 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTileItem(
             title: 'Master Data Products',
             onTap: () {},
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade300),
-            ),
+            border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
             customTrailingIcon: Icon(
               Icons.arrow_right_rounded,
               color: Colors.grey.shade500,
@@ -68,9 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTileItem(
             title: 'Master Data Materials',
             onTap: () {},
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade300),
-            ),
+            border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
             customTrailingIcon: Icon(
               Icons.arrow_right_rounded,
               color: Colors.grey.shade500,
@@ -82,9 +73,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTileItem(
             title: 'Edit Plan',
             onTap: () {},
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade300),
-            ),
+            border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
             customTrailingIcon: Icon(
               Icons.arrow_right_rounded,
               color: Colors.grey.shade500,
@@ -96,9 +85,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTileItem(
             title: 'Accurate',
             onTap: () {},
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade300),
-            ),
+            border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
             customTrailingIcon: Icon(
               Icons.arrow_right_rounded,
               color: Colors.grey.shade500,
@@ -110,9 +97,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListTileItem(
             title: 'Logout',
             onTap: () {},
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade300),
-            ),
+            border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
             customTrailingIcon: Icon(
               Icons.arrow_right_rounded,
               color: Colors.grey.shade500,
@@ -130,10 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           CircleAvatar(
             backgroundColor: Colors.grey.shade300,
-            child: Icon(
-              Icons.person,
-              color: Colors.grey.shade600,
-            ),
+            child: Icon(Icons.person, color: Colors.grey.shade600),
           ),
           Expanded(
             child: Column(
@@ -143,10 +125,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Hero(
                     tag: 'username',
-                    child: Text("Mochammad Rafli Ramadani",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleMedium),
+                    child: Text(
+                      "Mochammad Rafli Ramadani",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
                 ),
                 Padding(
@@ -155,9 +139,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     tag: 'usercompany',
                     child: Text(
                       "PT. Top Mortar Indonesia",
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: Colors.grey,
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleSmall?.copyWith(color: Colors.grey),
                     ),
                   ),
                 ),
@@ -170,12 +154,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               color: Colors.grey,
             ),
             itemBuilder: (ctx) => [
-              const PopupMenuItem(
-                child: Text('My Profile'),
-              ),
-              const PopupMenuItem(
-                child: Text('Edit'),
-              ),
+              const PopupMenuItem(child: Text('My Profile')),
+              const PopupMenuItem(child: Text('Edit')),
             ],
           ),
         ],

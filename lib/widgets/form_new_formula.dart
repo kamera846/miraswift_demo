@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/formula_model.dart';
-import 'package:miraswift_demo/models/material_model.dart';
+import 'package:miraswiftdemo/models/formula_model.dart';
+import 'package:miraswiftdemo/models/material_model.dart';
 
 class FormNewFormula extends StatefulWidget {
   const FormNewFormula({
@@ -8,8 +8,8 @@ class FormNewFormula extends StatefulWidget {
     required this.productId,
     required this.listMaterial,
     required this.onSubmitted,
-  })  : isEdit = false,
-        item = null;
+  }) : isEdit = false,
+       item = null;
   const FormNewFormula.edit({
     super.key,
     required this.item,
@@ -29,7 +29,8 @@ class FormNewFormula extends StatefulWidget {
     String target,
     String fine,
     String time,
-  ) onSubmitted;
+  )
+  onSubmitted;
 
   @override
   FormNewFormulaState createState() => FormNewFormulaState();
@@ -81,8 +82,10 @@ class FormNewFormulaState extends State<FormNewFormula> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(widget.isEdit ? 'Edit Formula' : 'New Formula',
-            style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          widget.isEdit ? 'Edit Formula' : 'New Formula',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         const SizedBox(height: 24),
         Form(
           key: _formKey,
@@ -96,17 +99,18 @@ class FormNewFormulaState extends State<FormNewFormula> {
                   ),
                 ),
                 items: widget.listMaterial.map<DropdownMenuItem<MaterialModel>>(
-                    (MaterialModel value) {
-                  return DropdownMenuItem<MaterialModel>(
-                    value: value,
-                    child: Text(
-                      value.id != -1
-                          ? '${value.name} [${value.no.toString()}]'
-                          : value.name,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  );
-                }).toList(),
+                  (MaterialModel value) {
+                    return DropdownMenuItem<MaterialModel>(
+                      value: value,
+                      child: Text(
+                        value.id != -1
+                            ? '${value.name} [${value.no.toString()}]'
+                            : value.name,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    );
+                  },
+                ).toList(),
                 onChanged: (MaterialModel? value) {
                   setState(() {
                     _selectedMaterial = value!;
@@ -136,10 +140,9 @@ class FormNewFormulaState extends State<FormNewFormula> {
                         labelText: 'Target (kg)',
                         labelStyle: Theme.of(context).textTheme.bodySmall,
                         hintText: '100.0',
-                        hintStyle:
-                            Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  color: Colors.grey,
-                                ),
+                        hintStyle: Theme.of(
+                          context,
+                        ).textTheme.bodySmall!.copyWith(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -165,10 +168,9 @@ class FormNewFormulaState extends State<FormNewFormula> {
                         labelText: 'Fine (kg)',
                         labelStyle: Theme.of(context).textTheme.bodySmall,
                         hintText: '5.0',
-                        hintStyle:
-                            Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  color: Colors.grey,
-                                ),
+                        hintStyle: Theme.of(
+                          context,
+                        ).textTheme.bodySmall!.copyWith(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -195,9 +197,9 @@ class FormNewFormulaState extends State<FormNewFormula> {
                   labelText: 'Time (second)',
                   labelStyle: Theme.of(context).textTheme.bodySmall,
                   hintText: '60',
-                  hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.grey,
-                      ),
+                  hintStyle: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

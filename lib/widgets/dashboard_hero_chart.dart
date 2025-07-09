@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/hero_chart_model.dart';
+import 'package:miraswiftdemo/models/hero_chart_model.dart';
 
 class DashboardHeroChart extends StatefulWidget {
   const DashboardHeroChart({
@@ -51,27 +51,18 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             widget.icon,
-            const SizedBox(
-              width: 16,
-            ),
-            Text(
-              widget.title,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            const SizedBox(
-              width: 4,
-            ),
+            const SizedBox(width: 16),
+            Text(widget.title, style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(width: 4),
             Text(
               '(${widget.unit})',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Colors.black38,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(color: Colors.black38),
             ),
           ],
         ),
-        const SizedBox(
-          height: 38,
-        ),
+        const SizedBox(height: 38),
         Expanded(
           child: BarChart(
             BarChartData(
@@ -87,22 +78,23 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
                     right: 16,
                     bottom: 8,
                   ),
-                  getTooltipItem: (
-                    BarChartGroupData group,
-                    int groupIndex,
-                    BarChartRodData rod,
-                    int rodIndex,
-                  ) {
-                    return BarTooltipItem(
-                      'Date: ${widget.heroChartData[groupIndex].date}\nBatch: ${widget.heroChartData[groupIndex].batch}\nTotal: ${rod.toY.toStringAsFixed(0)} ${widget.unit}',
-                      textAlign: TextAlign.start,
-                      const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12,
-                        color: Colors.white,
-                      ),
-                    );
-                  },
+                  getTooltipItem:
+                      (
+                        BarChartGroupData group,
+                        int groupIndex,
+                        BarChartRodData rod,
+                        int rodIndex,
+                      ) {
+                        return BarTooltipItem(
+                          'Date: ${widget.heroChartData[groupIndex].date}\nBatch: ${widget.heroChartData[groupIndex].batch}\nTotal: ${rod.toY.toStringAsFixed(0)} ${widget.unit}',
+                          textAlign: TextAlign.start,
+                          const TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        );
+                      },
                 ),
                 touchCallback: (FlTouchEvent event, barTouchResponse) {
                   setState(() {
@@ -131,9 +123,7 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
                           showTitles: true,
                           getTitlesWidget: bottomTitles,
                         )
-                      : const SideTitles(
-                          showTitles: false,
-                        ),
+                      : const SideTitles(showTitles: false),
                 ),
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
@@ -144,30 +134,24 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
                   ),
                 ),
               ),
-              borderData: FlBorderData(
-                show: false,
-              ),
+              borderData: FlBorderData(show: false),
               barGroups: showingChartGroups(),
               gridData: const FlGridData(show: false),
             ),
           ),
         ),
-        const SizedBox(
-          height: 12,
-        ),
+        const SizedBox(height: 12),
       ],
     );
   }
 
   Widget leftTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff7589a2),
-      fontSize: 12,
-    );
+    const style = TextStyle(color: Color(0xff7589a2), fontSize: 12);
 
     String text = '';
-    int val = widget.leftTitleValue
-        .indexWhere((element) => element.toDouble() == value);
+    int val = widget.leftTitleValue.indexWhere(
+      (element) => element.toDouble() == value,
+    );
     if (val != -1) {
       String key = widget.leftTitleKey[val];
       text = key;
@@ -181,10 +165,7 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
   }
 
   Widget bottomTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff7589a2),
-      fontSize: 12,
-    );
+    const style = TextStyle(color: Color(0xff7589a2), fontSize: 12);
 
     String text = '';
     if (value.toInt() < widget.bottomTitleKey!.length) {
@@ -218,7 +199,7 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
               : LinearGradient(
                   colors: [
                     widget.listColorGradient[0].withAlpha(80),
-                    widget.listColorGradient[0].withAlpha(80)
+                    widget.listColorGradient[0].withAlpha(80),
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
@@ -233,7 +214,8 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
 
     widget.listChartValue.asMap().forEach((index, value) {
       items.add(
-          makeGroupData(index, value, isTouched: index == touchedGroupIndex));
+        makeGroupData(index, value, isTouched: index == touchedGroupIndex),
+      );
     });
 
     return items;

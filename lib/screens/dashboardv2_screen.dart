@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:miraswift_demo/models/batch_model.dart';
-import 'package:miraswift_demo/models/logmsg_model.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/models/spk_model.dart';
-import 'package:miraswift_demo/screens/batch_screen.dart';
-import 'package:miraswift_demo/screens/notifications_screen.dart';
-import 'package:miraswift_demo/screens/product_screen.dart';
-import 'package:miraswift_demo/screens/spk_screen.dart';
-import 'package:miraswift_demo/screens/webview_screen.dart';
-import 'package:miraswift_demo/services/batch_api.dart';
-import 'package:miraswift_demo/services/logmsg_api.dart';
-import 'package:miraswift_demo/services/product_api.dart';
-import 'package:miraswift_demo/services/spk_api.dart';
+import 'package:miraswiftdemo/models/batch_model.dart';
+import 'package:miraswiftdemo/models/logmsg_model.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/models/spk_model.dart';
+import 'package:miraswiftdemo/screens/batch_screen.dart';
+import 'package:miraswiftdemo/screens/notifications_screen.dart';
+import 'package:miraswiftdemo/screens/product_screen.dart';
+import 'package:miraswiftdemo/screens/spk_screen.dart';
+import 'package:miraswiftdemo/screens/webview_screen.dart';
+import 'package:miraswiftdemo/services/batch_api.dart';
+import 'package:miraswiftdemo/services/logmsg_api.dart';
+import 'package:miraswiftdemo/services/product_api.dart';
+import 'package:miraswiftdemo/services/spk_api.dart';
 
 class DashboardV2Screen extends StatefulWidget {
   const DashboardV2Screen({super.key});
@@ -146,15 +146,16 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
           ? AnimatedBuilder(
               animation: _animationController!,
               builder: (ctx, kChild) => SlideTransition(
-                position: Tween(
-                  begin: const Offset(0, -0.5),
-                  end: const Offset(0, 0),
-                ).animate(
-                  CurvedAnimation(
-                    parent: _animationController!,
-                    curve: Curves.bounceOut,
-                  ),
-                ),
+                position:
+                    Tween(
+                      begin: const Offset(0, -0.5),
+                      end: const Offset(0, 0),
+                    ).animate(
+                      CurvedAnimation(
+                        parent: _animationController!,
+                        curve: Curves.bounceOut,
+                      ),
+                    ),
                 child: kChild,
               ),
               child: SingleChildScrollView(
@@ -164,10 +165,15 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(
-                          left: 32, top: 80, right: 32, bottom: 32),
+                        left: 32,
+                        top: 80,
+                        right: 32,
+                        bottom: 32,
+                      ),
                       child: Image(
                         image: AssetImage(
-                            'assets/images/topmortar_transparent.png'),
+                          'assets/images/topmortar_transparent.png',
+                        ),
                         height: 100,
                       ),
                     ),
@@ -187,14 +193,17 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     surfaceColor: Colors.blue,
                                     title: 'Recipes',
                                     description: '${products.length} products',
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (ctx) => const ProductScreen(),
-                                      ),
-                                    ).then(
-                                      (value) => getProducts(isLoading: false),
-                                    ),
+                                    onTap: () =>
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const ProductScreen(),
+                                          ),
+                                        ).then(
+                                          (value) =>
+                                              getProducts(isLoading: false),
+                                        ),
                                   ),
                                 ),
                                 SizedBox(
@@ -204,14 +213,16 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     surfaceColor: Colors.red,
                                     title: 'Settings SPK',
                                     description: '${listSpk.length} items',
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (ctx) => const SpkScreen(),
-                                      ),
-                                    ).then(
-                                      (value) => getProducts(isLoading: false),
-                                    ),
+                                    onTap: () =>
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (ctx) => const SpkScreen(),
+                                          ),
+                                        ).then(
+                                          (value) =>
+                                              getProducts(isLoading: false),
+                                        ),
                                   ),
                                 ),
                               ],
@@ -245,15 +256,17 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                                     surfaceColor: Colors.yellow.shade700,
                                     title: 'Notifications',
                                     description: '${messages.length} messages',
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (ctx) =>
-                                            const NotificationsScreen(),
-                                      ),
-                                    ).then(
-                                      (value) => getProducts(isLoading: false),
-                                    ),
+                                    onTap: () =>
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const NotificationsScreen(),
+                                          ),
+                                        ).then(
+                                          (value) =>
+                                              getProducts(isLoading: false),
+                                        ),
                                   ),
                                 ),
                               ],
@@ -276,9 +289,7 @@ class _DashboarV2dScreenState extends State<DashboardV2Screen>
                             MaterialPageRoute(
                               builder: (ctx) => const WebviewScreen(),
                             ),
-                          ).then(
-                            (value) => getProducts(isLoading: false),
-                          ),
+                          ).then((value) => getProducts(isLoading: false)),
                         ),
                       ),
                     ),
@@ -355,15 +366,9 @@ class MenuItems extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  icon,
-                  color: surfaceColor,
-                ),
+                Icon(icon, color: surfaceColor),
                 const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                Text(title, style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
             const SizedBox(height: 6),
@@ -385,9 +390,7 @@ class MenuItems extends StatelessWidget {
                   style: TextStyle(color: Colors.blue),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  width: 8,
-                ),
+                SizedBox(width: 8),
                 Icon(
                   Icons.arrow_circle_right_sharp,
                   size: 18,

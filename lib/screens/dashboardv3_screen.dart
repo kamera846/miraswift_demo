@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/widgets/dashboard_bottom_nav.dart';
-import 'package:miraswift_demo/widgets/dashboardv3_widget.dart';
+import 'package:miraswiftdemo/widgets/dashboard_bottom_nav.dart';
+import 'package:miraswiftdemo/widgets/dashboardv3_widget.dart';
 
 class DashboardV3Screen extends StatefulWidget {
   const DashboardV3Screen({super.key});
@@ -25,8 +25,9 @@ class _DashboarV2dScreenState extends State<DashboardV3Screen> {
           });
         },
       ),
-      bottomNavigationBar:
-          onLoaded ? DashboardBottomNav(dashboardKey: dashboardKey) : null,
+      bottomNavigationBar: onLoaded
+          ? DashboardBottomNav(dashboardKey: dashboardKey)
+          : null,
     );
   }
 }

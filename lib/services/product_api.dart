@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/services/api.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/services/api.dart';
 
 class ProductApi {
   Future<List<ProductModel>?> list({
@@ -13,10 +13,7 @@ class ProductApi {
     List<ProductModel>? data;
     try {
       final url = Uri.https(baseUrl, 'api/product');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -64,10 +61,7 @@ class ProductApi {
     List<ProductModel>? data;
     try {
       final url = Uri.https(baseUrl, 'api/product', {'source': 'accurate'});
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -116,10 +110,7 @@ class ProductApi {
     ProductModel? data;
     try {
       final url = Uri.https(baseUrl, 'api/product/$productId');
-      final response = await http.get(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -169,12 +160,10 @@ class ProductApi {
       final response = await http.post(
         url,
         headers: headerSetup,
-        body: jsonEncode(
-          {
-            'kode_product': productCode,
-            'name_product': productName,
-          },
-        ),
+        body: jsonEncode({
+          'kode_product': productCode,
+          'name_product': productName,
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -223,12 +212,10 @@ class ProductApi {
       final response = await http.post(
         url,
         headers: headerSetup,
-        body: jsonEncode(
-          {
-            'kode_product': productCode,
-            'name_product': productName,
-          },
-        ),
+        body: jsonEncode({
+          'kode_product': productCode,
+          'name_product': productName,
+        }),
       );
 
       if (response.statusCode == 200) {
@@ -272,10 +259,7 @@ class ProductApi {
   }) async {
     try {
       final url = Uri.https(baseUrl, 'api/product/$productId');
-      final response = await http.delete(
-        url,
-        headers: headerSetup,
-      );
+      final response = await http.delete(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

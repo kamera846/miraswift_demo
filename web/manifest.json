@@ -1,6 +1,6 @@
 {
-    "name": "miraswift_demo",
-    "short_name": "miraswift_demo",
+    "name": "miraswiftdemo",
+    "short_name": "miraswiftdemo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

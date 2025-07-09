@@ -1,13 +1,13 @@
 import 'package:accordion/accordion.dart';
 import 'package:flutter/material.dart';
-import 'package:miraswift_demo/models/batch_model.dart';
-import 'package:miraswift_demo/models/product_model.dart';
-import 'package:miraswift_demo/services/batch_api.dart';
-import 'package:miraswift_demo/utils/badge.dart';
-import 'package:miraswift_demo/utils/formatted_date.dart';
-import 'package:miraswift_demo/utils/formatted_time.dart';
-import 'package:miraswift_demo/utils/snackbar.dart';
-import 'package:miraswift_demo/widgets/batch_item.dart';
+import 'package:miraswiftdemo/models/batch_model.dart';
+import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/services/batch_api.dart';
+import 'package:miraswiftdemo/utils/badge.dart';
+import 'package:miraswiftdemo/utils/formatted_date.dart';
+import 'package:miraswiftdemo/utils/formatted_time.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
+import 'package:miraswiftdemo/widgets/batch_item.dart';
 
 class BatchDetailScreen extends StatefulWidget {
   const BatchDetailScreen({super.key, required this.batch});
@@ -48,34 +48,42 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           showSnackBar(context, msg);
         }
       },
-      onCompleted: (dataEquipment, dataScales, dataProduct, totalEquipmentTime,
-          totalMaterialTime) {
-        if (dataScales != null && dataScales.isNotEmpty) {
-          try {
-            for (var item in dataScales) {
-              setState(() {
-                totalScales += double.parse(item.actualTimbang);
-              });
+      onCompleted:
+          (
+            dataEquipment,
+            dataScales,
+            dataProduct,
+            totalEquipmentTime,
+            totalMaterialTime,
+          ) {
+            if (dataScales != null && dataScales.isNotEmpty) {
+              try {
+                for (var item in dataScales) {
+                  setState(() {
+                    totalScales += double.parse(item.actualTimbang);
+                  });
+                }
+              } catch (e) {
+                setState(() {
+                  totalScales = 0.0;
+                });
+              }
             }
-          } catch (e) {
-            setState(() {
-              totalScales = 0.0;
-            });
-          }
-        }
 
-        setState(() {
-          totalTimesEquipment = formatTime(totalEquipmentTime ?? '00:00:00');
-          totalTimesScales = formatTime(totalMaterialTime ?? '00:00:00');
-          if (dataEquipment != null && dataEquipment.isNotEmpty) {
-            dataEquipment.sort((a, b) => a.timeOn.compareTo(b.timeOn));
-          }
-          _dataEquipment = dataEquipment;
-          _dataScales = dataScales;
-          _dataProduct = dataProduct;
-          isLoading = false;
-        });
-      },
+            setState(() {
+              totalTimesEquipment = formatTime(
+                totalEquipmentTime ?? '00:00:00',
+              );
+              totalTimesScales = formatTime(totalMaterialTime ?? '00:00:00');
+              if (dataEquipment != null && dataEquipment.isNotEmpty) {
+                dataEquipment.sort((a, b) => a.timeOn.compareTo(b.timeOn));
+              }
+              _dataEquipment = dataEquipment;
+              _dataScales = dataScales;
+              _dataProduct = dataProduct;
+              isLoading = false;
+            });
+          },
     );
   }
 
@@ -113,7 +121,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               dataProduct: _dataProduct,
               totalScales: totalScales,
             ),
-            _accordionSection(context, dataEquipmentIndex, dataScalesIndex)
+            _accordionSection(context, dataEquipmentIndex, dataScalesIndex),
           ],
         ),
       ),
@@ -121,48 +129,52 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
   }
 
   Accordion _accordionSection(
-      BuildContext context, int dataEquipmentIndex, int dataScalesIndex) {
+    BuildContext context,
+    int dataEquipmentIndex,
+    int dataScalesIndex,
+  ) {
     return Accordion(
-        maxOpenSections: 2,
-        accordionId: 'accordion-batch',
-        headerPadding: const EdgeInsets.all(12),
-        headerBorderRadius: 8,
-        headerBorderWidth: 1,
-        headerBackgroundColorOpened: Colors.blue.shade50,
-        headerBackgroundColor: Colors.white,
-        headerBorderColor: Colors.grey.withAlpha(75),
-        flipRightIconIfOpen: true,
-        rightIcon: const Icon(
-          Icons.keyboard_arrow_down_rounded,
-          color: Colors.grey,
-          size: 28,
+      maxOpenSections: 2,
+      accordionId: 'accordion-batch',
+      headerPadding: const EdgeInsets.all(12),
+      headerBorderRadius: 8,
+      headerBorderWidth: 1,
+      headerBackgroundColorOpened: Colors.blue.shade50,
+      headerBackgroundColor: Colors.white,
+      headerBorderColor: Colors.grey.withAlpha(75),
+      flipRightIconIfOpen: true,
+      rightIcon: const Icon(
+        Icons.keyboard_arrow_down_rounded,
+        color: Colors.grey,
+        size: 28,
+      ),
+      contentBackgroundColor: Colors.white,
+      contentBorderRadius: 8,
+      contentBorderWidth: 1,
+      contentBorderColor: Colors.grey.withAlpha(75),
+      contentHorizontalPadding: 12,
+      contentVerticalPadding: 0,
+      scaleWhenAnimating: false,
+      disableScrolling: true,
+      children: [
+        _accordionItem(
+          context,
+          'Equipment',
+          'Times: $totalTimesEquipment',
+          Icons.settings_applications,
+          _dataEquipment,
+          dataEquipmentIndex,
         ),
-        contentBackgroundColor: Colors.white,
-        contentBorderRadius: 8,
-        contentBorderWidth: 1,
-        contentBorderColor: Colors.grey.withAlpha(75),
-        contentHorizontalPadding: 12,
-        contentVerticalPadding: 0,
-        scaleWhenAnimating: false,
-        disableScrolling: true,
-        children: [
-          _accordionItem(
-            context,
-            'Equipment',
-            'Times: $totalTimesEquipment',
-            Icons.settings_applications,
-            _dataEquipment,
-            dataEquipmentIndex,
-          ),
-          _accordionItem(
-            context,
-            'Scales',
-            'Times: $totalTimesScales • Scales: ${totalScales.toStringAsFixed(2)} Kg',
-            Icons.scale_rounded,
-            _dataScales,
-            dataEquipmentIndex,
-          ),
-        ]);
+        _accordionItem(
+          context,
+          'Scales',
+          'Times: $totalTimesScales • Scales: ${totalScales.toStringAsFixed(2)} Kg',
+          Icons.scale_rounded,
+          _dataScales,
+          dataEquipmentIndex,
+        ),
+      ],
+    );
   }
 
   AccordionSection _accordionItem(
@@ -180,15 +192,13 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: Colors.grey.shade800,
-                size: 20,
-              ),
+              Icon(icon, color: Colors.grey.shade800, size: 20),
               const SizedBox(width: 9),
               Expanded(
-                child:
-                    Text(title, style: Theme.of(context).textTheme.titleSmall),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
               ),
             ],
           ),
@@ -221,11 +231,13 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           : Center(
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: Text(isLoading
-                    ? 'Loading..'
-                    : !isLoading && (items == null || items.isEmpty)
-                        ? 'Data is empty.'
-                        : ''),
+                child: Text(
+                  isLoading
+                      ? 'Loading..'
+                      : !isLoading && (items == null || items.isEmpty)
+                      ? 'Data is empty.'
+                      : '',
+                ),
               ),
             ),
     );
@@ -276,25 +288,20 @@ class BatchDetailHeader extends StatelessWidget {
                   ],
                 ),
                 CustomBadge(
-                  badgeText:
-                      dataProduct != null ? dataProduct!.kodeProduct : '-',
+                  badgeText: dataProduct != null
+                      ? dataProduct!.kodeProduct
+                      : '-',
                 ),
               ],
             ),
           ),
-          Divider(
-            height: 0,
-            color: Colors.grey.shade300,
-          ),
+          Divider(height: 0, color: Colors.grey.shade300),
           Container(
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Status',
-                  style: Theme.of(context).textTheme.titleSmall!,
-                ),
+                Text('Status', style: Theme.of(context).textTheme.titleSmall!),
                 const SizedBox(height: 8),
                 Row(
                   children: [
@@ -305,16 +312,14 @@ class BatchDetailHeader extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.green.shade900.withAlpha(75),
                         border: Border.all(
-                            width: 2,
-                            color: Colors.green.shade900.withAlpha(150)),
+                          width: 2,
+                          color: Colors.green.shade900.withAlpha(150),
+                        ),
                         borderRadius: BorderRadius.circular(100),
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      'ON',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    Text('ON', style: Theme.of(context).textTheme.bodySmall),
                     const SizedBox(width: 12),
                     Container(
                       width: 16,
@@ -323,8 +328,9 @@ class BatchDetailHeader extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.yellow.shade900.withAlpha(75),
                         border: Border.all(
-                            width: 2,
-                            color: Colors.yellow.shade900.withAlpha(150)),
+                          width: 2,
+                          color: Colors.yellow.shade900.withAlpha(150),
+                        ),
                         borderRadius: BorderRadius.circular(100),
                       ),
                     ),
@@ -341,16 +347,14 @@ class BatchDetailHeader extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.red.shade900.withAlpha(75),
                         border: Border.all(
-                            width: 2,
-                            color: Colors.red.shade900.withAlpha(150)),
+                          width: 2,
+                          color: Colors.red.shade900.withAlpha(150),
+                        ),
                         borderRadius: BorderRadius.circular(100),
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      'OFF',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    Text('OFF', style: Theme.of(context).textTheme.bodySmall),
                     const SizedBox(width: 12),
                   ],
                 ),
