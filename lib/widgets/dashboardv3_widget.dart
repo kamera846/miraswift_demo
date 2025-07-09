@@ -213,6 +213,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
             children: [
               userProfile(context),
               runningProduction(context),
+              const SizedBox(height: 16),
               chartCarousel(),
             ],
           ),
@@ -311,107 +312,109 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
     );
   }
 
-  InkWell runningProduction(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const TransactionsSreen(),
-          ),
-        );
-      },
-      splashColor: Colors.blue.withOpacity(0.1),
-      highlightColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.all(16),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.8),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white, width: 2),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+  Widget runningProduction(BuildContext context) {
+    return spkToday != null && productToday != null && formulaToday != null
+        ? InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const TransactionsSreen(),
+                ),
+              );
+            },
+            splashColor: Colors.blue.withOpacity(0.1),
+            highlightColor: Colors.transparent,
+            borderRadius: BorderRadius.circular(24),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        productToday != null
-                            ? Icons.timelapse_rounded
-                            : Icons.watch_later_outlined,
-                        color: productToday != null
-                            ? Colors.yellow.shade900
-                            : Colors.blueGrey,
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        productToday != null
-                            ? 'Production is running...'
-                            : 'No production',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              productToday != null
+                                  ? Icons.timelapse_rounded
+                                  : Icons.watch_later_outlined,
+                              color: productToday != null
+                                  ? Colors.yellow.shade900
+                                  : Colors.blueGrey,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              productToday != null
+                                  ? 'Production is running...'
+                                  : 'No production',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          productToday != null
+                              ? productToday?.nameProduct ?? ''
+                              : 'No Spk Executed!',
+                          style: Theme.of(context).textTheme.titleSmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          spkToday != null
+                              ? '${spkToday?.jmlBatch ?? ''} batch will be executed'
+                              : "Let's get back to production",
+                          style: Theme.of(context).textTheme.bodySmall,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
-                    height: 4,
+                    width: 16,
                   ),
-                  Text(
-                    productToday != null
-                        ? productToday?.nameProduct ?? ''
-                        : 'No Spk Executed!',
-                    style: Theme.of(context).textTheme.titleSmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    spkToday != null
-                        ? '${spkToday?.jmlBatch ?? ''} batch will be executed'
-                        : "Let's get back to production",
-                    style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  IconButton(
+                    onPressed: () {
+                      if (productToday != null) {
+                        _stopProductionValidation(productToday);
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const TransactionsSreen(),
+                          ),
+                        );
+                      }
+                    },
+                    icon: Icon(
+                      productToday != null
+                          ? Icons.stop_circle_rounded
+                          : Icons.play_circle_fill_rounded,
+                      size: 48,
+                      color: productToday != null
+                          ? Colors.red.shade800
+                          : Colors.blueGrey,
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              width: 16,
-            ),
-            IconButton(
-              onPressed: () {
-                if (productToday != null) {
-                  _stopProductionValidation(productToday);
-                } else {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const TransactionsSreen(),
-                    ),
-                  );
-                }
-              },
-              icon: Icon(
-                productToday != null
-                    ? Icons.stop_circle_rounded
-                    : Icons.play_circle_fill_rounded,
-                size: 48,
-                color: productToday != null
-                    ? Colors.red.shade800
-                    : Colors.blueGrey,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          )
+        : SizedBox.shrink();
   }
 
   Column userProfile(BuildContext context) {

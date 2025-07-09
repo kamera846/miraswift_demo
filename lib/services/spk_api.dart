@@ -76,9 +76,14 @@ class SpkApi {
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
-        final apiResponse = ApiResponse.fromJsonList(responseBody);
+        final apiResponse = ApiResponse.fromJson(responseBody);
 
-        if (apiResponse.code == 200) {
+        if (apiResponse.code == 400) {
+          if (onError != null) {
+            onError(apiResponse.msg);
+          }
+          return;
+        } else {
           if (apiResponse.spk != null) {
             spk = SpkModel.fromJson(apiResponse.spk!);
           }
@@ -93,11 +98,6 @@ class SpkApi {
           }
           return;
         }
-
-        if (onError != null) {
-          onError(apiResponse.msg);
-        }
-        return;
       } else {
         if (onError != null) {
           onError('$failedRequestText. Status Code: ${response.statusCode}');
