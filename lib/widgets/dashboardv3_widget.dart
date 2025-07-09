@@ -333,7 +333,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                         ),
                         Text(
                           spkToday != null
-                              ? '${spkToday?.jmlBatch ?? ''} batch will be executed'
+                              ? '${spkToday?.jmlBatch ?? ''} batch from spk ${spkToday?.descSpk}'
                               : "Let's get back to production",
                           style: Theme.of(context).textTheme.bodySmall,
                           maxLines: 2,

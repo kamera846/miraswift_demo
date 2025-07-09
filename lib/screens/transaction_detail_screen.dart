@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:miraswiftdemo/models/spk_model.dart';
 import 'package:miraswiftdemo/models/transaction_detail_model.dart';
 import 'package:miraswiftdemo/models/transaction_model.dart';
+import 'package:miraswiftdemo/screens/batch_screen.dart';
 import 'package:miraswiftdemo/screens/spk_available_screen.dart';
 import 'package:miraswiftdemo/services/transaction_api.dart';
 import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
@@ -136,15 +137,16 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                                   return ListTileItem(
                                     key: ValueKey(item),
                                     onTap: () {
-                                      // if (item.spk != null && item.spk!.currentBatch.isNotEmpty) {
-                                      //   Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //       builder: (ctx) =>
-                                      //           BatchDetailScreen(batch: item.spk!.currentBatch),
-                                      //     ),
-                                      //   );
-                                      // }
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (ctx) => BatchScreen(
+                                            idProduct: item.spk?.idProduct,
+                                            date: _detailTransaction
+                                                ?.dateTransaction,
+                                          ),
+                                        ),
+                                      );
                                     },
                                     isSelected:
                                         (_selectedItem != null &&

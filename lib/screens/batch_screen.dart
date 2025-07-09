@@ -11,7 +11,9 @@ import 'package:miraswiftdemo/widgets/fullwidth_button.dart';
 import 'package:miraswiftdemo/widgets/list_tile_item.dart';
 
 class BatchScreen extends StatefulWidget {
-  const BatchScreen({super.key});
+  final String? idProduct;
+  final String? date;
+  const BatchScreen({super.key, this.idProduct, this.date});
 
   @override
   State<BatchScreen> createState() => _BatchScreenState();
@@ -57,7 +59,11 @@ class _BatchScreenState extends State<BatchScreen> {
         _loadMoreItems();
       }
     });
-    _getBatchs();
+    if (widget.idProduct != null) {
+      _getProduct();
+    } else {
+      _getBatchs();
+    }
   }
 
   void _loadMoreItems() {
@@ -143,7 +149,13 @@ class _BatchScreenState extends State<BatchScreen> {
             }
           }
         });
-        _getProduct();
+        if (widget.idProduct != null) {
+          setState(() {
+            isLoading = false;
+          });
+        } else {
+          _getProduct();
+        }
       },
     );
   }
@@ -162,7 +174,26 @@ class _BatchScreenState extends State<BatchScreen> {
           } else {
             _listProduct = data;
           }
-          isLoading = false;
+          if (widget.idProduct != null) {
+            int? productIndex = _listProduct?.indexWhere(
+              (product) => product.idProduct == widget.idProduct,
+            );
+            if (productIndex != null && productIndex > -1) {
+              _filteredProduct = _listProduct?[productIndex];
+              _selectedProduct = _filteredProduct;
+            }
+            if (widget.date != null && widget.date!.isNotEmpty) {
+              _filteredDate = formattedDate(
+                dateStr: widget.date ?? '',
+                inputFormat: "yyyy-MM-dd hh:mm:ss",
+                outputFormat: "yyyy-MM-dd",
+              );
+              _dateController.text = _filteredDate;
+            }
+            _getBatchs();
+          } else {
+            isLoading = false;
+          }
         });
       },
     );
