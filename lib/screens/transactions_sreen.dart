@@ -106,172 +106,174 @@ class _TransactionsSreenState extends State<TransactionsSreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: TextFormField(
-                onTap: () {
-                  if (!_isLoading) {
-                    FocusScope.of(context).unfocus();
-                    _selectDate(context);
-                  }
-                },
-                controller: _dateController,
-                readOnly: true,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall!.copyWith(color: Colors.blue),
-                decoration: InputDecoration(
-                  hintText: 'Click date icon to filter',
-                  hintStyle: Theme.of(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: TextFormField(
+                  onTap: () {
+                    if (!_isLoading) {
+                      FocusScope.of(context).unfocus();
+                      _selectDate(context);
+                    }
+                  },
+                  controller: _dateController,
+                  readOnly: true,
+                  style: Theme.of(
                     context,
-                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: 12,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: _dateController.text.isNotEmpty
-                          ? Colors.blue
-                          : Colors.grey,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.blue),
+                  decoration: InputDecoration(
+                    hintText: 'Click date icon to filter',
+                    hintStyle: Theme.of(
+                      context,
+                    ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 12,
                     ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.blue),
-                  ),
-                  prefixIcon: InkWell(
-                    onTap: () {
-                      if (!_isLoading) {
-                        FocusScope.of(context).unfocus();
-                        _selectDate(context);
-                      }
-                    },
-                    child: const Icon(CupertinoIcons.calendar),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: _dateController.text.isNotEmpty
+                            ? Colors.blue
+                            : Colors.grey,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.blue),
+                    ),
+                    prefixIcon: InkWell(
+                      onTap: () {
+                        if (!_isLoading) {
+                          FocusScope.of(context).unfocus();
+                          _selectDate(context);
+                        }
+                      },
+                      child: const Icon(CupertinoIcons.calendar),
+                    ),
                   ),
                 ),
               ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                    [
-                      'all',
-                      'pending',
-                      'running',
-                      'complete',
-                      'not_complete',
-                    ].map((item) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: OutlinedButton(
-                          onPressed: () {
-                            if (!_isLoading) {
-                              setState(() {
-                                _filterStatus = item;
-                              });
-                              _getList();
-                            }
-                          },
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                              color: _filterStatus == item
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                      [
+                        'all',
+                        'pending',
+                        'running',
+                        'complete',
+                        'not_complete',
+                      ].map((item) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: OutlinedButton(
+                            onPressed: () {
+                              if (!_isLoading) {
+                                setState(() {
+                                  _filterStatus = item;
+                                });
+                                _getList();
+                              }
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                color: _filterStatus == item
+                                    ? _isLoading
+                                          ? Colors.blue.withAlpha(50)
+                                          : Colors.blue.withAlpha(100)
+                                    : _isLoading
+                                    ? Colors.grey.shade200
+                                    : Colors.black12,
+                              ),
+                              backgroundColor: _filterStatus == item
                                   ? _isLoading
                                         ? Colors.blue.withAlpha(50)
                                         : Colors.blue.withAlpha(100)
                                   : _isLoading
                                   ? Colors.grey.shade200
                                   : Colors.black12,
+                              padding: const EdgeInsets.all(14),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: VisualDensity.compact,
                             ),
-                            backgroundColor: _filterStatus == item
-                                ? _isLoading
-                                      ? Colors.blue.withAlpha(50)
-                                      : Colors.blue.withAlpha(100)
-                                : _isLoading
-                                ? Colors.grey.shade200
-                                : Colors.black12,
-                            padding: const EdgeInsets.all(14),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            visualDensity: VisualDensity.compact,
+                            child: Text(
+                              item.toUpperCase(),
+                              style: Theme.of(context).textTheme.bodySmall!
+                                  .copyWith(
+                                    color: _filterStatus == item
+                                        ? _isLoading
+                                              ? Colors.blue.shade200
+                                              : Colors.blue
+                                        : _isLoading
+                                        ? Colors.black26
+                                        : Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
                           ),
-                          child: Text(
-                            item.toUpperCase(),
-                            style: Theme.of(context).textTheme.bodySmall!
-                                .copyWith(
-                                  color: _filterStatus == item
-                                      ? _isLoading
-                                            ? Colors.blue.shade200
-                                            : Colors.blue
-                                      : _isLoading
-                                      ? Colors.black26
-                                      : Colors.black54,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                ),
               ),
-            ),
-            if (_isLoading)
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.withAlpha(75),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text('Loading..', textAlign: TextAlign.center),
-              )
-            else if (_listFiltered == null || _listFiltered!.isEmpty)
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.withAlpha(75),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Data is empty.',
-                  textAlign: TextAlign.center,
-                ),
-              )
-            else
-              ListSpk(
-                onTap: (item) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => TransactionDetailScreen(
-                        idTransaction: item.idTransaction,
-                      ),
+              if (_isLoading)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey.withAlpha(75),
                     ),
-                  ).then((value) {
-                    _getList();
-                  });
-                },
-                listItem: _listFiltered!,
-                selectedItem: _selectedItem,
-              ),
-          ],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text('Loading..', textAlign: TextAlign.center),
+                )
+              else if (_listFiltered == null || _listFiltered!.isEmpty)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey.withAlpha(75),
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'Data is empty.',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              else
+                ListSpk(
+                  onTap: (item) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => TransactionDetailScreen(
+                          idTransaction: item.idTransaction,
+                        ),
+                      ),
+                    ).then((value) {
+                      _getList();
+                    });
+                  },
+                  listItem: _listFiltered!,
+                  selectedItem: _selectedItem,
+                ),
+            ],
+          ),
         ),
       ),
     );

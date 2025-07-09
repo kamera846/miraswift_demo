@@ -271,154 +271,164 @@ class _NotificationsTargetScreenState extends State<NotificationsTargetScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 12, right: 12),
-              child: Row(
-                children: [
-                  const Icon(Icons.person, color: Colors.grey, size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    'List User',
-                    style: Theme.of(context).textTheme.titleSmall,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 12, right: 12),
+                child: Row(
+                  children: [
+                    const Icon(Icons.person, color: Colors.grey, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      'List User',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.withAlpha(75),
                   ),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: (!_isLoading && _list != null && _list!.isNotEmpty)
-                  ? Column(
-                      children: _list!.map((item) {
-                        bool isUserActive = item.isActive == "1";
-                        final isLastIndex = (index == (_list!.length - 1));
-                        index++;
-                        return Column(
-                          children: [
-                            ListTileItem(
-                              onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (ctx) =>
-                                //         FormulaScreen(product: item),
-                                //   ),
-                                // );
-                              },
-                              isSelected:
-                                  (_selectedItem != null &&
-                                      _selectedItem!.idUser == item.idUser)
-                                  ? true
-                                  : false,
-                              badge: isUserActive ? "Active" : "Inactive",
-                              badgeModel: BadgeModel(
-                                isUserActive
-                                    ? badgeStyle[BadgeCategory.green]!.txtColor
-                                    : badgeStyle[BadgeCategory.grey]!.txtColor,
-                                isUserActive
-                                    ? badgeStyle[BadgeCategory.green]!.bgColor
-                                    : badgeStyle[BadgeCategory.grey]!.bgColor,
-                              ),
-                              title: item.nameUser,
-                              description: item.phoneUser,
-                              customTrailingIcon: PopupMenuButton<String>(
-                                icon: const Icon(
-                                  Icons.more_vert_rounded,
-                                  color: Colors.grey,
-                                ),
-                                itemBuilder: (ctx) {
-                                  return [
-                                    // PopupMenuItem<String>(
-                                    //   onTap: () {
-                                    //     // Navigator.push(
-                                    //     //   context,
-                                    //     //   MaterialPageRoute(
-                                    //     //     builder: (ctx) =>
-                                    //     //         FormulaScreen(product: item),
-                                    //     //   ),
-                                    //     // );
-                                    //   },
-                                    //   child: const Row(
-                                    //     children: [
-                                    //       Icon(
-                                    //         CupertinoIcons
-                                    //             .arrow_up_right_circle_fill,
-                                    //         size: 20,
-                                    //       ),
-                                    //       SizedBox(width: 12),
-                                    //       Text('Open')
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    PopupMenuItem<String>(
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedItem = item;
-                                        });
-                                        _editItem();
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            CupertinoIcons.pencil_circle_fill,
-                                            color: Colors.orange.withAlpha(150),
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 12),
-                                          const Text('Edit'),
-                                        ],
-                                      ),
-                                    ),
-                                    PopupMenuItem<String>(
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedItem = item;
-                                        });
-                                        _deleteItem();
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            CupertinoIcons.trash_circle_fill,
-                                            color: Colors.red.withAlpha(220),
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 12),
-                                          const Text('Delete'),
-                                        ],
-                                      ),
-                                    ),
-                                  ];
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: (!_isLoading && _list != null && _list!.isNotEmpty)
+                    ? Column(
+                        children: _list!.map((item) {
+                          bool isUserActive = item.isActive == "1";
+                          final isLastIndex = (index == (_list!.length - 1));
+                          index++;
+                          return Column(
+                            children: [
+                              ListTileItem(
+                                onTap: () {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (ctx) =>
+                                  //         FormulaScreen(product: item),
+                                  //   ),
+                                  // );
                                 },
+                                isSelected:
+                                    (_selectedItem != null &&
+                                        _selectedItem!.idUser == item.idUser)
+                                    ? true
+                                    : false,
+                                badge: isUserActive ? "Active" : "Inactive",
+                                badgeModel: BadgeModel(
+                                  isUserActive
+                                      ? badgeStyle[BadgeCategory.green]!
+                                            .txtColor
+                                      : badgeStyle[BadgeCategory.grey]!
+                                            .txtColor,
+                                  isUserActive
+                                      ? badgeStyle[BadgeCategory.green]!.bgColor
+                                      : badgeStyle[BadgeCategory.grey]!.bgColor,
+                                ),
+                                title: item.nameUser,
+                                description: item.phoneUser,
+                                customTrailingIcon: PopupMenuButton<String>(
+                                  icon: const Icon(
+                                    Icons.more_vert_rounded,
+                                    color: Colors.grey,
+                                  ),
+                                  itemBuilder: (ctx) {
+                                    return [
+                                      // PopupMenuItem<String>(
+                                      //   onTap: () {
+                                      //     // Navigator.push(
+                                      //     //   context,
+                                      //     //   MaterialPageRoute(
+                                      //     //     builder: (ctx) =>
+                                      //     //         FormulaScreen(product: item),
+                                      //     //   ),
+                                      //     // );
+                                      //   },
+                                      //   child: const Row(
+                                      //     children: [
+                                      //       Icon(
+                                      //         CupertinoIcons
+                                      //             .arrow_up_right_circle_fill,
+                                      //         size: 20,
+                                      //       ),
+                                      //       SizedBox(width: 12),
+                                      //       Text('Open')
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      PopupMenuItem<String>(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedItem = item;
+                                          });
+                                          _editItem();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.pencil_circle_fill,
+                                              color: Colors.orange.withAlpha(
+                                                150,
+                                              ),
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 12),
+                                            const Text('Edit'),
+                                          ],
+                                        ),
+                                      ),
+                                      PopupMenuItem<String>(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedItem = item;
+                                          });
+                                          _deleteItem();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.trash_circle_fill,
+                                              color: Colors.red.withAlpha(220),
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 12),
+                                            const Text('Delete'),
+                                          ],
+                                        ),
+                                      ),
+                                    ];
+                                  },
+                                ),
                               ),
-                            ),
-                            if (!isLastIndex)
-                              Divider(height: 0, color: Colors.grey.shade300),
-                          ],
-                        );
-                      }).toList(),
-                    )
-                  : Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Text(
-                          _isLoading
-                              ? 'Loading..'
-                              : !_isLoading && (_list == null || _list!.isEmpty)
-                              ? 'Data is empty.'
-                              : '',
+                              if (!isLastIndex)
+                                Divider(height: 0, color: Colors.grey.shade300),
+                            ],
+                          );
+                        }).toList(),
+                      )
+                    : Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            _isLoading
+                                ? 'Loading..'
+                                : !_isLoading &&
+                                      (_list == null || _list!.isEmpty)
+                                ? 'Data is empty.'
+                                : '',
+                          ),
                         ),
                       ),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

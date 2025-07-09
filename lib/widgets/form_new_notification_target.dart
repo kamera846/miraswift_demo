@@ -53,107 +53,109 @@ class FormNewNotificationTargetState extends State<FormNewNotificationTarget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          widget.isEdit
-              ? 'Edit Notification Target'
-              : 'New Notification Target',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 24),
-        Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                style: Theme.of(context).textTheme.bodySmall,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  labelStyle: Theme.of(context).textTheme.bodySmall,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _nameInput = value ?? '';
-                },
-              ),
-              const SizedBox(height: 12.0),
-              TextFormField(
-                controller: _phoneController,
-                style: Theme.of(context).textTheme.bodySmall,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  labelStyle: Theme.of(context).textTheme.bodySmall,
-                  hintText: 'ex: 6281XXXXXX',
-                  hintStyle: Theme.of(
-                    context,
-                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                validator: (value) {
-                  final RegExp phoneRegExp = RegExp(
-                    r'^\+?[1-9]\d{1,14}$',
-                  ); // E.164 format
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  if (!phoneRegExp.hasMatch(value)) {
-                    return 'Please enter valid phone number';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _phoneInput = value ?? '';
-                },
-              ),
-              const SizedBox(height: 12.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Toggle Status (${_status ? 'active' : 'disabled'})'),
-                  Switch(
-                    value: _status,
-                    activeColor: Colors.green.shade900.withAlpha(150),
-                    activeTrackColor: Colors.green.shade900.withAlpha(75),
-                    onChanged: (value) {
-                      setState(() {
-                        _status = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    _formKey.currentState?.save();
-
-                    String statusInput = _status ? "1" : "0";
-                    widget.onSubmitted(_nameInput, _phoneInput, statusInput);
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text('Submit Now'),
-              ),
-              const SizedBox(height: 12.0),
-            ],
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            widget.isEdit
+                ? 'Edit Notification Target'
+                : 'New Notification Target',
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-        ),
-      ],
+          const SizedBox(height: 24),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    labelStyle: Theme.of(context).textTheme.bodySmall,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _nameInput = value ?? '';
+                  },
+                ),
+                const SizedBox(height: 12.0),
+                TextFormField(
+                  controller: _phoneController,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: 'Phone Number',
+                    labelStyle: Theme.of(context).textTheme.bodySmall,
+                    hintText: 'ex: 6281XXXXXX',
+                    hintStyle: Theme.of(
+                      context,
+                    ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (value) {
+                    final RegExp phoneRegExp = RegExp(
+                      r'^\+?[1-9]\d{1,14}$',
+                    ); // E.164 format
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    if (!phoneRegExp.hasMatch(value)) {
+                      return 'Please enter valid phone number';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _phoneInput = value ?? '';
+                  },
+                ),
+                const SizedBox(height: 12.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Toggle Status (${_status ? 'active' : 'disabled'})'),
+                    Switch(
+                      value: _status,
+                      activeColor: Colors.green.shade900.withAlpha(150),
+                      activeTrackColor: Colors.green.shade900.withAlpha(75),
+                      onChanged: (value) {
+                        setState(() {
+                          _status = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12.0),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      _formKey.currentState?.save();
+
+                      String statusInput = _status ? "1" : "0";
+                      widget.onSubmitted(_nameInput, _phoneInput, statusInput);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text('Submit Now'),
+                ),
+                const SizedBox(height: 12.0),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

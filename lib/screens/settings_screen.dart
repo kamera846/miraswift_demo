@@ -20,10 +20,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: Text('Settings', style: Theme.of(context).textTheme.titleMedium),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [settingsHeader(context), settingsMenu()],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [settingsHeader(context), settingsMenu()],
+          ),
         ),
       ),
     );

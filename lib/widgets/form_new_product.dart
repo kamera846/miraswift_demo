@@ -48,75 +48,77 @@ class FormNewProductState extends State<FormNewProduct> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          widget.isEdit ? 'Edit Product' : 'New Product',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 24),
-        Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              DropdownButtonFormField<ProductModel>(
-                value: _selectedProduct,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                items: widget.listProduct.map<DropdownMenuItem<ProductModel>>((
-                  ProductModel value,
-                ) {
-                  return DropdownMenuItem<ProductModel>(
-                    value: value,
-                    child: Text(
-                      value.id != -1
-                          ? '${value.name} [${value.no.toString()}]'
-                          : value.name,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (ProductModel? value) {
-                  setState(() {
-                    _selectedProduct = value!;
-                  });
-                },
-                validator: (value) {
-                  if (value!.id == -1) {
-                    return 'Please select the product';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  setState(() {
-                    _selectedProduct = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 12.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    _formKey.currentState?.save();
-
-                    widget.onSubmitted(
-                      _selectedProduct!.no,
-                      _selectedProduct!.name,
-                    );
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text('Submit Now'),
-              ),
-              const SizedBox(height: 12.0),
-            ],
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            widget.isEdit ? 'Edit Product' : 'New Product',
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-        ),
-      ],
+          const SizedBox(height: 24),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                DropdownButtonFormField<ProductModel>(
+                  value: _selectedProduct,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  items: widget.listProduct.map<DropdownMenuItem<ProductModel>>(
+                    (ProductModel value) {
+                      return DropdownMenuItem<ProductModel>(
+                        value: value,
+                        child: Text(
+                          value.id != -1
+                              ? '${value.name} [${value.no.toString()}]'
+                              : value.name,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      );
+                    },
+                  ).toList(),
+                  onChanged: (ProductModel? value) {
+                    setState(() {
+                      _selectedProduct = value!;
+                    });
+                  },
+                  validator: (value) {
+                    if (value!.id == -1) {
+                      return 'Please select the product';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    setState(() {
+                      _selectedProduct = value!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12.0),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      _formKey.currentState?.save();
+
+                      widget.onSubmitted(
+                        _selectedProduct!.no,
+                        _selectedProduct!.name,
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text('Submit Now'),
+                ),
+                const SizedBox(height: 12.0),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

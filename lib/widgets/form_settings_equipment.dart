@@ -58,64 +58,66 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 12, top: 12, right: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildFormInput(
-                    'Semen',
-                    _highSemen,
-                    _lowSemen,
-                    (high) => setState(() => _highSemen = high),
-                    (low) => setState(() => _lowSemen = low),
-                  ),
-                  const SizedBox(height: 12.0),
-                  _buildFormInput(
-                    'Kapur',
-                    _highKapur,
-                    _lowKapur,
-                    (high) => setState(() => _highKapur = high),
-                    (low) => setState(() => _lowKapur = low),
-                  ),
-                  const SizedBox(height: 12.0),
-                  _buildFormInput(
-                    'Pasir Kasar',
-                    _highKasar,
-                    _lowKasar,
-                    (high) => setState(() => _highKasar = high),
-                    (low) => setState(() => _lowKasar = low),
-                  ),
-                  const SizedBox(height: 12.0),
-                  _buildFormInput(
-                    'Pasir Halus',
-                    _highHalus,
-                    _lowHalus,
-                    (high) => setState(() => _highHalus = high),
-                    (low) => setState(() => _lowHalus = low),
-                  ),
-                  const SizedBox(height: 12.0),
-                  _buildFormInput(
-                    'Semen Putih',
-                    _highPutih,
-                    _lowPutih,
-                    (high) => setState(() => _highPutih = high),
-                    (low) => setState(() => _lowPutih = low),
-                  ),
-                  const SizedBox(height: 12.0),
-                ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 12, top: 12, right: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildFormInput(
+                      'Semen',
+                      _highSemen,
+                      _lowSemen,
+                      (high) => setState(() => _highSemen = high),
+                      (low) => setState(() => _lowSemen = low),
+                    ),
+                    const SizedBox(height: 12.0),
+                    _buildFormInput(
+                      'Kapur',
+                      _highKapur,
+                      _lowKapur,
+                      (high) => setState(() => _highKapur = high),
+                      (low) => setState(() => _lowKapur = low),
+                    ),
+                    const SizedBox(height: 12.0),
+                    _buildFormInput(
+                      'Pasir Kasar',
+                      _highKasar,
+                      _lowKasar,
+                      (high) => setState(() => _highKasar = high),
+                      (low) => setState(() => _lowKasar = low),
+                    ),
+                    const SizedBox(height: 12.0),
+                    _buildFormInput(
+                      'Pasir Halus',
+                      _highHalus,
+                      _lowHalus,
+                      (high) => setState(() => _highHalus = high),
+                      (low) => setState(() => _lowHalus = low),
+                    ),
+                    const SizedBox(height: 12.0),
+                    _buildFormInput(
+                      'Semen Putih',
+                      _highPutih,
+                      _lowPutih,
+                      (high) => setState(() => _highPutih = high),
+                      (low) => setState(() => _lowPutih = low),
+                    ),
+                    const SizedBox(height: 12.0),
+                  ],
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () => _confirmSubmit(context),
-              child: const Text('Save Settings'),
-            ),
-            const SizedBox(height: 12.0),
-          ],
+              ElevatedButton(
+                onPressed: () => _confirmSubmit(context),
+                child: const Text('Save Settings'),
+              ),
+              const SizedBox(height: 12.0),
+            ],
+          ),
         ),
       ),
     );

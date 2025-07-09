@@ -33,84 +33,89 @@ class _ChartScreenState extends State<ChartScreen> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children:
-              [
-                DashboardHeroChart(
-                  barWidth: 16,
-                  title: 'Total Scales 2025',
-                  unit: 'kg',
-                  icon: const Icon(Icons.scale_rounded, color: Colors.blue),
-                  listColorGradient: const [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                  ],
-                  chartInterval: 20000,
-                  maxChartValue: 80000,
-                  listChartValue: chartScaleYearValues,
-                  leftTitleKey: const ['0', '20k', '40k', '60k', '80k'],
-                  leftTitleValue: const [0, 20000, 40000, 60000, 80000],
-                  heroChartData: chartScalesYearData,
-                  bottomTitleKey: chartScalesYearBottomTitle,
-                ),
-                DashboardHeroChart(
-                  title: 'Best Scales',
-                  unit: 'kg',
-                  icon: const Icon(Icons.scale_outlined, color: Colors.green),
-                  listColorGradient: const [Colors.green, Colors.lightGreen],
-                  chartInterval: 250,
-                  maxChartValue: 1000,
-                  listChartValue: chartScaleValues,
-                  leftTitleKey: const ['0', '250', '500', '750', '1K'],
-                  leftTitleValue: const [0, 250, 500, 750, 1000],
-                  heroChartData: chartScalesData,
-                  bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
-                ),
-                DashboardHeroChart(
-                  title: 'Best Time',
-                  unit: 'minutes',
-                  icon: const Icon(Icons.timelapse_rounded, color: Colors.red),
-                  listColorGradient: const [Colors.red, Colors.orange],
-                  maxChartValue: 20,
-                  chartInterval: 5,
-                  listChartValue: chartTimeValues,
-                  leftTitleKey: const ['0', '5', '10', '15', '20'],
-                  leftTitleValue: const [0, 5, 10, 15, 20],
-                  heroChartData: chartTimeData,
-                  bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
-                ),
-              ].map((item) {
-                return Hero(
-                  tag: item.title,
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      padding: EdgeInsets.only(
-                        left: 12,
-                        top: 12,
-                        right: 12,
-                        bottom: item.bottomTitleKey != null ? 0 : 12,
-                      ),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue.withAlpha(10),
-                        border: Border.all(
-                          width: 2,
-                          color: Colors.lightBlue.withAlpha(25),
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: item,
-                    ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children:
+                [
+                  DashboardHeroChart(
+                    barWidth: 16,
+                    title: 'Total Scales 2025',
+                    unit: 'kg',
+                    icon: const Icon(Icons.scale_rounded, color: Colors.blue),
+                    listColorGradient: const [
+                      Colors.blue,
+                      Colors.lightBlueAccent,
+                    ],
+                    chartInterval: 20000,
+                    maxChartValue: 80000,
+                    listChartValue: chartScaleYearValues,
+                    leftTitleKey: const ['0', '20k', '40k', '60k', '80k'],
+                    leftTitleValue: const [0, 20000, 40000, 60000, 80000],
+                    heroChartData: chartScalesYearData,
+                    bottomTitleKey: chartScalesYearBottomTitle,
                   ),
-                );
-              }).toList(),
+                  DashboardHeroChart(
+                    title: 'Best Scales',
+                    unit: 'kg',
+                    icon: const Icon(Icons.scale_outlined, color: Colors.green),
+                    listColorGradient: const [Colors.green, Colors.lightGreen],
+                    chartInterval: 250,
+                    maxChartValue: 1000,
+                    listChartValue: chartScaleValues,
+                    leftTitleKey: const ['0', '250', '500', '750', '1K'],
+                    leftTitleValue: const [0, 250, 500, 750, 1000],
+                    heroChartData: chartScalesData,
+                    bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
+                  ),
+                  DashboardHeroChart(
+                    title: 'Best Time',
+                    unit: 'minutes',
+                    icon: const Icon(
+                      Icons.timelapse_rounded,
+                      color: Colors.red,
+                    ),
+                    listColorGradient: const [Colors.red, Colors.orange],
+                    maxChartValue: 20,
+                    chartInterval: 5,
+                    listChartValue: chartTimeValues,
+                    leftTitleKey: const ['0', '5', '10', '15', '20'],
+                    leftTitleValue: const [0, 5, 10, 15, 20],
+                    heroChartData: chartTimeData,
+                    bottomTitleKey: const ['7', '6', '5', '4', '3', '2', '1'],
+                  ),
+                ].map((item) {
+                  return Hero(
+                    tag: item.title,
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        padding: EdgeInsets.only(
+                          left: 12,
+                          top: 12,
+                          right: 12,
+                          bottom: item.bottomTitleKey != null ? 0 : 12,
+                        ),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue.withAlpha(10),
+                          border: Border.all(
+                            width: 2,
+                            color: Colors.lightBlue.withAlpha(25),
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: item,
+                      ),
+                    ),
+                  );
+                }).toList(),
+          ),
         ),
       ),
     );

@@ -423,312 +423,315 @@ class _SpkScreenState extends State<SpkScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: TextFormField(
-                onTap: () {
-                  if (!_isLoading) {
-                    FocusScope.of(context).unfocus();
-                    _selectDate(context);
-                  }
-                },
-                controller: _dateController,
-                readOnly: true,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall!.copyWith(color: Colors.blue),
-                decoration: InputDecoration(
-                  hintText: 'Click date icon to filter',
-                  hintStyle: Theme.of(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: TextFormField(
+                  onTap: () {
+                    if (!_isLoading) {
+                      FocusScope.of(context).unfocus();
+                      _selectDate(context);
+                    }
+                  },
+                  controller: _dateController,
+                  readOnly: true,
+                  style: Theme.of(
                     context,
-                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: 12,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: _dateController.text.isNotEmpty
-                          ? Colors.blue
-                          : Colors.grey,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.blue),
+                  decoration: InputDecoration(
+                    hintText: 'Click date icon to filter',
+                    hintStyle: Theme.of(
+                      context,
+                    ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 12,
                     ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.blue),
-                  ),
-                  prefixIcon: InkWell(
-                    onTap: () {
-                      if (!_isLoading) {
-                        FocusScope.of(context).unfocus();
-                        _selectDate(context);
-                      }
-                    },
-                    child: const Icon(CupertinoIcons.calendar),
-                  ),
-                  // suffixIcon: _dateController.text.isNotEmpty
-                  //     ? InkWell(
-                  //         onTap: () {
-                  //           FocusScope.of(context).unfocus();
-                  //           setState(() {
-                  //             _dateController.clear();
-                  //           });
-                  //           _getList();
-                  //         },
-                  //         child: const Icon(
-                  //           CupertinoIcons.xmark_circle_fill,
-                  //         ),
-                  //       )
-                  //     : null,
-                ),
-              ),
-              // child: DatePickerFormField(
-              //   value: _dateController.text,
-              //   onChanged: (dateString) {
-              //     setState(() {
-              //       _dateController.text = dateString;
-              //     });
-              //     _getList();
-              //   },
-              // ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: ['all', 'pending', 'running', 'done', 'stopped'].map((
-                  item,
-                ) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: OutlinedButton(
-                      onPressed: () {
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: _dateController.text.isNotEmpty
+                            ? Colors.blue
+                            : Colors.grey,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.blue),
+                    ),
+                    prefixIcon: InkWell(
+                      onTap: () {
                         if (!_isLoading) {
-                          setState(() {
-                            _filterStatus = item;
-                          });
-                          _getList();
+                          FocusScope.of(context).unfocus();
+                          _selectDate(context);
                         }
                       },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: _filterStatus == item
-                              ? _isLoading
-                                    ? Colors.blue.withAlpha(50)
-                                    : Colors.blue.withAlpha(100)
-                              : _isLoading
-                              ? Colors.grey.shade200
-                              : Colors.black12,
-                        ),
-                        backgroundColor: _filterStatus == item
-                            ? _isLoading
-                                  ? Colors.blue.withAlpha(50)
-                                  : Colors.blue.withAlpha(100)
-                            : _isLoading
-                            ? Colors.grey.shade200
-                            : Colors.black12,
-                        padding: const EdgeInsets.all(14),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      child: Text(
-                        item.toUpperCase(),
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: _filterStatus == item
-                              ? _isLoading
-                                    ? Colors.blue.shade200
-                                    : Colors.blue
-                              : _isLoading
-                              ? Colors.black26
-                              : Colors.black54,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: const Icon(CupertinoIcons.calendar),
                     ),
-                  );
-                }).toList(),
-              ),
-            ),
-            if (_isLoading)
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.withAlpha(75),
+                    // suffixIcon: _dateController.text.isNotEmpty
+                    //     ? InkWell(
+                    //         onTap: () {
+                    //           FocusScope.of(context).unfocus();
+                    //           setState(() {
+                    //             _dateController.clear();
+                    //           });
+                    //           _getList();
+                    //         },
+                    //         child: const Icon(
+                    //           CupertinoIcons.xmark_circle_fill,
+                    //         ),
+                    //       )
+                    //     : null,
                   ),
-                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text('Loading..', textAlign: TextAlign.center),
-              )
-            else if (_listFiltered == null || _listFiltered!.isEmpty)
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.withAlpha(75),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Data is empty.',
-                  textAlign: TextAlign.center,
-                ),
-              )
-            else
-              ListSpk(
-                listItem: _listFiltered!,
-                selectedItem: _selectedItem,
-                onEdit: (item) {
-                  setState(() {
-                    _selectedItem = item;
-                  });
-                  _editItem();
-                },
-                onDelete: (item) {
-                  setState(() {
-                    _selectedItem = item;
-                  });
-                  _deleteItem();
-                },
+                // child: DatePickerFormField(
+                //   value: _dateController.text,
+                //   onChanged: (dateString) {
+                //     setState(() {
+                //       _dateController.text = dateString;
+                //     });
+                //     _getList();
+                //   },
+                // ),
               ),
-            // else ...[
-            // if ((_listNow == null || _listNow!.isEmpty) &&
-            //     (_listPast == null || _listPast!.isEmpty) &&
-            //     (_listUpcoming == null || _listUpcoming!.isEmpty) &&
-            //     (_listDate == null || _listDate!.isEmpty))
-            //   Container(
-            //     width: double.infinity,
-            //     margin: const EdgeInsets.all(12),
-            //     padding: const EdgeInsets.all(12),
-            //     decoration: BoxDecoration(
-            //       border:
-            //           Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-            //       borderRadius: BorderRadius.circular(8),
-            //     ),
-            //     child: const Text(
-            //       'Data is empty.',
-            //       textAlign: TextAlign.center,
-            //     ),
-            //   )
-            // else if (_dateController.text.isNotEmpty)
-            //   ListSpk(
-            //     title: 'Filter by date',
-            //     listItem: _listDate!,
-            //     selectedItem: _selectedItem,
-            //     onEdit: (item) {
-            //       setState(() {
-            //         _selectedItem = item;
-            //       });
-            //       _editItem();
-            //     },
-            //     // onDelete: (item) {
-            //     //   setState(() {
-            //     //     _selectedItem = item;
-            //     //   });
-            //     //   _deleteItem();
-            //     // },
-            //   )
-            // else ...[
-            //   _listNow != null && _listNow!.isNotEmpty
-            //       ? ListSpk(
-            //           title: 'Now',
-            //           listItem: _listNow!,
-            //           selectedItem: _selectedItem,
-            //           onEdit: (item) {
-            //             setState(() {
-            //               _selectedItem = item;
-            //             });
-            //             _editItem();
-            //           },
-            //           onDelete: (item) {
-            //             setState(() {
-            //               _selectedItem = item;
-            //             });
-            //             _deleteItem();
-            //           },
-            //         )
-            //       : const SizedBox.shrink(),
-            //   _listUpcoming != null && _listUpcoming!.isNotEmpty
-            //       ? ListSpk(
-            //           title: 'Upcoming Spk',
-            //           listItem: _listUpcoming!,
-            //           selectedItem: _selectedItem,
-            //           onEdit: (item) {
-            //             setState(() {
-            //               _selectedItem = item;
-            //             });
-            //             _editItem();
-            //           },
-            //           onDelete: (item) {
-            //             setState(() {
-            //               _selectedItem = item;
-            //             });
-            //             _deleteItem();
-            //           },
-            //         )
-            //       : const SizedBox.shrink(),
-            //   _listPast != null && _listPast!.isNotEmpty
-            //       ? ListSpk(
-            //           title: 'Past Spk',
-            //           listItem: _listPast!,
-            //           selectedItem: _selectedItem,
-            //           withCustomTrailing: false,
-            //           onEdit: (item) {
-            //             setState(() {
-            //               _selectedItem = item;
-            //             });
-            //             _editItem();
-            //           },
-            //           onDelete: (item) {
-            //             setState(() {
-            //               _selectedItem = item;
-            //             });
-            //             _deleteItem();
-            //           },
-            //           // onReorder: (oldIndex, newIndex) {
-            //           //   print('$oldIndex & $newIndex');
-            //           //   if (_listPast != null) {
-            //           //     setState(() {
-            //           //       if (oldIndex < newIndex) {
-            //           //         newIndex -= 1;
-            //           //       }
-            //           //       final SpkModel item =
-            //           //           _listPast!.removeAt(oldIndex);
-            //           //       _listPast!.insert(newIndex, item);
-            //           //       showSnackBar(context,
-            //           //           'Sedang mengganti urutan ${item.descSpk} dari $oldIndex ke $newIndex...');
-            //           //     });
-            //           //     Future.delayed(const Duration(seconds: 2), () {
-            //           //       showSnackBar(
-            //           //           context, 'Berhasil mengganti urutan');
-            //           //       // setState(() {
-            //           //       //   final SpkModel item =
-            //           //       //       _listPast!.removeAt(newIndex);
-            //           //       //   _listPast!.insert(oldIndex, item);
-            //           //       //   showSnackBar(context, 'Gagal mengganti urutan');
-            //           //       // });
-            //           //     });
-            //           //   }
-            //           // },
-            //         )
-            //       : const SizedBox.shrink(),
-            // ]
-            // ]
-          ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: ['all', 'pending', 'running', 'done', 'stopped']
+                      .map((item) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: OutlinedButton(
+                            onPressed: () {
+                              if (!_isLoading) {
+                                setState(() {
+                                  _filterStatus = item;
+                                });
+                                _getList();
+                              }
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                color: _filterStatus == item
+                                    ? _isLoading
+                                          ? Colors.blue.withAlpha(50)
+                                          : Colors.blue.withAlpha(100)
+                                    : _isLoading
+                                    ? Colors.grey.shade200
+                                    : Colors.black12,
+                              ),
+                              backgroundColor: _filterStatus == item
+                                  ? _isLoading
+                                        ? Colors.blue.withAlpha(50)
+                                        : Colors.blue.withAlpha(100)
+                                  : _isLoading
+                                  ? Colors.grey.shade200
+                                  : Colors.black12,
+                              padding: const EdgeInsets.all(14),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: VisualDensity.compact,
+                            ),
+                            child: Text(
+                              item.toUpperCase(),
+                              style: Theme.of(context).textTheme.bodySmall!
+                                  .copyWith(
+                                    color: _filterStatus == item
+                                        ? _isLoading
+                                              ? Colors.blue.shade200
+                                              : Colors.blue
+                                        : _isLoading
+                                        ? Colors.black26
+                                        : Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
+                        );
+                      })
+                      .toList(),
+                ),
+              ),
+              if (_isLoading)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey.withAlpha(75),
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text('Loading..', textAlign: TextAlign.center),
+                )
+              else if (_listFiltered == null || _listFiltered!.isEmpty)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey.withAlpha(75),
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'Data is empty.',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              else
+                ListSpk(
+                  listItem: _listFiltered!,
+                  selectedItem: _selectedItem,
+                  onEdit: (item) {
+                    setState(() {
+                      _selectedItem = item;
+                    });
+                    _editItem();
+                  },
+                  onDelete: (item) {
+                    setState(() {
+                      _selectedItem = item;
+                    });
+                    _deleteItem();
+                  },
+                ),
+              // else ...[
+              // if ((_listNow == null || _listNow!.isEmpty) &&
+              //     (_listPast == null || _listPast!.isEmpty) &&
+              //     (_listUpcoming == null || _listUpcoming!.isEmpty) &&
+              //     (_listDate == null || _listDate!.isEmpty))
+              //   Container(
+              //     width: double.infinity,
+              //     margin: const EdgeInsets.all(12),
+              //     padding: const EdgeInsets.all(12),
+              //     decoration: BoxDecoration(
+              //       border:
+              //           Border.all(width: 1, color: Colors.grey.withAlpha(75)),
+              //       borderRadius: BorderRadius.circular(8),
+              //     ),
+              //     child: const Text(
+              //       'Data is empty.',
+              //       textAlign: TextAlign.center,
+              //     ),
+              //   )
+              // else if (_dateController.text.isNotEmpty)
+              //   ListSpk(
+              //     title: 'Filter by date',
+              //     listItem: _listDate!,
+              //     selectedItem: _selectedItem,
+              //     onEdit: (item) {
+              //       setState(() {
+              //         _selectedItem = item;
+              //       });
+              //       _editItem();
+              //     },
+              //     // onDelete: (item) {
+              //     //   setState(() {
+              //     //     _selectedItem = item;
+              //     //   });
+              //     //   _deleteItem();
+              //     // },
+              //   )
+              // else ...[
+              //   _listNow != null && _listNow!.isNotEmpty
+              //       ? ListSpk(
+              //           title: 'Now',
+              //           listItem: _listNow!,
+              //           selectedItem: _selectedItem,
+              //           onEdit: (item) {
+              //             setState(() {
+              //               _selectedItem = item;
+              //             });
+              //             _editItem();
+              //           },
+              //           onDelete: (item) {
+              //             setState(() {
+              //               _selectedItem = item;
+              //             });
+              //             _deleteItem();
+              //           },
+              //         )
+              //       : const SizedBox.shrink(),
+              //   _listUpcoming != null && _listUpcoming!.isNotEmpty
+              //       ? ListSpk(
+              //           title: 'Upcoming Spk',
+              //           listItem: _listUpcoming!,
+              //           selectedItem: _selectedItem,
+              //           onEdit: (item) {
+              //             setState(() {
+              //               _selectedItem = item;
+              //             });
+              //             _editItem();
+              //           },
+              //           onDelete: (item) {
+              //             setState(() {
+              //               _selectedItem = item;
+              //             });
+              //             _deleteItem();
+              //           },
+              //         )
+              //       : const SizedBox.shrink(),
+              //   _listPast != null && _listPast!.isNotEmpty
+              //       ? ListSpk(
+              //           title: 'Past Spk',
+              //           listItem: _listPast!,
+              //           selectedItem: _selectedItem,
+              //           withCustomTrailing: false,
+              //           onEdit: (item) {
+              //             setState(() {
+              //               _selectedItem = item;
+              //             });
+              //             _editItem();
+              //           },
+              //           onDelete: (item) {
+              //             setState(() {
+              //               _selectedItem = item;
+              //             });
+              //             _deleteItem();
+              //           },
+              //           // onReorder: (oldIndex, newIndex) {
+              //           //   print('$oldIndex & $newIndex');
+              //           //   if (_listPast != null) {
+              //           //     setState(() {
+              //           //       if (oldIndex < newIndex) {
+              //           //         newIndex -= 1;
+              //           //       }
+              //           //       final SpkModel item =
+              //           //           _listPast!.removeAt(oldIndex);
+              //           //       _listPast!.insert(newIndex, item);
+              //           //       showSnackBar(context,
+              //           //           'Sedang mengganti urutan ${item.descSpk} dari $oldIndex ke $newIndex...');
+              //           //     });
+              //           //     Future.delayed(const Duration(seconds: 2), () {
+              //           //       showSnackBar(
+              //           //           context, 'Berhasil mengganti urutan');
+              //           //       // setState(() {
+              //           //       //   final SpkModel item =
+              //           //       //       _listPast!.removeAt(newIndex);
+              //           //       //   _listPast!.insert(oldIndex, item);
+              //           //       //   showSnackBar(context, 'Gagal mengganti urutan');
+              //           //       // });
+              //           //     });
+              //           //   }
+              //           // },
+              //         )
+              //       : const SizedBox.shrink(),
+              // ]
+              // ]
+            ],
+          ),
         ),
       ),
     );

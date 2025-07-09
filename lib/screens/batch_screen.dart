@@ -220,14 +220,40 @@ class _BatchScreenState extends State<BatchScreen> {
         title: Text('Batch', style: Theme.of(context).textTheme.titleMedium),
         scrolledUnderElevation: 0,
       ),
-      body: Column(
-        children: [
-          _sectionFilter(context),
-          Expanded(
-            child: CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                if (isShowedFastestBatch == true) ...[
+      body: SafeArea(
+        child: Column(
+          children: [
+            _sectionFilter(context),
+            Expanded(
+              child: CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  if (isShowedFastestBatch == true) ...[
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          left: 12,
+                          right: 12,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.leaderboard_rounded,
+                              color: Colors.grey,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Best Batch on ${_filteredProduct?.nameProduct} (${_batchFastest?.length ?? 0})',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(child: _sectionFastest(context)),
+                  ],
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -238,49 +264,25 @@ class _BatchScreenState extends State<BatchScreen> {
                       child: Row(
                         children: [
                           const Icon(
-                            Icons.leaderboard_rounded,
+                            Icons.lightbulb_circle,
                             color: Colors.grey,
                             size: 20,
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'Best Batch on ${_filteredProduct?.nameProduct} (${_batchFastest?.length ?? 0})',
+                            'List Batch (${_batchs?.length ?? 0})',
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(child: _sectionFastest(context)),
+                  SliverToBoxAdapter(child: _sectionItems(context)),
                 ],
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 12,
-                      left: 12,
-                      right: 12,
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.lightbulb_circle,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'List Batch (${_batchs?.length ?? 0})',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(child: _sectionItems(context)),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
