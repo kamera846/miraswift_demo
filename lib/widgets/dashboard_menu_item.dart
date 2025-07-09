@@ -24,7 +24,7 @@ class DashboardMenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      splashColor: surfaceColor!.withOpacity(0.3),
+      splashColor: surfaceColor!.withValues(alpha: 0.3),
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(24),
       child: Container(
@@ -32,7 +32,7 @@ class DashboardMenuItem extends StatelessWidget {
         padding: padding,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.8),
+          color: Colors.white.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: Colors.white, width: 2),
         ),

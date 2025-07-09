@@ -79,7 +79,7 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
               barTouchData: BarTouchData(
                 enabled: true,
                 touchTooltipData: BarTouchTooltipData(
-                  tooltipBgColor: Colors.black87.withOpacity(0.7),
+                  tooltipBgColor: Colors.black87.withValues(alpha: 0.7),
                   tooltipMargin: 8,
                   tooltipPadding: const EdgeInsets.only(
                     left: 16,

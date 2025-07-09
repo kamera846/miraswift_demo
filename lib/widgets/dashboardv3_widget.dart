@@ -107,7 +107,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
-              color: Colors.blue.withOpacity(0.2),
+              color: Colors.blue.withValues(alpha: 0.2),
             ),
           ),
         ),
@@ -137,7 +137,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 height: 40,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                   border: Border.all(width: 2, color: Colors.white),
                   borderRadius: BorderRadius.circular(100),
                 ),
@@ -156,7 +156,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 height: 40,
                 padding: const EdgeInsets.all(0),
                 decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     border: Border.all(width: 2, color: Colors.white),
                     borderRadius: BorderRadius.circular(100)),
                 child: IconButton(
@@ -299,7 +299,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 ),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   border: Border.all(width: 2, color: Colors.white),
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -322,7 +322,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 ),
               );
             },
-            splashColor: Colors.blue.withOpacity(0.1),
+            splashColor: Colors.blue.withValues(alpha: 0.1),
             highlightColor: Colors.transparent,
             borderRadius: BorderRadius.circular(24),
             child: Container(
@@ -330,7 +330,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
               margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: Colors.white, width: 2),
               ),
@@ -414,7 +414,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
               ),
             ),
           )
-        : SizedBox.shrink();
+        : const SizedBox.shrink();
   }
 
   Column userProfile(BuildContext context) {
@@ -439,7 +439,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                       fontWeight: FontWeight.bold,
                       shadows: [
                         Shadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                           offset: const Offset(2.0, 2.0),
                           blurRadius: 6.0,
                         ),
@@ -457,7 +457,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   color: Colors.white,
                   shadows: [
                     Shadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       offset: const Offset(2.0, 2.0),
                       blurRadius: 6.0,
                     ),
@@ -477,7 +477,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                 color: Colors.white,
                 shadows: [
                   Shadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     offset: const Offset(2.0, 2.0),
                     blurRadius: 6.0,
                   ),
@@ -646,7 +646,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
             ),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: Colors.white, width: 2),
             ),

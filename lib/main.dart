@@ -48,10 +48,10 @@ class _MainAppState extends State<MainApp> {
         popupMenuTheme: const PopupMenuThemeData(
           color: Colors.white,
         ),
-        dialogTheme: const DialogTheme(
+        dialogTheme: const DialogThemeData(
           backgroundColor: Colors.white,
         ),
-        splashColor: Colors.blue.withOpacity(0.1),
+        splashColor: Colors.blue.withValues(alpha: 0.1),
       ),
       home: Stack(
         children: [
@@ -73,7 +73,7 @@ class _MainAppState extends State<MainApp> {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: Container(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
               ),
             ),
           ),
