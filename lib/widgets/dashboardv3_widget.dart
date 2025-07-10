@@ -15,7 +15,7 @@ import 'package:miraswiftdemo/screens/notifications_screen.dart';
 import 'package:miraswiftdemo/screens/panel_screen.dart';
 import 'package:miraswiftdemo/screens/product_screen.dart';
 import 'package:miraswiftdemo/screens/spk_screen.dart';
-import 'package:miraswiftdemo/screens/transactions_sreen.dart';
+import 'package:miraswiftdemo/screens/transaction_screen.dart';
 import 'package:miraswiftdemo/services/batch_api.dart';
 import 'package:miraswiftdemo/services/logmsg_api.dart';
 import 'package:miraswiftdemo/services/product_api.dart';
@@ -279,7 +279,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const TransactionsSreen(),
+                  builder: (context) => const TransactionScreen(),
                 ),
               );
             },
@@ -350,7 +350,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                       } else {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const TransactionsSreen(),
+                            builder: (context) => const TransactionScreen(),
                           ),
                         );
                       }

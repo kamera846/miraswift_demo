@@ -8,14 +8,14 @@ import 'package:miraswiftdemo/utils/formatted_date.dart';
 import 'package:miraswiftdemo/utils/snackbar.dart';
 import 'package:miraswiftdemo/widgets/list_tile_item.dart';
 
-class TransactionsSreen extends StatefulWidget {
-  const TransactionsSreen({super.key});
+class OldTransactionScreen extends StatefulWidget {
+  const OldTransactionScreen({super.key});
 
   @override
-  State<TransactionsSreen> createState() => _TransactionsSreenState();
+  State<OldTransactionScreen> createState() => _OldTransactionScreenState();
 }
 
-class _TransactionsSreenState extends State<TransactionsSreen> {
+class _OldTransactionScreenState extends State<OldTransactionScreen> {
   List<TransactionModel>? _listFiltered;
   TransactionModel? _selectedItem;
   bool _isLoading = true;

@@ -9,14 +9,14 @@ import 'package:miraswiftdemo/utils/formatted_date.dart';
 import 'package:miraswiftdemo/utils/snackbar.dart';
 import 'package:miraswiftdemo/widgets/list_tile_item.dart';
 
-class TestDateConcept extends StatefulWidget {
-  const TestDateConcept({super.key});
+class TransactionScreen extends StatefulWidget {
+  const TransactionScreen({super.key});
 
   @override
-  TestDateConceptState createState() => TestDateConceptState();
+  TransactionScreenState createState() => TransactionScreenState();
 }
 
-class TestDateConceptState extends State<TestDateConcept> {
+class TransactionScreenState extends State<TransactionScreen> {
   DateTime dateNow = DateTime.now();
   DateTime selectedDate = DateTime.now();
   DateTime visibleMonth = DateTime(DateTime.now().year, DateTime.now().month);
@@ -42,10 +42,8 @@ class TestDateConceptState extends State<TestDateConcept> {
   }
 
   void _goToPreviousMonth() {
-    print('Date: Previous before $visibleMonth');
     setState(() {
       visibleMonth = DateTime(visibleMonth.year, visibleMonth.month - 1);
-      print('Date: Previous after $visibleMonth');
       if (visibleMonth.month == dateNow.month &&
           visibleMonth.year == dateNow.year) {
         selectedDate = dateNow;
@@ -57,10 +55,8 @@ class TestDateConceptState extends State<TestDateConcept> {
   }
 
   void _goToNextMonth() {
-    print('Date: Next before $visibleMonth');
     setState(() {
       visibleMonth = DateTime(visibleMonth.year, visibleMonth.month + 1);
-      print('Date: Next after $visibleMonth');
       if (visibleMonth.month == dateNow.month &&
           visibleMonth.year == dateNow.year) {
         selectedDate = dateNow;

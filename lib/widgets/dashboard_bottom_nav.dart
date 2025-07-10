@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miraswiftdemo/screens/chart_screen.dart';
 import 'package:miraswiftdemo/screens/settings_screen.dart';
-import 'package:miraswiftdemo/screens/transactions_sreen.dart';
+import 'package:miraswiftdemo/screens/transaction_screen.dart';
 import 'package:miraswiftdemo/widgets/dashboardv3_widget.dart';
 
 class DashboardBottomNav extends StatelessWidget {
@@ -48,7 +48,7 @@ class DashboardBottomNav extends StatelessWidget {
     if (index == 0) {
       nextPage = const ChartScreen();
     } else if (index == 1) {
-      nextPage = const TransactionsSreen();
+      nextPage = const TransactionScreen();
     } else if (index == 2) {
       nextPage = const SettingsScreen();
     } else {
