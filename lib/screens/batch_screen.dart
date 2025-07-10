@@ -38,6 +38,7 @@ class _BatchScreenState extends State<BatchScreen> {
   ProductModel? _selectedProduct;
   List<ProductModel>? _listProduct;
   String _emptyMessage = "Data is empty.";
+  String _batchFastestMessage = "Data is empty.";
 
   int totalItems = 0;
   int _itemCount = 0;
@@ -208,15 +209,14 @@ class _BatchScreenState extends State<BatchScreen> {
         isBatchFastestLoading = true;
       }
       isShowedFastestBatch = true;
+      _batchFastestMessage = "";
     });
     await BatchApiService().batchFastest(
       idProduct: idProduct,
       onError: (msg) {
-        if (mounted) {
-          if (isSilentRefresh != true) {
-            showSnackBar(context, msg);
-          }
-        }
+        setState(() {
+          _batchFastestMessage = msg;
+        });
       },
       onCompleted: (data) {
         setState(() {
@@ -448,9 +448,13 @@ class _BatchScreenState extends State<BatchScreen> {
                       ? 'Loading..'
                       : !isBatchFastestLoading &&
                             (_batchFastest == null || _batchFastest!.isEmpty)
-                      ? 'Data is empty.'
+                      ? _batchFastestMessage.isNotEmpty
+                            ? _batchFastestMessage
+                            : 'Data is empty.'
                       : '',
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
