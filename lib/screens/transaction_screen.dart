@@ -144,9 +144,13 @@ class TransactionScreenState extends State<TransactionScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                icon: Icon(Icons.chevron_left),
-                onPressed: _isLoading == true ? null : _goToPreviousMonth,
+              InkWell(
+                onTap: _isLoading == true ? null : _goToPreviousMonth,
+                borderRadius: BorderRadius.circular(100),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Icon(Icons.chevron_left),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -158,9 +162,14 @@ class TransactionScreenState extends State<TransactionScreen> {
                   ),
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: _isLoading == true ? null : _goToNextMonth,
+
+              InkWell(
+                onTap: _isLoading == true ? null : _goToNextMonth,
+                borderRadius: BorderRadius.circular(100),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Icon(Icons.chevron_right),
+                ),
               ),
             ],
           ),
