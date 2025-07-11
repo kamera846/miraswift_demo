@@ -7,7 +7,6 @@ import 'package:miraswiftdemo/screens/transaction_detail_screen.dart';
 import 'package:miraswiftdemo/services/transaction_api.dart';
 import 'package:miraswiftdemo/utils/formatted_date.dart';
 import 'package:miraswiftdemo/utils/snackbar.dart';
-import 'package:miraswiftdemo/widgets/list_tile_item.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -22,8 +21,6 @@ class TransactionScreenState extends State<TransactionScreen> {
   DateTime visibleMonth = DateTime(DateTime.now().year, DateTime.now().month);
   final ScrollController _scrollController = ScrollController();
   List<TransactionModel>? _listFiltered;
-  TransactionModel? _selectedItem;
-  String _filterStatus = 'all';
   bool _isLoading = true;
 
   @override
@@ -84,7 +81,6 @@ class TransactionScreenState extends State<TransactionScreen> {
       );
     }
 
-    _filterStatus = 'all';
     _getList();
   }
 
@@ -97,7 +93,7 @@ class TransactionScreenState extends State<TransactionScreen> {
         dateStr: selectedDate.toString(),
         outputFormat: "yyyy-MM-dd",
       ),
-      status: _filterStatus,
+      status: 'all',
       onError: (msg) {
         if (mounted) {
           showSnackBar(context, msg);
@@ -106,7 +102,6 @@ class TransactionScreenState extends State<TransactionScreen> {
       onCompleted: (data) {
         setState(() {
           _listFiltered = data;
-          _selectedItem = null;
           _isLoading = false;
         });
       },
@@ -123,7 +118,6 @@ class TransactionScreenState extends State<TransactionScreen> {
 
     if (pickedDate != null) {
       setState(() {
-        _filterStatus = 'all';
         visibleMonth = DateTime(
           pickedDate.year,
           pickedDate.month,
@@ -198,72 +192,200 @@ class TransactionScreenState extends State<TransactionScreen> {
                   _scrollToSelected();
                 });
               },
-        backgroundColor: _isLoading ? Colors.black26 : Colors.black54,
+        backgroundColor: _isLoading ? Colors.black26 : Colors.grey.shade800,
         foregroundColor: Colors.white,
         elevation: 0,
         child: Icon(Icons.add),
       ),
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _dateSelection(days),
-            Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: Text(
-                'List Transactions (${_listFiltered?.length ?? 0})',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ),
-            if (_isLoading)
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.withAlpha(75),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text('Loading..', textAlign: TextAlign.center),
-              )
-            else if (_listFiltered == null || _listFiltered!.isEmpty)
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.withAlpha(75),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Data is empty.',
-                  textAlign: TextAlign.center,
-                ),
-              )
-            else
-              ListSpk(
-                onTap: (item) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => TransactionDetailScreen(
-                        idTransaction: item.idTransaction,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 16,
+                        left: 16,
+                        right: 16,
+                      ),
+                      child: Text(
+                        'List Transactions (${_listFiltered?.length ?? 0})',
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
-                  ).then((value) {
-                    _scrollToSelected();
-                  });
-                },
-                listItem: _listFiltered!,
-                selectedItem: _selectedItem,
+                    if (_isLoading)
+                      Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.grey.withAlpha(75),
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          'Loading..',
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    else if (_listFiltered == null || _listFiltered!.isEmpty)
+                      Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.grey.withAlpha(75),
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          'Data is empty.',
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    else
+                      ListView.separated(
+                        itemCount: _listFiltered?.length ?? 0,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16),
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 16),
+                        itemBuilder: (context, index) {
+                          final item = _listFiltered![index];
+                          return _transactionItem(context, item);
+                        },
+                      ),
+                  ],
+                ),
               ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _transactionItem(BuildContext context, TransactionModel item) {
+    IconData icon = Icons.schedule;
+    Color color = Colors.grey;
+    if (item.statusTransaction == 'RUNNING') {
+      icon = Icons.autorenew;
+      color = Colors.orange;
+    } else if (item.statusTransaction == 'NOT_COMPLETE') {
+      icon = Icons.warning_amber;
+      color = Colors.red;
+    } else if (item.statusTransaction == 'COMPLETE') {
+      icon = Icons.task_alt;
+      color = Colors.green;
+    }
+
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) =>
+                TransactionDetailScreen(idTransaction: item.idTransaction),
+          ),
+        );
+      },
+      borderRadius: BorderRadius.circular(8),
+      child: Card(
+        color: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(8),
+          side: BorderSide(color: Colors.grey.withAlpha(75)),
+        ),
+        margin: EdgeInsets.all(0),
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  IconButton.filledTonal(
+                    onPressed: null,
+                    icon: Icon(icon, color: color, size: 20),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                        color.withAlpha(50),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Transaction Item",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Spacer(),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Text(
+                      "ID ${item.idTransaction}",
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: color.withAlpha(50),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      item.statusTransaction,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleSmall?.copyWith(color: color),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(Icons.event, size: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    formattedDate(
+                      dateStr: item.dateTransaction,
+                      inputFormat: 'yyyy-MM-dd HH:mm:ss',
+                      outputFormat: 'dd MMM yyyy, HH:mm:ss',
+                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Divider(color: Colors.grey.withAlpha(75)),
+              Row(
+                children: [
+                  Text(
+                    "Detail Item",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  Spacer(),
+                  Icon(Icons.keyboard_arrow_right),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -363,114 +485,6 @@ class TransactionScreenState extends State<TransactionScreen> {
           },
         ),
       ),
-    );
-  }
-}
-
-class ListSpk extends StatelessWidget {
-  const ListSpk({
-    super.key,
-    this.title,
-    required this.listItem,
-    this.onTap,
-    this.selectedItem,
-    this.withCustomTrailing = true,
-    this.onEdit,
-    this.onDelete,
-    this.onReorder,
-  });
-
-  final String? title;
-  final List<TransactionModel> listItem;
-  final TransactionModel? selectedItem;
-  final bool withCustomTrailing;
-  final Function(TransactionModel item)? onTap;
-  final Function(TransactionModel item)? onEdit;
-  final Function(TransactionModel item)? onDelete;
-  final Function(int oldIndex, int newIndex)? onReorder;
-
-  @override
-  Widget build(BuildContext context) {
-    var index = 0;
-    return Column(
-      children: [
-        title != null
-            ? Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.playlist_add_check_circle,
-                      color: Colors.grey,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      title ?? '',
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ],
-                ),
-              )
-            : const SizedBox.shrink(),
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.grey.withAlpha(75)),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: listItem.map((item) {
-              final isLastIndex = (index == (listItem.length - 1));
-              index++;
-              return ListTileItem(
-                key: Key('$index'),
-                onTap: () {
-                  onTap != null ? onTap!(item) : null;
-                },
-                isSelected:
-                    (selectedItem != null &&
-                        selectedItem!.idTransaction == item.idTransaction)
-                    ? true
-                    : false,
-                title: formattedDate(dateStr: item.dateTransaction),
-                border: !isLastIndex
-                    ? Border(
-                        bottom: BorderSide(
-                          width: 1,
-                          color: Colors.grey.shade300,
-                        ),
-                      )
-                    : null,
-                description: 'Status ${item.statusTransaction}',
-                customTrailingIcon: IconButton(
-                  onPressed: () {
-                    onTap != null ? onTap!(item) : null;
-                  },
-                  icon: const Icon(Icons.keyboard_arrow_right_rounded),
-                ),
-                customLeadingIcon: item.statusTransaction == 'PENDING'
-                    ? Icon(Icons.watch_later_rounded, color: Colors.grey)
-                    : item.statusTransaction == 'RUNNING'
-                    ? Icon(
-                        Icons.timelapse_rounded,
-                        color: Colors.yellow.shade900,
-                      )
-                    : item.statusTransaction == 'COMPLETE'
-                    ? Icon(
-                        Icons.check_circle_rounded,
-                        color: Colors.green.shade700,
-                      )
-                    : Icon(
-                        Icons.stop_circle_rounded,
-                        color: Colors.red.shade700,
-                      ),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
     );
   }
 }
