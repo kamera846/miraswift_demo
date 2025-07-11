@@ -61,77 +61,15 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  if (_isLoading)
-                    Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.all(12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: Colors.grey.withAlpha(75),
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'Loading..',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  else if (_listItem == null || _listItem!.isEmpty)
-                    Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.all(12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: Colors.grey.withAlpha(75),
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'Data is empty.',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  else ...[
-                    ListSpk(
-                      listItem: _listItem!,
-                      selectedItem: _selectedItem,
-                      onCheckedChanged: (value, item) {
-                        int findIndex = _listItem!.indexWhere(
-                          (element) => element.idSpk == item.idSpk,
-                        );
-                        if (findIndex != -1) {
-                          setState(() {
-                            _listItem![findIndex] = _listItem![findIndex]
-                                .copyWith(isChecked: value);
-                            if (_listItem![findIndex].isChecked) {
-                              _selectedSpk.add(_listItem![findIndex].idSpk);
-                            } else {
-                              _selectedSpk.remove(_listItem![findIndex].idSpk);
-                            }
-                          });
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 84),
-                  ],
-                ],
-              ),
-            ),
-            if (!_isLoading && _listItem != null && _listItem!.isNotEmpty)
-              Positioned(
-                bottom: 24,
-                left: 24,
-                right: 24,
+      bottomNavigationBar:
+          !_isLoading && _listItem != null && _listItem!.isNotEmpty
+          ? SafeArea(
+              child: Container(
+                padding: EdgeInsetsGeometry.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(top: BorderSide(color: Colors.grey.shade100)),
+                ),
                 child: ElevatedButton(
                   onPressed: _onCreateTransaction,
                   style: ElevatedButton.styleFrom(
@@ -145,7 +83,68 @@ class SpkAvailableScreenState extends State<SpkAvailableScreen> {
                   ),
                 ),
               ),
-          ],
+            )
+          : null,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              if (_isLoading)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey.withAlpha(75),
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text('Loading..', textAlign: TextAlign.center),
+                )
+              else if (_listItem == null || _listItem!.isEmpty)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey.withAlpha(75),
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'Data is empty.',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              else ...[
+                ListSpk(
+                  listItem: _listItem!,
+                  selectedItem: _selectedItem,
+                  onCheckedChanged: (value, item) {
+                    int findIndex = _listItem!.indexWhere(
+                      (element) => element.idSpk == item.idSpk,
+                    );
+                    if (findIndex != -1) {
+                      setState(() {
+                        _listItem![findIndex] = _listItem![findIndex].copyWith(
+                          isChecked: value,
+                        );
+                        if (_listItem![findIndex].isChecked) {
+                          _selectedSpk.add(_listItem![findIndex].idSpk);
+                        } else {
+                          _selectedSpk.remove(_listItem![findIndex].idSpk);
+                        }
+                      });
+                    }
+                  },
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
@@ -260,33 +259,51 @@ class ListSpk extends StatelessWidget {
                 badge: '${item.jmlBatch} Batch',
                 title: item.descSpk,
                 border: !isLastIndex
-                    ? Border(
-                        bottom: BorderSide(
-                          width: 1,
-                          color: Colors.grey.shade300,
-                        ),
-                      )
+                    ? Border(bottom: BorderSide(color: Colors.grey.shade300))
                     : null,
                 description:
                     'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
                 customLeadingIcon: item.statusSpk == 'pending'
-                    ? Icon(
-                        Icons.watch_later_rounded,
-                        color: Colors.grey.shade700,
+                    ? IconButton.filledTonal(
+                        onPressed: null,
+                        icon: Icon(Icons.schedule, color: Colors.grey),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            Colors.grey.withAlpha(50),
+                          ),
+                        ),
                       )
                     : item.statusSpk == 'running'
-                    ? Icon(
-                        Icons.timelapse_rounded,
-                        color: Colors.yellow.shade900,
+                    ? IconButton.filledTonal(
+                        onPressed: null,
+                        icon: Icon(Icons.autorenew, color: Colors.orange),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            Colors.orange.withAlpha(50),
+                          ),
+                        ),
                       )
                     : item.statusSpk == 'done'
-                    ? Icon(
-                        Icons.check_circle_rounded,
-                        color: Colors.green.shade700,
+                    ? IconButton.filledTonal(
+                        onPressed: null,
+                        icon: Icon(Icons.task_alt, color: Colors.green),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            Colors.green.withAlpha(50),
+                          ),
+                        ),
                       )
-                    : Icon(
-                        Icons.stop_circle_rounded,
-                        color: Colors.red.shade700,
+                    : IconButton.filledTonal(
+                        onPressed: null,
+                        icon: Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.red,
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            Colors.red.withAlpha(50),
+                          ),
+                        ),
                       ),
                 customTrailingIcon: Checkbox(
                   value: item.isChecked,

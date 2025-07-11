@@ -816,23 +816,46 @@ class ListSpk extends StatelessWidget {
                 description:
                     'Jadwal untuk tanggal ${formattedDate(dateStr: item.dateSpk)}',
                 customLeadingIcon: item.statusSpk == 'pending'
-                    ? Icon(
-                        Icons.watch_later_rounded,
-                        color: Colors.grey.shade700,
+                    ? IconButton.filledTonal(
+                        onPressed: null,
+                        icon: Icon(Icons.schedule, color: Colors.grey),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            Colors.grey.withAlpha(50),
+                          ),
+                        ),
                       )
                     : item.statusSpk == 'running'
-                    ? Icon(
-                        Icons.timelapse_rounded,
-                        color: Colors.yellow.shade900,
+                    ? IconButton.filledTonal(
+                        onPressed: null,
+                        icon: Icon(Icons.autorenew, color: Colors.orange),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            Colors.orange.withAlpha(50),
+                          ),
+                        ),
                       )
                     : item.statusSpk == 'done'
-                    ? Icon(
-                        Icons.check_circle_rounded,
-                        color: Colors.green.shade700,
+                    ? IconButton.filledTonal(
+                        onPressed: null,
+                        icon: Icon(Icons.task_alt, color: Colors.green),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            Colors.green.withAlpha(50),
+                          ),
+                        ),
                       )
-                    : Icon(
-                        Icons.stop_circle_rounded,
-                        color: Colors.red.shade700,
+                    : IconButton.filledTonal(
+                        onPressed: null,
+                        icon: Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.red,
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            Colors.red.withAlpha(50),
+                          ),
+                        ),
                       ),
                 customTrailingIcon:
                     withCustomTrailing && item.statusSpk != 'done'
