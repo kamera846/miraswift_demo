@@ -20,6 +20,7 @@ import 'package:miraswiftdemo/services/batch_api.dart';
 import 'package:miraswiftdemo/services/logmsg_api.dart';
 import 'package:miraswiftdemo/services/product_api.dart';
 import 'package:miraswiftdemo/services/spk_api.dart';
+import 'package:miraswiftdemo/utils/formatted_date.dart';
 import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
 import 'package:miraswiftdemo/widgets/dashboard_hero_chart.dart';
 import 'package:miraswiftdemo/widgets/dashboard_menu_item.dart';
@@ -274,102 +275,241 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
   }
 
   Widget runningProduction(BuildContext context) {
-    return spkToday != null && productToday != null && formulaToday != null
-        ? InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const TransactionScreen(),
-                ),
-              );
-            },
-            splashColor: Colors.blue.withValues(alpha: 0.1),
-            highlightColor: Colors.transparent,
+    if (spkToday != null && productToday != null) {
+      IconData icon = Icons.schedule;
+      Color color = Colors.grey;
+      String status = spkToday!.statusSpk.toUpperCase();
+
+      if (status == 'RUNNING') {
+        icon = Icons.autorenew;
+        color = Colors.orange;
+      } else if (status == 'STOPPED') {
+        icon = Icons.warning_amber;
+        color = Colors.red;
+      } else if (status == 'DONE') {
+        icon = Icons.task_alt;
+        color = Colors.green;
+      }
+
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => TransactionScreen(date: spkToday!.dateSpk),
+            ),
+          );
+        },
+        splashColor: Colors.blue.withValues(alpha: 0.1),
+        highlightColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(24),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            border: Border.all(color: Colors.white, width: 2),
+          ),
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Flexible(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              productToday != null
-                                  ? Icons.timelapse_rounded
-                                  : Icons.watch_later_outlined,
-                              color: productToday != null
-                                  ? Colors.yellow.shade900
-                                  : Colors.blueGrey,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              productToday != null
-                                  ? 'Production is running...'
-                                  : 'No production',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          productToday != null
-                              ? productToday?.nameProduct ?? ''
-                              : 'No Spk Executed!',
-                          style: Theme.of(context).textTheme.titleSmall,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          spkToday != null
-                              ? '${spkToday?.jmlBatch ?? ''} batch from spk ${spkToday?.descSpk}'
-                              : "Let's get back to production",
-                          style: Theme.of(context).textTheme.bodySmall,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                  IconButton.filledTonal(
+                    onPressed: null,
+                    icon: Icon(icon, color: color, size: 20),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                        color.withAlpha(50),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  IconButton(
-                    onPressed: () {
-                      if (productToday != null) {
-                        _stopProductionValidation(productToday);
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const TransactionScreen(),
-                          ),
-                        );
-                      }
-                    },
-                    icon: Icon(
-                      productToday != null
-                          ? Icons.stop_circle_rounded
-                          : Icons.play_circle_fill_rounded,
-                      size: 48,
-                      color: productToday != null
-                          ? Colors.red.shade800
-                          : Colors.blueGrey,
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        productToday?.nameProduct ?? '-',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(
+                        "Total ${spkToday?.jmlBatch} Batch",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  IconButton.outlined(
+                    onPressed: productToday == null
+                        ? null
+                        : () => _stopProductionValidation(productToday),
+                    icon: Icon(Icons.stop_rounded, color: Colors.red.shade600),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                        Colors.red.shade100,
+                      ),
+                      side: WidgetStateProperty.all(
+                        BorderSide(color: Colors.red.shade200),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-          )
-        : const SizedBox.shrink();
+              const SizedBox(height: 8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: color.withAlpha(50),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      status,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleSmall?.copyWith(color: color),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(Icons.assignment_outlined, size: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    "SPK ${spkToday?.descSpk}",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(Icons.event, size: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    formattedDate(dateStr: spkToday?.dateSpk ?? "-"),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              LinearProgressIndicator(
+                borderRadius: BorderRadius.circular(50),
+                minHeight: 5,
+                backgroundColor: color.withAlpha(50),
+                valueColor: AlwaysStoppedAnimation(color.withAlpha(150)),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Text(
+                    "Detail Transaction",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  Spacer(),
+                  Icon(Icons.keyboard_arrow_right),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
+    // return spkToday != null && productToday != null && formulaToday != null
+    //     ? InkWell(
+    //         onTap: () {
+    //           Navigator.of(context).push(
+    //             MaterialPageRoute(
+    //               builder: (context) => const TransactionScreen(),
+    //             ),
+    //           );
+    //         },
+    //         splashColor: Colors.blue.withValues(alpha: 0.1),
+    //         highlightColor: Colors.transparent,
+    //         borderRadius: BorderRadius.circular(24),
+    //         child: Container(
+    //           padding: const EdgeInsets.all(16),
+    //           margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
+    //           width: double.infinity,
+    //           decoration: BoxDecoration(
+    //             color: Colors.white.withValues(alpha: 0.8),
+    //             borderRadius: BorderRadius.circular(24),
+    //             border: Border.all(color: Colors.white, width: 2),
+    //           ),
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Flexible(
+    //                 flex: 1,
+    //                 child: Column(
+    //                   crossAxisAlignment: CrossAxisAlignment.start,
+    //                   children: [
+    //                     Row(
+    //                       children: [
+    //                         Icon(
+    //                           productToday != null
+    //                               ? Icons.timelapse_rounded
+    //                               : Icons.watch_later_outlined,
+    //                           color: productToday != null
+    //                               ? Colors.yellow.shade900
+    //                               : Colors.blueGrey,
+    //                         ),
+    //                         const SizedBox(width: 8),
+    //                         Text(
+    //                           productToday != null
+    //                               ? 'Production is running...'
+    //                               : 'No production',
+    //                           style: Theme.of(context).textTheme.bodyMedium,
+    //                         ),
+    //                       ],
+    //                     ),
+    //                     const SizedBox(height: 4),
+    //                     Text(
+    //                       productToday != null
+    //                           ? productToday?.nameProduct ?? ''
+    //                           : 'No Spk Executed!',
+    //                       style: Theme.of(context).textTheme.titleSmall,
+    //                       maxLines: 1,
+    //                       overflow: TextOverflow.ellipsis,
+    //                     ),
+    //                     Text(
+    //                       spkToday != null
+    //                           ? '${spkToday?.jmlBatch ?? ''} batch from spk ${spkToday?.descSpk}'
+    //                           : "Let's get back to production",
+    //                       style: Theme.of(context).textTheme.bodySmall,
+    //                       maxLines: 2,
+    //                       overflow: TextOverflow.ellipsis,
+    //                     ),
+    //                   ],
+    //                 ),
+    //               ),
+    //               const SizedBox(width: 16),
+    //               IconButton(
+    //                 onPressed: () {
+    //                   if (productToday != null) {
+    //                     _stopProductionValidation(productToday);
+    //                   } else {
+    //                     Navigator.of(context).push(
+    //                       MaterialPageRoute(
+    //                         builder: (context) => const TransactionScreen(),
+    //                       ),
+    //                     );
+    //                   }
+    //                 },
+    //                 icon: Icon(
+    //                   productToday != null
+    //                       ? Icons.stop_circle_rounded
+    //                       : Icons.play_circle_fill_rounded,
+    //                   size: 48,
+    //                   color: productToday != null
+    //                       ? Colors.red.shade800
+    //                       : Colors.blueGrey,
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       )
+    //     : const SizedBox.shrink();
   }
 
   Column userProfile(BuildContext context) {
