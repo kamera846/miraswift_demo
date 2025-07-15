@@ -92,7 +92,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Execution Transaction ID ${_detailTransaction?.idTransaction ?? "-"}',
+          'Transaction ID ${_detailTransaction?.idTransaction ?? "-"}',
           style: Theme.of(context).textTheme.titleMedium,
         ),
         actions: [
@@ -158,18 +158,22 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                       padding: EdgeInsets.all(8),
                       header: Padding(
                         padding: EdgeInsets.only(
-                          left: 16,
-                          right: 16,
+                          left: 12,
+                          right: 12,
                           bottom: 8,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Transaction ${formattedDate(dateStr: _detailTransaction?.dateTransaction ?? "-", inputFormat: 'yyyy-MM-dd HH:mm:ss', outputFormat: 'dd MMM yyyy, HH:mm:ss')}",
-                              style: Theme.of(context).textTheme.titleSmall,
+                            Expanded(
+                              child: Text(
+                                "Transaction ${formattedDate(dateStr: _detailTransaction?.dateTransaction ?? "-", inputFormat: 'yyyy-MM-dd HH:mm:ss', outputFormat: 'dd MMM yyyy, HH:mm:ss')}",
+                                style: Theme.of(context).textTheme.titleSmall,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
+                            const SizedBox(width: 8),
                             Container(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 8,
@@ -335,11 +339,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Icon(
-                    CupertinoIcons.cube_box,
-                    size: 16,
-                    color: Colors.grey.shade700,
-                  ),
+                  Icon(CupertinoIcons.cube_box, size: 16),
                   const SizedBox(width: 4),
                   Text(
                     "Batch • ${item.spk?.currentBatch}",

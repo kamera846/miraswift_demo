@@ -191,6 +191,7 @@ class _BatchScreenState extends State<BatchScreen> {
               );
               _dateController.text = _filteredDate;
             }
+            isFilterShowed = true;
             _getBatchs();
           } else {
             isLoading = false;

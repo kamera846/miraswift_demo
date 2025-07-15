@@ -9,7 +9,8 @@ import 'package:miraswiftdemo/utils/formatted_date.dart';
 import 'package:miraswiftdemo/utils/snackbar.dart';
 
 class TransactionScreen extends StatefulWidget {
-  const TransactionScreen({super.key});
+  final String? date;
+  const TransactionScreen({super.key, this.date});
 
   @override
   TransactionScreenState createState() => TransactionScreenState();
@@ -26,6 +27,11 @@ class TransactionScreenState extends State<TransactionScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.date != null) {
+      DateTime dateParams = DateFormat("yyyy-MM-dd").parse(widget.date ?? "-");
+      selectedDate = dateParams;
+      visibleMonth = DateTime(dateParams.year, dateParams.month);
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
   }
 
