@@ -2,6 +2,7 @@ import 'package:accordion/accordion.dart';
 import 'package:flutter/material.dart';
 import 'package:miraswiftdemo/models/batch_model.dart';
 import 'package:miraswiftdemo/models/product_model.dart';
+import 'package:miraswiftdemo/services/api.dart';
 import 'package:miraswiftdemo/services/batch_api.dart';
 import 'package:miraswiftdemo/utils/badge.dart';
 import 'package:miraswiftdemo/utils/formatted_date.dart';
@@ -19,9 +20,11 @@ class BatchDetailScreen extends StatefulWidget {
 }
 
 class _BatchDetailScreenState extends State<BatchDetailScreen> {
+  List<Map<String, String?>> _dataTimes = [];
   List<BatchModel>? _dataEquipment;
   List<BatchModel>? _dataScales;
   ProductModel? _dataProduct;
+  ApiResponse? _batchDetail;
   bool isLoading = true;
   double totalScales = 0.0;
   String totalTimesEquipment = '-';
@@ -55,7 +58,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
             dataProduct,
             totalEquipmentTime,
             totalMaterialTime,
-          ) {
+            batchDetail,
+          ) async {
             if (dataScales != null && dataScales.isNotEmpty) {
               try {
                 for (var item in dataScales) {
@@ -78,9 +82,35 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               if (dataEquipment != null && dataEquipment.isNotEmpty) {
                 dataEquipment.sort((a, b) => a.timeOn.compareTo(b.timeOn));
               }
+
               _dataEquipment = dataEquipment;
               _dataScales = dataScales;
               _dataProduct = dataProduct;
+              _batchDetail = batchDetail;
+
+              _dataTimes = [
+                {
+                  'value': _batchDetail?.totalEquipmentTime,
+                  'label': 'Equipment',
+                  'icon': '🔧',
+                },
+                {
+                  'value': _batchDetail?.totalMaterialTime,
+                  'label': 'Material',
+                  'icon': '📦',
+                },
+                {
+                  'value': _batchDetail?.totalFeedingTime,
+                  'label': 'Feeding',
+                  'icon': '🔽',
+                },
+                {
+                  'value': _batchDetail?.totalDelayTime,
+                  'label': 'Delay',
+                  'icon': '⌛',
+                },
+              ];
+
               isLoading = false;
             });
           },
@@ -95,6 +125,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int dataTimeIndex = 0;
     int dataEquipmentIndex = 0;
     int dataScalesIndex = 0;
 
@@ -121,8 +152,14 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                 batch: widget.batch,
                 dataProduct: _dataProduct,
                 totalScales: totalScales,
+                batchDetail: _batchDetail,
               ),
-              _accordionSection(context, dataEquipmentIndex, dataScalesIndex),
+              _accordionSection(
+                context,
+                dataTimeIndex,
+                dataEquipmentIndex,
+                dataScalesIndex,
+              ),
             ],
           ),
         ),
@@ -132,11 +169,12 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
 
   Accordion _accordionSection(
     BuildContext context,
+    int dataTimeIndex,
     int dataEquipmentIndex,
     int dataScalesIndex,
   ) {
     return Accordion(
-      maxOpenSections: 2,
+      maxOpenSections: 3,
       accordionId: 'accordion-batch',
       headerPadding: const EdgeInsets.all(12),
       headerBorderRadius: 8,
@@ -159,10 +197,12 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
       scaleWhenAnimating: false,
       disableScrolling: true,
       children: [
+        _accordionTime(context, dataTimeIndex),
         _accordionItem(
           context,
           'Equipment',
-          'Times: $totalTimesEquipment',
+          // 'Times: $totalTimesEquipment',
+          null,
           Icons.settings_applications,
           _dataEquipment,
           dataEquipmentIndex,
@@ -170,7 +210,8 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
         _accordionItem(
           context,
           'Scales',
-          'Times: $totalTimesScales • Scales: ${totalScales.toStringAsFixed(2)} Kg',
+          // 'Times: $totalTimesScales • Scales: ${totalScales.toStringAsFixed(2)} Kg',
+          'Total Scales: ${totalScales.toStringAsFixed(2)} Kg',
           Icons.scale_rounded,
           _dataScales,
           dataEquipmentIndex,
@@ -179,10 +220,100 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
     );
   }
 
+  AccordionSection _accordionTime(BuildContext context, int dataTimeIndex) {
+    return AccordionSection(
+      isOpen: true,
+      header: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.access_time_filled,
+                color: Colors.grey.shade800,
+                size: 20,
+              ),
+              const SizedBox(width: 9),
+              Expanded(
+                child: Text(
+                  'Time Report',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      content: (!isLoading && _dataTimes.isNotEmpty)
+          ? Column(
+              children: _dataTimes.asMap().entries.map((entry) {
+                final item = entry.value;
+                final isLastIndex = (dataTimeIndex == (_dataTimes.length - 1));
+                dataTimeIndex++;
+                return Padding(
+                  padding: EdgeInsets.only(
+                    top: 12,
+                    bottom: isLastIndex ? 12 : 0,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item['label'] as String,
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                // '${item['icon'] as String} Total time ${formatTime(item['value'] as String)}',
+                                'Total ${formatTime(item['value'] as String)}',
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: Colors.grey.shade700),
+                              ),
+                            ],
+                          ),
+                          Text(item['icon'] as String),
+                        ],
+                      ),
+
+                      if (!isLastIndex) ...[
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          child: Divider(
+                            height: 0,
+                            color: Colors.grey.shade300,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              }).toList(),
+            )
+          : Center(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  isLoading
+                      ? 'Loading..'
+                      : !isLoading && _dataTimes.isEmpty
+                      ? 'Data is empty.'
+                      : '',
+                ),
+              ),
+            ),
+    );
+  }
+
   AccordionSection _accordionItem(
     BuildContext context,
     String title,
-    String description,
+    String? description,
     IconData icon,
     List<BatchModel>? items,
     int itemIndex,
@@ -204,8 +335,10 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(description, style: Theme.of(context).textTheme.bodySmall),
+          if (description != null) ...[
+            const SizedBox(height: 8),
+            Text(description, style: Theme.of(context).textTheme.bodySmall),
+          ],
         ],
       ),
       content: (!isLoading && items != null && items.isNotEmpty)
@@ -252,11 +385,13 @@ class BatchDetailHeader extends StatelessWidget {
     required this.batch,
     required this.dataProduct,
     required this.totalScales,
+    required this.batchDetail,
   });
 
   final BatchModel batch;
   final ProductModel? dataProduct;
   final double totalScales;
+  final ApiResponse? batchDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +419,7 @@ class BatchDetailHeader extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall!,
                     ),
                     Text(
-                      'SPK ${batch.spk?.descSpk} \u2022 ${formattedDate(dateStr: batch.dateEquipment)}',
+                      'SPK ${batch.spk?.descSpk} • ${formattedDate(dateStr: batch.dateEquipment)}',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
@@ -297,7 +432,6 @@ class BatchDetailHeader extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 0, color: Colors.grey.shade300),
           Container(
             padding: const EdgeInsets.all(12),
             child: Column(

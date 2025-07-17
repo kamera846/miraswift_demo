@@ -127,6 +127,7 @@ class BatchApiService {
       ProductModel? dataProduct,
       String? totalEquipmentTime,
       String? totalMaterialTime,
+      ApiResponse? batchDetail,
     )?
     onCompleted,
   }) async {
@@ -135,13 +136,14 @@ class BatchApiService {
     ProductModel? dataProduct;
     String? totalEquipmentTime;
     String? totalMaterialTime;
+    ApiResponse? apiResponse;
     try {
       final url = Uri.https(baseUrl, 'api/batch/detail/$batchNumber');
       final response = await http.get(url, headers: headerSetup);
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
-        final apiResponse = ApiResponse.fromJsonList(responseBody);
+        apiResponse = ApiResponse.fromJsonList(responseBody);
 
         if (apiResponse.code == 200) {
           if (apiResponse.dataScales != null) {
@@ -188,6 +190,7 @@ class BatchApiService {
           dataProduct,
           totalEquipmentTime,
           totalMaterialTime,
+          apiResponse,
         );
       }
     }
