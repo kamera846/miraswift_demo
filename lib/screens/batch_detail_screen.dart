@@ -145,23 +145,21 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
         ],
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              BatchDetailHeader(
-                batch: widget.batch,
-                dataProduct: _dataProduct,
-                totalScales: totalScales,
-                batchDetail: _batchDetail,
-              ),
-              _accordionSection(
-                context,
-                dataTimeIndex,
-                dataEquipmentIndex,
-                dataScalesIndex,
-              ),
-            ],
-          ),
+        child: ListView(
+          children: [
+            BatchDetailHeader(
+              batch: widget.batch,
+              dataProduct: _dataProduct,
+              totalScales: totalScales,
+              batchDetail: _batchDetail,
+            ),
+            _accordionSection(
+              context,
+              dataTimeIndex,
+              dataEquipmentIndex,
+              dataScalesIndex,
+            ),
+          ],
         ),
       ),
     );
