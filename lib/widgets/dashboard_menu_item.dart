@@ -41,10 +41,7 @@ class DashboardMenuItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  icon,
-                  color: surfaceColor,
-                ),
+                Icon(icon, color: surfaceColor),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -74,9 +71,7 @@ class DashboardMenuItem extends StatelessWidget {
                   style: TextStyle(color: Colors.blue),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  width: 8,
-                ),
+                SizedBox(width: 8),
                 Icon(
                   Icons.arrow_circle_right_sharp,
                   size: 18,
