@@ -91,22 +91,27 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
               _dataTimes = [
                 {
                   'value': _batchDetail?.totalEquipmentTime,
-                  'label': 'Equipment',
-                  'icon': '🔧',
+                  'label': 'Cycle Time',
+                  'desc': 'Total waktu dari feeding + discharge.',
+                  'icon': '🔁',
                 },
                 {
                   'value': _batchDetail?.totalMaterialTime,
                   'label': 'Material',
+                  'desc': 'Total waktu untuk transfer material.',
                   'icon': '📦',
                 },
                 {
                   'value': _batchDetail?.totalFeedingTime,
                   'label': 'Feeding',
+                  'desc':
+                      'Total waktu dari material pertama sampai material terakhir.',
                   'icon': '🔽',
                 },
                 {
                   'value': _batchDetail?.totalDelayTime,
                   'label': 'Delay',
+                  'desc': 'Total waktu tunda dari setiap equipment.',
                   'icon': '⌛',
                 },
               ];
@@ -209,7 +214,7 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
           context,
           'Scales',
           // 'Times: $totalTimesScales • Scales: ${totalScales.toStringAsFixed(2)} Kg',
-          'Total Scales: ${totalScales.toStringAsFixed(2)} Kg',
+          'Total Scales: ${totalScales.toStringAsFixed(2)} KG',
           Icons.scale_rounded,
           _dataScales,
           dataEquipmentIndex,
@@ -258,23 +263,28 @@ class _BatchDetailScreenState extends State<BatchDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item['label'] as String,
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                // '${item['icon'] as String} Total time ${formatTime(item['value'] as String)}',
-                                'Total ${formatTime(item['value'] as String)}',
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(color: Colors.grey.shade700),
-                              ),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item['label'] as String,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${item['icon'] as String} ${item['desc'] as String}',
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(color: Colors.grey.shade700),
+                                ),
+                              ],
+                            ),
                           ),
-                          Text(item['icon'] as String),
+                          const SizedBox(width: 8),
+                          Text(
+                            formatTime(item['value'] as String),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ],
                       ),
 

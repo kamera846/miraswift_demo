@@ -70,7 +70,7 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
               barTouchData: BarTouchData(
                 enabled: true,
                 touchTooltipData: BarTouchTooltipData(
-                  tooltipBgColor: Colors.black87.withValues(alpha: 0.7),
+                  // tooltipBgColor: Colors.black87.withValues(alpha: 0.7),
                   tooltipMargin: 8,
                   tooltipPadding: const EdgeInsets.only(
                     left: 16,
@@ -158,8 +158,9 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
     }
 
     return SideTitleWidget(
-      axisSide: AxisSide.bottom,
+      // axisSide: AxisSide.bottom,
       space: 4,
+      meta: meta,
       child: Text(text, style: style),
     );
   }
@@ -175,8 +176,9 @@ class DashboardHeroChartState extends State<DashboardHeroChart> {
     }
 
     return SideTitleWidget(
-      axisSide: AxisSide.bottom,
+      // axisSide: AxisSide.bottom,
       space: 4,
+      meta: meta,
       child: Text(text, style: style),
     );
   }
