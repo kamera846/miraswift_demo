@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:miraswiftdemo/models/frequency_model.dart';
+import 'package:miraswiftdemo/services/frequency_api.dart';
 import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
+import 'package:miraswiftdemo/utils/snackbar.dart';
 
 class FormSettingsEquipment extends StatefulWidget {
   const FormSettingsEquipment({super.key});
@@ -9,16 +12,19 @@ class FormSettingsEquipment extends StatefulWidget {
 }
 
 class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
-  int _highSemen = 50;
-  int _lowSemen = 25;
-  int _highKapur = 50;
-  int _lowKapur = 25;
-  int _highKasar = 50;
-  int _lowKasar = 25;
-  int _highHalus = 50;
-  int _lowHalus = 25;
-  int _highPutih = 50;
-  int _lowPutih = 25;
+  String _idFrequency = '-1';
+  bool isLoading = true;
+
+  int _semenHigh = 0;
+  int _semenLow = 0;
+  int _kapurHigh = 0;
+  int _kapurLow = 0;
+  int _pasirKasarHigh = 0;
+  int _pasirKasarLow = 0;
+  int _pasirHalusHigh = 0;
+  int _pasirHalusLow = 0;
+  int _semenPutihHigh = 0;
+  int _semenPutihLow = 0;
 
   @override
   void initState() {
@@ -31,7 +37,59 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
     super.dispose();
   }
 
-  void _setupItem() {}
+  void _setupItem() async {
+    setState(() {
+      isLoading = true;
+    });
+    await FrequencyApi().detail(
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: (item) async {
+        if (item != null) {
+          setState(() {
+            _idFrequency = item.idFrequency;
+            _semenHigh = int.tryParse(item.semenHigh) != null
+                ? int.parse(item.semenHigh)
+                : 0;
+            _semenLow = int.tryParse(item.semenLow) != null
+                ? int.parse(item.semenLow)
+                : 0;
+            _kapurHigh = int.tryParse(item.kapurHigh) != null
+                ? int.parse(item.kapurHigh)
+                : 0;
+            _kapurLow = int.tryParse(item.kapurLow) != null
+                ? int.parse(item.kapurLow)
+                : 0;
+            _pasirKasarHigh = int.tryParse(item.pasirKasarHigh) != null
+                ? int.parse(item.pasirKasarHigh)
+                : 0;
+            _pasirKasarLow = int.tryParse(item.pasirKasarLow) != null
+                ? int.parse(item.pasirKasarLow)
+                : 0;
+            _pasirHalusHigh = int.tryParse(item.pasirHalusHigh) != null
+                ? int.parse(item.pasirHalusHigh)
+                : 0;
+            _pasirHalusLow = int.tryParse(item.pasirHalusLow) != null
+                ? int.parse(item.pasirHalusLow)
+                : 0;
+            _semenPutihHigh = int.tryParse(item.semenPutihHigh) != null
+                ? int.parse(item.semenPutihHigh)
+                : 0;
+            _semenPutihLow = int.tryParse(item.semenPutihLow) != null
+                ? int.parse(item.semenPutihLow)
+                : 0;
+          });
+        }
+
+        setState(() {
+          isLoading = false;
+        });
+      },
+    );
+  }
 
   void _confirmSubmit(BuildContext context) {
     showPlatformAlertDialog(
@@ -45,6 +103,45 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
       positiveButtonText: 'Submit',
       onPositivePressed: () {
         Navigator.of(context).pop();
+        _submitEdit();
+      },
+    );
+  }
+
+  void _submitEdit() async {
+    setState(() {
+      isLoading = true;
+    });
+    await FrequencyApi().save(
+      item: FrequencyModel(
+        idFrequency: _idFrequency,
+        semenHigh: '$_semenHigh',
+        semenLow: '$_semenLow',
+        kapurHigh: '$_kapurHigh',
+        kapurLow: '$_kapurLow',
+        pasirKasarHigh: '$_pasirKasarHigh',
+        pasirKasarLow: '$_pasirKasarLow',
+        pasirHalusHigh: '$_pasirHalusHigh',
+        pasirHalusLow: '$_pasirHalusLow',
+        semenPutihHigh: '$_semenPutihHigh',
+        semenPutihLow: '$_semenPutihLow',
+        createdAt: '',
+        updatedAt: '',
+      ),
+      onSuccess: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onError: (msg) {
+        if (mounted) {
+          showSnackBar(context, msg);
+        }
+      },
+      onCompleted: () {
+        setState(() {
+          isLoading = false;
+        });
       },
     );
   }
@@ -70,51 +167,53 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
                   children: [
                     _buildFormInput(
                       'Semen',
-                      _highSemen,
-                      _lowSemen,
-                      (high) => setState(() => _highSemen = high),
-                      (low) => setState(() => _lowSemen = low),
+                      _semenHigh,
+                      _semenLow,
+                      (high) => setState(() => _semenHigh = high),
+                      (low) => setState(() => _semenLow = low),
                     ),
                     const SizedBox(height: 12.0),
                     _buildFormInput(
                       'Kapur',
-                      _highKapur,
-                      _lowKapur,
-                      (high) => setState(() => _highKapur = high),
-                      (low) => setState(() => _lowKapur = low),
+                      _kapurHigh,
+                      _kapurLow,
+                      (high) => setState(() => _kapurHigh = high),
+                      (low) => setState(() => _kapurLow = low),
                     ),
                     const SizedBox(height: 12.0),
                     _buildFormInput(
                       'Pasir Kasar',
-                      _highKasar,
-                      _lowKasar,
-                      (high) => setState(() => _highKasar = high),
-                      (low) => setState(() => _lowKasar = low),
+                      _pasirKasarHigh,
+                      _pasirKasarLow,
+                      (high) => setState(() => _pasirKasarHigh = high),
+                      (low) => setState(() => _pasirKasarLow = low),
                     ),
                     const SizedBox(height: 12.0),
                     _buildFormInput(
                       'Pasir Halus',
-                      _highHalus,
-                      _lowHalus,
-                      (high) => setState(() => _highHalus = high),
-                      (low) => setState(() => _lowHalus = low),
+                      _pasirHalusHigh,
+                      _pasirHalusLow,
+                      (high) => setState(() => _pasirHalusHigh = high),
+                      (low) => setState(() => _pasirHalusLow = low),
                     ),
                     const SizedBox(height: 12.0),
                     _buildFormInput(
                       'Semen Putih',
-                      _highPutih,
-                      _lowPutih,
-                      (high) => setState(() => _highPutih = high),
-                      (low) => setState(() => _lowPutih = low),
+                      _semenPutihHigh,
+                      _semenPutihLow,
+                      (high) => setState(() => _semenPutihHigh = high),
+                      (low) => setState(() => _semenPutihLow = low),
                     ),
                     const SizedBox(height: 12.0),
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () => _confirmSubmit(context),
-                child: const Text('Save Settings'),
-              ),
+              isLoading
+                  ? CircularProgressIndicator.adaptive()
+                  : ElevatedButton(
+                      onPressed: () => _confirmSubmit(context),
+                      child: const Text('Save Settings'),
+                    ),
               const SizedBox(height: 12.0),
             ],
           ),
@@ -139,11 +238,14 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
             Text('High', style: Theme.of(context).textTheme.bodySmall),
             Expanded(
               child: Slider.adaptive(
+                allowedInteraction: SliderInteraction.slideOnly,
                 label: highValue.toString(),
                 value: highValue.toDouble(),
                 min: 0,
                 max: 50,
-                onChanged: (value) => onHighChanged(value.toInt()),
+                onChanged: isLoading
+                    ? null
+                    : (value) => onHighChanged(value.toInt()),
               ),
             ),
             Text(
@@ -161,7 +263,9 @@ class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
                 value: lowValue.toDouble(),
                 min: 0,
                 max: 50,
-                onChanged: (value) => onLowChanged(value.toInt()),
+                onChanged: isLoading
+                    ? null
+                    : (value) => onLowChanged(value.toInt()),
               ),
             ),
             Text('($lowValue)Hz', style: Theme.of(context).textTheme.bodySmall),
