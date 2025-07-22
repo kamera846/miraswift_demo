@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miraswiftdemo/widgets/form_settings_equipment.dart';
+import 'package:miraswiftdemo/screens/settings_hz_screen.dart';
 
 class PanelScreen extends StatefulWidget {
   const PanelScreen({super.key});
@@ -25,9 +25,9 @@ class _PanelScreenState extends State<PanelScreen> {
   }
 
   void _settingsEquipment() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const FormSettingsEquipment()),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const SettingsHzScreen()));
   }
 
   @override

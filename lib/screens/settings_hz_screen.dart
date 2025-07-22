@@ -4,14 +4,14 @@ import 'package:miraswiftdemo/services/frequency_api.dart';
 import 'package:miraswiftdemo/utils/platform_alert_dialog.dart';
 import 'package:miraswiftdemo/utils/snackbar.dart';
 
-class FormSettingsEquipment extends StatefulWidget {
-  const FormSettingsEquipment({super.key});
+class SettingsHzScreen extends StatefulWidget {
+  const SettingsHzScreen({super.key});
 
   @override
-  FormSettingsEquipmentState createState() => FormSettingsEquipmentState();
+  SettingsHzScreenState createState() => SettingsHzScreenState();
 }
 
-class FormSettingsEquipmentState extends State<FormSettingsEquipment> {
+class SettingsHzScreenState extends State<SettingsHzScreen> {
   String _idFrequency = '-1';
   bool isLoading = true;
 

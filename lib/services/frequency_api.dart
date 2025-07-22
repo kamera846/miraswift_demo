@@ -63,7 +63,7 @@ class FrequencyApi {
         url,
         headers: headerSetup,
         body: jsonEncode({
-          'id_frequency': item.idFrequency,
+          // 'id_frequency': item.idFrequency,
           'semen_high': item.semenHigh,
           'semen_low': item.semenLow,
           'kapur_high': item.kapurHigh,
