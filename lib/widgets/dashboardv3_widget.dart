@@ -25,9 +25,7 @@ import 'package:miraswiftdemo/widgets/dashboard_hero_chart.dart';
 import 'package:miraswiftdemo/widgets/dashboard_menu_item.dart';
 
 class Dashboardv3Widget extends StatefulWidget {
-  const Dashboardv3Widget({super.key, required this.onLoaded});
-
-  final Function(bool state) onLoaded;
+  const Dashboardv3Widget({super.key});
 
   @override
   State<Dashboardv3Widget> createState() => Dashboardv3WidgetState();
@@ -641,7 +639,6 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
         .then((value) {
           setState(() {
             _isLoading = false;
-            widget.onLoaded(true);
           });
         });
   }

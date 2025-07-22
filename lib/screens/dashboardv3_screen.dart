@@ -7,12 +7,11 @@ class DashboardV3Screen extends StatefulWidget {
   const DashboardV3Screen({super.key});
 
   @override
-  State<DashboardV3Screen> createState() => _DashboarV2dScreenState();
+  State<DashboardV3Screen> createState() => _DashboarV3dScreenState();
 }
 
-class _DashboarV2dScreenState extends State<DashboardV3Screen> {
+class _DashboarV3dScreenState extends State<DashboardV3Screen> {
   double opacityValue = 0;
-  bool onLoaded = false;
   final GlobalKey<Dashboardv3WidgetState> dashboardKey = GlobalKey();
 
   @override
@@ -54,14 +53,7 @@ class _DashboarV2dScreenState extends State<DashboardV3Screen> {
             child: Container(color: Colors.white.withValues(alpha: 0.5)),
           ),
         ),
-        if (opacityValue == 1)
-          Dashboardv3Widget(
-            onLoaded: (bool state) {
-              setState(() {
-                onLoaded = state;
-              });
-            },
-          ),
+        if (opacityValue == 1) const Dashboardv3Widget(),
       ],
     );
   }
