@@ -335,15 +335,19 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   Icon(Icons.assignment_outlined, size: 16),
                   const SizedBox(width: 4),
                   Text(
-                    "SPK ${spkToday?.descSpk}",
+                    _formattedTextLength("SPK ${spkToday?.descSpk}"),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(width: 8),
                   Icon(Icons.event, size: 16),
                   const SizedBox(width: 4),
-                  Text(
-                    formattedDate(dateStr: spkToday?.dateSpk ?? "-"),
-                    style: Theme.of(context).textTheme.bodySmall,
+                  Expanded(
+                    child: Text(
+                      formattedDate(dateStr: spkToday?.dateSpk ?? "-"),
+                      style: Theme.of(context).textTheme.bodySmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),
@@ -779,6 +783,15 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
         Navigator.of(context).pop();
       },
     );
+  }
+
+  String _formattedTextLength(String text) {
+    final maxLength = 15;
+    if (text.length > maxLength) {
+      final newText = text.substring(0, maxLength);
+      return '$newText...';
+    }
+    return text;
   }
 
   void _stopProduction() {
