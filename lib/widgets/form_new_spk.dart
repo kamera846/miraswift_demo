@@ -78,7 +78,7 @@ class FormNewSpkState extends State<FormNewSpk> {
             child: Column(
               children: [
                 DropdownButtonFormField<ProductModel>(
-                  value: _selectedProduct,
+                  initialValue: _selectedProduct,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),

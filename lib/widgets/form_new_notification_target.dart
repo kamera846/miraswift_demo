@@ -127,7 +127,7 @@ class FormNewNotificationTargetState extends State<FormNewNotificationTarget> {
                     Text('Toggle Status (${_status ? 'active' : 'disabled'})'),
                     Switch(
                       value: _status,
-                      activeColor: Colors.green.shade900.withAlpha(150),
+                      activeThumbColor: Colors.green.shade900.withAlpha(150),
                       activeTrackColor: Colors.green.shade900.withAlpha(75),
                       onChanged: (value) {
                         setState(() {

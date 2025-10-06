@@ -570,9 +570,9 @@ class _BatchScreenState extends State<BatchScreen> {
             color: Colors.transparent,
             child: Row(
               children: [
-                Form(
-                  key: _formKey,
-                  child: Expanded(
+                Expanded(
+                  child: Form(
+                    key: _formKey,
                     child: TextFormField(
                       controller: _searchController,
                       focusNode: _focusNode,

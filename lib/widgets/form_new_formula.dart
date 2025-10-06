@@ -105,7 +105,7 @@ class FormNewFormulaState extends State<FormNewFormula> {
             child: Column(
               children: [
                 DropdownButtonFormField<MaterialModel>(
-                  value: _selectedMaterial,
+                  initialValue: _selectedMaterial,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),

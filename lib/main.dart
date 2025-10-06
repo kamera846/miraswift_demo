@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
               primaryColor: Colors.blue,
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
               appBarTheme: const AppBarTheme(
-                color: Colors.white,
+                backgroundColor: Colors.white,
                 elevation: 0,
                 scrolledUnderElevation: 1,
                 shadowColor: Colors.white54,
