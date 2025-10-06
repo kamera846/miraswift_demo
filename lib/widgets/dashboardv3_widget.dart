@@ -10,8 +10,8 @@ import 'package:miraswiftdemo/models/product_model.dart';
 import 'package:miraswiftdemo/models/spk_model.dart';
 import 'package:miraswiftdemo/screens/batch_screen.dart';
 import 'package:miraswiftdemo/screens/notifications_screen.dart';
-import 'package:miraswiftdemo/screens/panel_screen.dart';
 import 'package:miraswiftdemo/screens/product_screen.dart';
+import 'package:miraswiftdemo/screens/scada_screen.dart';
 import 'package:miraswiftdemo/screens/spk_screen.dart';
 import 'package:miraswiftdemo/screens/transaction_screen.dart';
 import 'package:miraswiftdemo/services/batch_api.dart';
@@ -520,7 +520,7 @@ class Dashboardv3WidgetState extends State<Dashboardv3Widget>
                   description: 'Looking your equipments in realtime',
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (ctx) => const PanelScreen()),
+                    MaterialPageRoute(builder: (ctx) => const ScadaScreen()),
                   ).then((value) => getSpkToday(isLoading: false)),
                 ),
               ),
