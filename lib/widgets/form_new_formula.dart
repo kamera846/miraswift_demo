@@ -29,6 +29,8 @@ class FormNewFormula extends StatefulWidget {
     String target,
     String fine,
     String time,
+    int coarse,
+    int order,
   )
   onSubmitted;
 
@@ -42,10 +44,14 @@ class FormNewFormulaState extends State<FormNewFormula> {
       TextEditingController();
   final TextEditingController _fineFormulaController = TextEditingController();
   final TextEditingController _timeTargetController = TextEditingController();
+  final TextEditingController _coarseController = TextEditingController();
+  final TextEditingController _orderController = TextEditingController();
 
   String _targetFormulaInput = '';
   String _fineFormulaInput = '';
   String _timeTargetInput = '';
+  String _coarseInput = '';
+  String _orderInput = '';
 
   MaterialModel? _selectedMaterial;
 
@@ -61,6 +67,8 @@ class FormNewFormulaState extends State<FormNewFormula> {
     _targetFormulaController.dispose();
     _fineFormulaController.dispose();
     _timeTargetController.dispose();
+    _coarseController.dispose();
+    _orderController.dispose();
     super.dispose();
   }
 
@@ -68,9 +76,13 @@ class FormNewFormulaState extends State<FormNewFormula> {
     _targetFormulaInput = widget.item!.targetFormula;
     _fineFormulaInput = widget.item!.fineFormula;
     _timeTargetInput = widget.item!.timeTarget;
+    _coarseInput = widget.item!.coarseFormula;
+    _orderInput = widget.item!.orderFormula;
     _targetFormulaController.text = widget.item!.targetFormula;
     _fineFormulaController.text = widget.item!.fineFormula;
     _timeTargetController.text = widget.item!.timeTarget;
+    _coarseController.text = widget.item!.coarseFormula;
+    _orderController.text = widget.item!.orderFormula;
     _selectedMaterial = widget.listMaterial.firstWhere(
       (item) => item.no == widget.item!.kodeMaterial,
       orElse: () => widget.listMaterial.first,
@@ -192,14 +204,74 @@ class FormNewFormulaState extends State<FormNewFormula> {
                   ],
                 ),
                 const SizedBox(height: 12.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _timeTargetController,
+                        style: Theme.of(context).textTheme.bodySmall,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Time (second)',
+                          labelStyle: Theme.of(context).textTheme.bodySmall,
+                          hintText: '60',
+                          hintStyle: Theme.of(
+                            context,
+                          ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some number';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _timeTargetInput = value ?? '';
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 12.0),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _coarseController,
+                        style: Theme.of(context).textTheme.bodySmall,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Coarse (kg)',
+                          hintText: '5.0',
+                          labelStyle: Theme.of(context).textTheme.bodySmall,
+                          hintStyle: Theme.of(
+                            context,
+                          ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some number';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _coarseInput = value ?? '';
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12.0),
                 TextFormField(
-                  controller: _timeTargetController,
+                  controller: _orderController,
                   style: Theme.of(context).textTheme.bodySmall,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: 'Time (second)',
+                    labelText: 'Urutan Formula',
+                    hintText: '1',
                     labelStyle: Theme.of(context).textTheme.bodySmall,
-                    hintText: '60',
                     hintStyle: Theme.of(
                       context,
                     ).textTheme.bodySmall!.copyWith(color: Colors.grey),
@@ -211,10 +283,13 @@ class FormNewFormulaState extends State<FormNewFormula> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some number';
                     }
+                    if (int.parse(value) <= 0) {
+                      return 'Nilai harus lebih dari 0';
+                    }
                     return null;
                   },
                   onSaved: (value) {
-                    _timeTargetInput = value ?? '';
+                    _orderInput = value ?? '';
                   },
                 ),
                 const SizedBox(height: 12.0),
@@ -230,6 +305,8 @@ class FormNewFormulaState extends State<FormNewFormula> {
                         _targetFormulaInput,
                         _fineFormulaInput,
                         _timeTargetInput,
+                        int.parse(_coarseInput),
+                        int.parse(_orderInput),
                       );
                       Navigator.pop(context);
                     }

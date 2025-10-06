@@ -154,6 +154,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
     String target,
     String fine,
     String time,
+    int coarse,
+    int order,
   ) async {
     setState(() {
       _isLoading = true;
@@ -165,6 +167,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
       target: target,
       fine: fine,
       time: time,
+      coarse: coarse,
+      order: order,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {
@@ -254,6 +258,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
     String target,
     String fine,
     String time,
+    int coarse,
+    int order,
   ) async {
     setState(() {
       _isLoading = true;
@@ -266,6 +272,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
       target: target,
       fine: fine,
       time: time,
+      coarse: coarse,
+      order: order,
       onSuccess: (msg) => showSnackBar(context, msg),
       onError: (msg) => showSnackBar(context, msg),
       onCompleted: () {

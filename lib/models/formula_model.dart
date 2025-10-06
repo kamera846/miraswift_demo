@@ -7,6 +7,8 @@ class FormulaModel {
     required this.kodeMaterial,
     required this.nameMaterial,
     required this.timeTarget,
+    required this.coarseFormula,
+    required this.orderFormula,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -18,6 +20,8 @@ class FormulaModel {
   final String kodeMaterial;
   final String nameMaterial;
   final String timeTarget;
+  final String coarseFormula;
+  final String orderFormula;
   final String createdAt;
   final String updatedAt;
 
@@ -30,20 +34,24 @@ class FormulaModel {
       kodeMaterial: json['kode_material'] ?? '',
       nameMaterial: json['name_material'] ?? '',
       timeTarget: json['time_target'] ?? '',
+      coarseFormula: json['coarse_formula'] ?? '',
+      orderFormula: json['urutan_formula'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id_formula': idFormula,
-        'id_product': idProduct,
-        'target_formula': targetFormula,
-        'fine_formula': fineFormula,
-        'kode_material': kodeMaterial,
-        'name_material': nameMaterial,
-        'time_target': timeTarget,
-        'created_at': createdAt,
-        'updated_at': updatedAt,
-      };
+    'id_formula': idFormula,
+    'id_product': idProduct,
+    'target_formula': targetFormula,
+    'fine_formula': fineFormula,
+    'kode_material': kodeMaterial,
+    'name_material': nameMaterial,
+    'time_target': timeTarget,
+    'coarse_formula': coarseFormula,
+    'urutan_formula': orderFormula,
+    'created_at': createdAt,
+    'updated_at': updatedAt,
+  };
 }

@@ -108,6 +108,8 @@ class FormulaApi {
     required String target,
     required String fine,
     required String time,
+    required int coarse,
+    required int order,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
     Function()? onCompleted,
@@ -124,6 +126,8 @@ class FormulaApi {
           'kode_material': code,
           'name_material': name,
           'time_target': time,
+          'coarse_formula': coarse,
+          'urutan_formula': order,
         }),
       );
 
@@ -168,6 +172,8 @@ class FormulaApi {
     required String target,
     required String fine,
     required String time,
+    required int coarse,
+    required int order,
     Function(String msg)? onSuccess,
     Function(String msg)? onError,
     Function()? onCompleted,
@@ -184,6 +190,8 @@ class FormulaApi {
           'kode_material': code,
           'name_material': name,
           'time_target': time,
+          'coarse_formula': coarse,
+          'urutan_formula': order,
         }),
       );
 
