@@ -1,4 +1,4 @@
-const baseUrl = 'bizlink.topmortarindonesia.com';
+const baseUrl = 'bizlink.miraswift.com';
 const headerSetup = {'Content-Type': 'application/json'};
 const failedRequestText = 'Failed fetch data.';
 
